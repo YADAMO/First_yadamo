@@ -1,10 +1,10 @@
 #include "LineTracer.h"
 
-LineTrace::LineTracer()
+LineTracer::LineTracer()
 {
 
 }
-LineTrace::~LineTracer()
+LineTracer::~LineTracer()
 {
 
 }		

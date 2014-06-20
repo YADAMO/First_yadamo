@@ -1,4 +1,4 @@
-#define once
+#pragma once
 //include header file of gray detector class
 //include header file of ecorrent position estimate
 #include "LineTracer.h"

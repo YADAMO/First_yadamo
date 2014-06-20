@@ -1,4 +1,4 @@
-#define once
+#pragma once
 //read neccessary header file
 #include "Motor.h"
 #include  "LineTracer.h"

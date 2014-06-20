@@ -1,8 +1,8 @@
-#define once
+#pragma once
 //read neccessary header file
 //#include header file of PID class
 #include  "Driver.h"
-#include  "SetionController.h"
+#include  "SectionController.h"
 
 class LineTracer {
 private:

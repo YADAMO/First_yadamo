@@ -1,9 +1,10 @@
-#define once
+#pragma once
 
 class GrayDetector{
 private:
+	GrayDetector();
     int threshold;
     int buffer[10];
 public:
-    grayDetect();
+    bool grayDetect();
 };

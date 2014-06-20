@@ -1,12 +1,14 @@
 #include "GrayDetector.h"
 
 GrayDetector::GrayDetector(){
-    threshold = 0;
-    buffer = 0;
+    // threshold = 0;
+    // buffer = 0;
 }
 
-bool grayDetect(){
-    bool isGray;
+bool GrayDetector::grayDetect(){
+    // bool isGray;
     
-    return isGray;
+    // return isGray;
+    return true;
 }
+ 

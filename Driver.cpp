@@ -1,10 +1,10 @@
 #include "Driver.h"
 
-Drive::Driver(){
+Driver::Driver(){
 
 }
 
-Drive::~Driver(){
+Driver::~Driver(){
 
 }
 

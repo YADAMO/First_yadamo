@@ -1,4 +1,4 @@
-#define once
+#pragma once
 
 class Pid{
 private:
@@ -7,5 +7,6 @@ private:
     int d;
     int diff[5];
 public:
-    calcTurn(int brighitness);
+	Pid();
+    int calcTurn(int brighitness);
 };
