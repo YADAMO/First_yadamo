@@ -95,7 +95,7 @@ TASK(OSEK_Task_Background)
 	_motorL.setCount(0);
 	_motorR.setCount(0);
 
-	while(!touch.isPressed());
+	while(!_touch.isPressed());
 		_clk.wait(500); /* 500msec wait */
 	
 	while(1)
