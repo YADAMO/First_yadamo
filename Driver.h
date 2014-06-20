@@ -1,6 +1,6 @@
 #define once
 //read neccessary header file
-//#include header file of Motor class
+#include "Motor.h"
 #include  "LineTracer.h"
 
 class Driver {
