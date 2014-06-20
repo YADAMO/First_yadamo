@@ -72,4 +72,15 @@ Temporary Items
 #----------- Makefile ---------
 Makefile
 
-
+#----------- created file -----
+Yadamo.rxe
+Yadamo_ram*
+Yadamo_rom*
+Yadamo_rxe*
+appflash.sh
+biosflash.sh
+build/
+implementation.oil
+kernel_*
+ramboot.sh
+rxeflash.sh

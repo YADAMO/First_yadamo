@@ -40,6 +40,7 @@ using namespace ecrobot;
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
 
+
 Motor _motorL(DRIVE_L,true);
 Motor _motorR(DRIVE_R,true);
 Motor _motorS(STEER,true);
@@ -85,7 +86,7 @@ void ecrobot_device_terminate()
 /* nxtOSEK hook to be invoked from an ISR in category 2 */
 void user_1ms_isr_type2(void){ /* do nothing */ }
 
-TASK(OSEK_Task_Background)
+extern "C" TASK(OSEK_Task_Background)
 {
 	int grey = (BLACK+WHITE)/2;
 	int light = 0;
@@ -125,4 +126,5 @@ TASK(OSEK_Task_Background)
 		_clk.wait(10); /* 10msec wait */
 	}
 }
+
 
