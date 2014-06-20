@@ -24,8 +24,6 @@
 
 using namespace ecrobot;
 
-extern "C" {
-
 #include "kernel.h"
 #include "kernel_id.h"
 #include "ecrobot_interface.h"
@@ -94,38 +92,37 @@ TASK(OSEK_Task_Background)
 	int count = 0;
 	int cnt = 0;
 	int cnt_2 = 0;
-	motor_L.setCount(0);
-	motor_R.setCount(0);
+	_motorL.setCount(0);
+	_motorR.setCount(0);
 
 	while(!touch.isPressed());
-		clk.wait(500); /* 500msec wait */
+		_clk.wait(500); /* 500msec wait */
 	
 	while(1)
 	{
-		light = ir.get();
-		count = motor_STEER.getCount();
+		light = _light.get();
+		count = _motorS.getCount();
 		cnt ++;
 		if(light<grey){
 			if(count<MAX_STEERING_ANGLE){
-				motor_STEER.setPWM(100);
+				_motorS.setPWM(100);
 			}else{
-				motor_STEER.setPWM(0);
+				_motorS.setPWM(0);
 			}
-			motor_L.setPWM(-DRIVING_POWER);
-			motor_R.setPWM(1);
+			_motorL.setPWM(-DRIVING_POWER);
+			_motorR.setPWM(1);
 		}else{
 			if(count>-MAX_STEERING_ANGLE){
-				motor_STEER.setPWM(-100);
+				_motorS.setPWM(-100);
 			}else{
-				motor_STEER.setPWM(0);
+				_motorS.setPWM(0);
 			}
-			motor_L.setPWM(1);
-			motor_R.setPWM(-DRIVING_POWER);
+			_motorL.setPWM(1);
+			_motorR.setPWM(-DRIVING_POWER);
 		}
 
   		ecrobot_status_monitor("NXTrike Sample");
-		clk.wait(10); /* 10msec wait */
+		_clk.wait(10); /* 10msec wait */
 	}
 }
 
-}
