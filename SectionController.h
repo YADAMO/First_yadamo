@@ -1,6 +1,6 @@
 #pragma once
-//include header file of gray detector class
-//include header file of ecorrent position estimate
+#include "GrayDetector.h"
+#include "PositionEstimater.h"
 #include "LineTracer.h"
 
 enum Sections {FIRST_SECTION, SCOND_SECTION, };
