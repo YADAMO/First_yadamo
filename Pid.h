@@ -2,10 +2,12 @@
 
 class Pid{
 private:
-    int p;
-    int i;
-    int d;
-    int diff[5];
+    float delta;
+    float kp;
+    float ki;
+    float kd;
+    float diff[2];
+    float integral
 public:
 	Pid();
     int calcTurn(int brighitness);
