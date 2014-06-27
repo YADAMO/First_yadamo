@@ -5,9 +5,9 @@
 
 class Driver {
 private:
-  Motor motorL;
-  Motor motorR;
-  Motor motorS;
+  ecrobot::Motor motorL;
+  ecrobot::Motor motorR;
+  ecrobot::Motor motorS;
 public:
   Driver();
   ~Driver();   

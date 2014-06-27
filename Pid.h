@@ -10,5 +10,5 @@ private:
     float integral;
 public:
 	Pid();
-    int calcTurn(int brighitness);
+  int calcTurn(float brightness, float target);
 };

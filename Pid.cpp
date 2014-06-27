@@ -10,7 +10,7 @@ Pid::Pid(){
     integral = 0;
 }
 
-int calcTurn(float brightness, float target){
+int Pid::calcTurn(float brightness, float target){
     float p, i, d;
     
     diff[0] = diff[1];

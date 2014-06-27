@@ -1,8 +1,8 @@
 #pragma once
 //read neccessary header file
 //#include header file of PID class
-#include  "Driver.h"
-#include  "SectionController.h"
+#include "Driver.h"
+#include "SectionController.h"
 #include "Pid.h"
 
 class LineTracer {

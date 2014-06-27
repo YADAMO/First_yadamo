@@ -8,8 +8,8 @@ LineTracer::LineTracer()
 LineTracer::~LineTracer()
 {
 
-}		
+}
 
-void lineTrace(int speed){
-  driver.drive(calcTurn(), speed);
+void LineTracer::lineTrace(int speed){
+  driver.drive(calcTurn(float brightness, 570), speed);
 }
