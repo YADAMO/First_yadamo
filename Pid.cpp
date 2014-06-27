@@ -2,7 +2,7 @@
 #include "math.h"
 
 Pid::Pid(){
-    delta = 0.004; //処理周期：現在4msec
+    delta = 0.001; //処理周期：現在4msec
     kp = 0;
     ki = 0;
     kd = 0;
