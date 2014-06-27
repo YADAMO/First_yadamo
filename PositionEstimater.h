@@ -1,4 +1,4 @@
-#define once
+#pragma once
 //read neccessary header file
 //#include header file of Motor class
 

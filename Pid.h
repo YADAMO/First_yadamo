@@ -7,7 +7,7 @@ private:
     float ki;
     float kd;
     float diff[2];
-    float integral
+    float integral;
 public:
 	Pid();
     int calcTurn(int brighitness);

@@ -40,14 +40,15 @@ using namespace ecrobot;
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
 
-
-Motor _motorL(DRIVE_L,true);
-Motor _motorR(DRIVE_R,true);
-Motor _motorS(STEER,true);
-LightSensor _light(LIGHT);
-TouchSensor _touch(TOUCH);
-Nxt _nxt;
-Clock _clk;
+LineTracer lineTracer;
+Driver driver;
+Motor motorL(DRIVE_L,true);
+Motor motorR(DRIVE_R,true);
+Motor motorS(STEER,true);
+LightSensor light(LIGHT);
+TouchSensor touch(TOUCH);
+Nxt nxt;
+Clock clk;
 
 // LineTracer _line;
 // SectionController section;  
@@ -65,13 +66,13 @@ void ecrobot_device_initialize()
 void ecrobot_device_terminate()
 {
 
-// Motor _motorL(DRIVE_L,true);
-// Motor _motorR(DRIVE_R,true);
-// Motor _motorS(STEER,true);
-// LightSensor _light(LIGHT);
-// TouchSensor _touch(TOUCH);
-// 	~_nxt;
-// 	~_clk;
+// Motor motorL(DRIVE_L,true);
+// Motor motorR(DRIVE_R,true);
+// Motor motorS(STEER,true);
+// LightSensor light(LIGHT);
+// TouchSensor touch(TOUCH);
+// 	~nxt;
+// 	~clk;
 
 // 	~_line;
 // 	~section;  
@@ -88,42 +89,21 @@ void user_1ms_isr_type2(void){ /* do nothing */ }
 
 extern "C" TASK(OSEK_Task_Background)
 {
-	int grey = (BLACK+WHITE)/2;
-	int light = 0;
-	int count = 0;
-	int cnt = 0;
-	int cnt_2 = 0;
-	_motorL.setCount(0);
-	_motorR.setCount(0);
+	// int grey = (BLACK+WHITE)/2;
+	// int light = 0;
+	// int count = 0;
+	motorL.setCount(0);
+	motorR.setCount(0);
 
-	while(!_touch.isPressed());
-		_clk.wait(500); /* 500msec wait */
+	while(!touch.isPressed()){
+	}
+	clk.wait(500); /* 500msec wait */	
 	
 	while(1)
 	{
-		light = _light.get();
-		count = _motorS.getCount();
-		cnt ++;
-		if(light<grey){
-			if(count<MAX_STEERING_ANGLE){
-				_motorS.setPWM(100);
-			}else{
-				_motorS.setPWM(0);
-			}
-			_motorL.setPWM(-DRIVING_POWER);
-			_motorR.setPWM(1);
-		}else{
-			if(count>-MAX_STEERING_ANGLE){
-				_motorS.setPWM(-100);
-			}else{
-				_motorS.setPWM(0);
-			}
-			_motorL.setPWM(1);
-			_motorR.setPWM(-DRIVING_POWER);
-		}
-
-  		ecrobot_status_monitor("NXTrike Sample");
-		_clk.wait(10); /* 10msec wait */
+		lineTracer.lineTrace(30);
+  	ecrobot_status_monitor("NXTrike Sample");
+		clk.wait(1); /* 10msec wait */
 	}
 }
 

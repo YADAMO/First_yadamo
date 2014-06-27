@@ -2,10 +2,10 @@
 #include "math.h"
 
 Pid::Pid(){
-    delta = 0.001; //処理周期：現在4msec
-    kp = 0;
-    ki = 0;
-    kd = 0;
+    delta = 0.001; //処理周期：現在1msec
+    kp = 0.9;
+    ki = 0.1;
+    kd = 0.4;
     diff = {0,0};
     integral = 0;
 }
