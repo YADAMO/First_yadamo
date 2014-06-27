@@ -8,7 +8,8 @@ private:
     float kd;
     float diff[2];
     float integral;
+    LightSensor lightSensor;
 public:
 	Pid();
-  int calcTurn(float brightness, float target);
+  int calcTurn(float target);
 };

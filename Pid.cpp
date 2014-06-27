@@ -1,5 +1,6 @@
 #include "Pid.h"
 #include "math.h"
+#include "LightSensor.h"
 
 Pid::Pid(){
     delta = 0.001; //処理周期：現在1msec
@@ -10,7 +11,8 @@ Pid::Pid(){
     integral = 0;
 }
 
-int Pid::calcTurn(float brightness, float target){
+int Pid::calcTurn(float target){
+    float brightness = lightSensor.getBrightness();
     float p, i, d;
     
     diff[0] = diff[1];
