@@ -3,13 +3,17 @@
 #include "Motor.h"
 #include "LineTracer.h"
 
+#define MAX_STEERING_ANGLE  270
+
+// using namespace ecrobot
+
 class Driver {
 private:
-  ecrobot::Motor motorL;
-  ecrobot::Motor motorR;
-  ecrobot::Motor motorS;
+  ecrobot::Motor *motorL;
+  ecrobot::Motor *motorR;
+  ecrobot::Motor *motorS;
 public:
-  Driver();
+  Driver(ecrobot::Motor *L, ecrobot::Motor *R, ecrobot::Motor *S);
   ~Driver();   
   void drive(int turn, int speed); 
   void turn(int angle);

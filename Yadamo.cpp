@@ -31,7 +31,6 @@ using namespace ecrobot;
 #define BLACK 591
 #define WHITE 542
 
-#define MAX_STEERING_ANGLE	270
 #define DRIVING_POWER		 70
 
 #define STEER	PORT_C
@@ -40,11 +39,11 @@ using namespace ecrobot;
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
 
-LineTracer lineTracer;
-Driver driver;
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
+Driver driver(&motorL, &motorR, &motorS);
+LineTracer lineTracer(&driver);
 LightSensor light(LIGHT);
 TouchSensor touch(TOUCH);
 Nxt nxt;

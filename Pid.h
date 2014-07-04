@@ -1,4 +1,5 @@
 #pragma once
+#include "LightSensor.h"
 
 class Pid{
 private:
@@ -8,7 +9,7 @@ private:
     float kd;
     float diff[2];
     float integral;
-    LightSensor lightSensor;
+    ecrobot::LightSensor lightSensor;
 public:
 	Pid();
   int calcTurn(float target);

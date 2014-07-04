@@ -8,9 +8,10 @@
 class LineTracer {
 private:
 //not define on UML
-  Driver driver;
+  Driver *driver;
+  Pid pid;
 public:
-	LineTracer();
+	LineTracer(Driver *argDriver);
 	~LineTracer();		
   void lineTrace(int speed);
 };
