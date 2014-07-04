@@ -5,15 +5,15 @@
 
 #define MAX_STEERING_ANGLE  270
 
-// using namespace ecrobot
+using namespace ecrobot;
 
 class Driver {
 private:
-  ecrobot::Motor *motorL;
-  ecrobot::Motor *motorR;
-  ecrobot::Motor *motorS;
+  Motor *motorL;
+  Motor *motorR;
+  Motor *motorS;
 public:
-  Driver(ecrobot::Motor *L, ecrobot::Motor *R, ecrobot::Motor *S);
+  Driver(Motor *L, Motor *R, Motor *S);
   ~Driver();   
   void drive(int turn, int speed); 
   void turn(int angle);

@@ -4,14 +4,15 @@
 #include "Driver.h"
 #include "SectionController.h"
 #include "Pid.h"
-
+ const float TARGET = 700;
+class Driver;
 class LineTracer {
 private:
 //not define on UML
   Driver *driver;
-  Pid pid;
+  Pid *pid;
 public:
-	LineTracer(Driver *argDriver);
-	~LineTracer();		
+	LineTracer(Driver *argDriver, Pid *argPid);
+	~LineTracer();
   void lineTrace(int speed);
 };

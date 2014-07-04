@@ -39,12 +39,16 @@ using namespace ecrobot;
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
 
+
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
 Driver driver(&motorL, &motorR, &motorS);
-LineTracer lineTracer(&driver);
 LightSensor light(LIGHT);
+Pid pid(&light);
+LineTracer lineTracer(&driver, &pid);
+
+
 TouchSensor touch(TOUCH);
 Nxt nxt;
 Clock clk;
@@ -100,8 +104,8 @@ extern "C" TASK(OSEK_Task_Background)
 	
 	while(1)
 	{
-		lineTracer.lineTrace(30);
-  	ecrobot_status_monitor("NXTrike Sample");
+		lineTracer.lineTrace(40);
+		ecrobot_status_monitor("NXTrike Sample");
 		clk.wait(1); /* 10msec wait */
 	}
 }

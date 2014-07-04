@@ -8,3 +8,4 @@ private:
 public:
     bool grayDetect();
 };
+
