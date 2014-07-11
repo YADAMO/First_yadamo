@@ -21,6 +21,7 @@
 #include "Nxt.h"
 #include "Bluetooth.h"
 #include "Daq.h"
+#include "Distance.h"
 
 using namespace ecrobot;
 
@@ -104,7 +105,7 @@ extern "C" TASK(OSEK_Task_Background)
 	
 	while(1)
 	{
-		lineTracer.lineTrace(40);
+		lineTracer.lineTrace(30);
 		ecrobot_status_monitor("NXTrike Sample");
 		clk.wait(1); /* 10msec wait */
 	}
