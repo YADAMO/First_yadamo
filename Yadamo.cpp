@@ -22,6 +22,7 @@
 #include "Bluetooth.h"
 #include "Daq.h"
 #include "Distance.h"
+#include "TouchJudgement.h"
 
 using namespace ecrobot;
 
@@ -40,6 +41,9 @@ using namespace ecrobot;
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
 
+TouchSensor touch(TOUCH);
+Nxt nxt;
+Clock clk;
 
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
@@ -48,11 +52,9 @@ Driver driver(&motorL, &motorR, &motorS);
 LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
+TouchJudgement touchJudgement(&touch);
 
 
-TouchSensor touch(TOUCH);
-Nxt nxt;
-Clock clk;
 
 // LineTracer _line;
 // SectionController section;  
@@ -99,7 +101,7 @@ extern "C" TASK(OSEK_Task_Background)
 	motorL.setCount(0);
 	motorR.setCount(0);
 
-	while(!touch.isPressed()){
+	while(!touchJudgement.judge()){
 	}
 	clk.wait(500); /* 500msec wait */	
 	
