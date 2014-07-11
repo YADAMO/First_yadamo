@@ -14,3 +14,7 @@ LineTracer::~LineTracer()
 void LineTracer::lineTrace(int speed){
   driver->drive(pid->calcTurn(TARGET), speed);
 }
+
+void LineTracer::setTARGET(float target){
+	TARGET = target;
+}
