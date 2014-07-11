@@ -23,6 +23,7 @@
 #include "Daq.h"
 #include "Distance.h"
 #include "TouchJudgement.h"
+#include "UI.h"
 
 using namespace ecrobot;
 
@@ -53,7 +54,7 @@ LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
-
+UI ui(&light, &touchJudgement, &lineTracer, &clk);
 
 
 // LineTracer _line;
@@ -101,15 +102,14 @@ extern "C" TASK(OSEK_Task_Background)
 	motorL.setCount(0);
 	motorR.setCount(0);
 
-	while(!touchJudgement.judge()){
-	}
+	ui.calibration();
 	clk.wait(500); /* 500msec wait */	
 	
 	while(1)
 	{
-		lineTracer.lineTrace(30);
+		//lineTracer.lineTrace(30);
 		ecrobot_status_monitor("NXTrike Sample");
-		clk.wait(1); /* 10msec wait */
+		clk.wait(10); /* 10msec wait */
 	}
 }
 
