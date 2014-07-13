@@ -21,7 +21,13 @@
 #include "Nxt.h"
 #include "Bluetooth.h"
 #include "Daq.h"
+<<<<<<< HEAD
 #include "Speaker.h"
+=======
+#include "Distance.h"
+#include "TouchJudgement.h"
+#include "UI.h"
+>>>>>>> 5b3e2e119cac50549cc0cac72ac434aaffb8c612
 
 using namespace ecrobot;
 
@@ -40,6 +46,9 @@ using namespace ecrobot;
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
 
+TouchSensor touch(TOUCH);
+Nxt nxt;
+Clock clk;
 
 Speaker speaker;
 Motor motorL(DRIVE_L,true);
@@ -49,11 +58,9 @@ Driver driver(&motorL, &motorR, &motorS);
 LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
+TouchJudgement touchJudgement(&touch);
+UI ui(&light, &touchJudgement, &lineTracer, &clk);
 
-
-TouchSensor touch(TOUCH);
-Nxt nxt;
-Clock clk;
 
 // LineTracer _line;
 // SectionController section;  
@@ -100,10 +107,7 @@ extern "C" TASK(OSEK_Task_Background)
 	motorL.setCount(0);
 	motorR.setCount(0);
 
-	while(!touch.isPressed()){
-		lineTracer.setTarget(light.getBrightness());
-	}
-	speaker.playTone(880, 100, 50);
+	ui.calibration();
 	clk.wait(500); /* 500msec wait */	
 	
 	while(1)

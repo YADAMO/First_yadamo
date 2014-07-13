@@ -19,3 +19,7 @@ void LineTracer::lineTrace(int speed){
 void LineTracer::setTarget(float tar){
   target = tar;
 }
+
+void LineTracer::setTARGET(float target){
+	TARGET = target;
+}
