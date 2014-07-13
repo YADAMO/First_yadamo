@@ -16,23 +16,23 @@ void Driver::drive(int turn, int speed){
 
   if(turn > 0){
     if(count>-MAX_STEERING_ANGLE){
-      // motorS->setPWM(-100);
+      motorS->setPWM(-100);
     }else{
-      // motorS->setPWM(0);
+      motorS->setPWM(0);
     }
   }else if(turn < 0){
     if(count<MAX_STEERING_ANGLE){
-      // motorS->setPWM(100);
+      motorS->setPWM(100);
     }else{
-      // motorS->setPWM(0);
+      motorS->setPWM(0);
     }
   }else{
     if(count > 0){
-      // motorS->setPWM(-100);
+      motorS->setPWM(-100);
     }else if(count < 0){
-      // motorS->setPWM(100);
+      motorS->setPWM(100);
     }else{
-      // motorS->setPWM(0);
+      motorS->setPWM(0);
     }
   }
   motorL->setPWM(turn + speed);

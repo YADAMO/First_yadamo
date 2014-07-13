@@ -21,6 +21,7 @@
 #include "Nxt.h"
 #include "Bluetooth.h"
 #include "Daq.h"
+#include "Speaker.h"
 
 using namespace ecrobot;
 
@@ -40,6 +41,7 @@ using namespace ecrobot;
 #define TOUCH	PORT_2
 
 
+Speaker speaker;
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
@@ -99,14 +101,21 @@ extern "C" TASK(OSEK_Task_Background)
 	motorR.setCount(0);
 
 	while(!touch.isPressed()){
+		lineTracer.setTarget(light.getBrightness());
 	}
+	speaker.playTone(880, 100, 50);
 	clk.wait(500); /* 500msec wait */	
 	
 	while(1)
 	{
-		lineTracer.lineTrace(40);
-		ecrobot_status_monitor("NXTrike Sample");
-		clk.wait(1); /* 10msec wait */
+		lineTracer.lineTrace(10);
+//		ecrobot_status_monitor("NXTrike Sample");
+		display_clear(0);
+		display_goto_xy(0,1);
+		display_int(pid.calcTurn(light.getBrightness()), 1);
+		display_int(light.getBrightness(), 3);
+		display_update();
+		clk.wait(4); /* 10msec wait */
 	}
 }
 

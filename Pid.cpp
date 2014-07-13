@@ -2,7 +2,7 @@
 #include "math.h"
 
 Pid::Pid(LightSensor *light){
-    delta = 0.001; //処理周期：現在1msec
+    delta = 0.004; //処理周期：現在1msec
     kp = 0.6;
     ki = 0.1;
     kd = 0.4;
@@ -10,7 +10,6 @@ Pid::Pid(LightSensor *light){
 	diff[1] = 0;
     integral = 0;
 	lightSensor = light;
-	
 }
 
 int Pid::calcTurn(float target){
@@ -26,14 +25,14 @@ int Pid::calcTurn(float target){
     i = ki * integral;
     d = kd * (diff[1] - diff[0]) / delta;
 	
-	turn = p + i + d;
+	turn = (int)(p + i + d);
 	if(turn <= -100){
-		turn = -100;
+	  turn = -100;
 	}else if(turn >= 100){
-		turn = 100;
+	  turn = 100;
 	}
 	
-    return turn;
+    return  turn;
 }
 
 
