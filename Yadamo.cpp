@@ -57,7 +57,7 @@ LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
-UI ui(&light, &touchJudgement, &lineTracer, &clk);
+UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker);
 
 
 // LineTracer _line;
@@ -120,5 +120,3 @@ extern "C" TASK(OSEK_Task_Background)
 		clk.wait(4); /* 10msec wait */
 	}
 }
-
-
