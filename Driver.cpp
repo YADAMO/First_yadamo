@@ -4,6 +4,8 @@ Driver::Driver(Motor *L, Motor *R, Motor *S){
   motorL = L;
   motorR = R;
   motorS = S;
+  rightOffset = 0;
+  leftOffset = 0;
 }
 
 Driver::~Driver(){
@@ -54,8 +56,22 @@ void Driver::turn(int angle){
   */
 }
 
-void Driver::driveStraight(int distance){
-  /*
-    モーターエンコード値と距離の相関を計算してください
-  */
+void Driver::straightInit(){
+	rightOffset = motorR->getCount();
+	leftOffset = motorL->getCount();
+}
+
+void Driver::straight(int speed){
+	int turn = (motorR->getCount() - rightOffset) - (motorL->getCount() - leftOffset);
+	
+	int right = -turn/2 - speed;
+	int left = turn/2 - speed;
+	if(right >= 127)	right = 127;
+	if(right <= -128)	right = -128;
+	if(left >= 127)	left = 127;
+	if(left <= -128)	left = -128;
+  
+	motorL->setPWM(left);
+	motorR->setPWM(right);
+	
 }

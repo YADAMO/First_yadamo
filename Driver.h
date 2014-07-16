@@ -12,10 +12,13 @@ private:
   Motor *motorL;
   Motor *motorR;
   Motor *motorS;
+  S32 rightOffset, leftOffset;
+  
 public:
   Driver(Motor *L, Motor *R, Motor *S);
   ~Driver();   
   void drive(int turn, int speed); 
   void turn(int angle);
-  void driveStraight(int distance);
+  void straightInit();
+  void straight(int speed);
 };
