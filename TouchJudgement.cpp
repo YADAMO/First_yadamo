@@ -17,7 +17,6 @@ bool TouchJudgement::judge(){
 	}
 	
 	if(count == 10){
-		count = 0;
 		return true;
 	}
 	return false;

@@ -21,13 +21,11 @@
 #include "Nxt.h"
 #include "Bluetooth.h"
 #include "Daq.h"
-<<<<<<< HEAD
 #include "Speaker.h"
-=======
+
 #include "Distance.h"
 #include "TouchJudgement.h"
 #include "UI.h"
->>>>>>> 5b3e2e119cac50549cc0cac72ac434aaffb8c612
 
 using namespace ecrobot;
 

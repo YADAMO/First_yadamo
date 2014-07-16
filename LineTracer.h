@@ -11,10 +11,10 @@ private:
 //not define on UML
   Driver *driver;
   Pid *pid;
-  float TARGET;
+  float target;
 public:
 	LineTracer(Driver *argDriver, Pid *argPid);
 	~LineTracer();
 	void lineTrace(int speed);
-	void setTARGET(float target);
+	void setTarget(float target);
 };

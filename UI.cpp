@@ -28,7 +28,7 @@ void UI::calibration(void){
 				black = lightSensor->getBrightness();
 				judge = false;
 			}else if(touchCount == 3){
-				lineTracer->setTARGET(((float)white + (float)black) / 2);
+				lineTracer->setTarget(((float)white + (float)black) / 2);
 				judge = false;
 				break;
 			}
