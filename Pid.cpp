@@ -1,5 +1,4 @@
 #include "Pid.h"
-#include "math.h"
 
 Pid::Pid(LightSensor *light){
     delta = 0.004; //処理周期：現在1msec
@@ -10,6 +9,16 @@ Pid::Pid(LightSensor *light){
 	diff[1] = 0;
     integral = 0;
 	lightSensor = light;
+}
+
+void Pid::changePid(float p, float i, float d){
+	if((p < 0) || (i < 0) || (d < 0)){
+		return;
+	}
+	
+	kp = p;
+	ki = i;
+	kd = d;
 }
 
 int Pid::calcTurn(float target){

@@ -14,6 +14,6 @@ private:
 	LightSensor *lightSensor;
 public:
 	Pid(LightSensor *light);
-	
-  int calcTurn(float target);
+	void changePid(float p, float i, float d);
+	int calcTurn(float target);
 };
