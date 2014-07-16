@@ -110,7 +110,7 @@ extern "C" TASK(OSEK_Task_Background)
 	
 	while(1)
 	{
-		lineTracer.lineTrace(10);
+		lineTracer.lineTrace(50);
 //		ecrobot_status_monitor("NXTrike Sample");
 		display_clear(0);
 		display_goto_xy(0,1);

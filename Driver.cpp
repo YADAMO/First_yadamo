@@ -13,6 +13,7 @@ Driver::~Driver(){
 
 void Driver::drive(int turn, int speed){
   int count = motorS->getCount();
+  int right, left;
 
   if(turn > 0){
     if(count>-MAX_STEERING_ANGLE){
@@ -35,8 +36,16 @@ void Driver::drive(int turn, int speed){
       motorS->setPWM(0);
     }
   }
-  motorL->setPWM(turn + speed);
-  motorR->setPWM(-turn + speed);
+  
+  right = -turn/2 - speed;
+  left = turn/2 - speed;
+  if(right >= 127)	right = 127;
+  if(right <= -128)	right = -128;
+  if(left >= 127)	left = 127;
+  if(left <= -128)	left = -128;
+  
+  motorL->setPWM(left);
+  motorR->setPWM(right);
 }
 
 void Driver::turn(int angle){
