@@ -4,6 +4,7 @@
 #include "LineTracer.h"
 
 #define MAX_STEERING_ANGLE  270
+#define TURN_BASE_SPEED 70
 
 using namespace ecrobot;
 
@@ -13,7 +14,8 @@ private:
   Motor *motorR;
   Motor *motorS;
   S32 rightOffset, leftOffset;
-  
+  int calcSteerAngle(S8 right, S8 left);
+
 public:
   Driver(Motor *L, Motor *R, Motor *S);
   ~Driver();   
@@ -21,4 +23,5 @@ public:
   void turn(int angle);
   void straightInit();
   void straight(int speed);
+  int steerAngle;
 };

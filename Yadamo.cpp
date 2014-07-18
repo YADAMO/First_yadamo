@@ -110,12 +110,11 @@ extern "C" TASK(OSEK_Task_Background)
 	
 	while(1)
 	{
-		lineTracer.lineTrace(50);
+		lineTracer.lineTrace(35);
 //		ecrobot_status_monitor("NXTrike Sample");
 		display_clear(0);
 		display_goto_xy(0,1);
-		display_int(pid.calcTurn(light.getBrightness()), 1);
-		display_int(light.getBrightness(), 3);
+		display_int(driver.steerAngle, 1);
 		display_update();
 		clk.wait(4); /* 10msec wait */
 	}
