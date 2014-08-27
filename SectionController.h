@@ -1,17 +1,19 @@
 #pragma once
 #include "GrayDetector.h"
 #include "PositionEstimater.h"
-#include "LineTracer.h"
 
-enum Sections {FIRST_SECTION, SCOND_SECTION, };
+namespace std {}
+using namespace std;
+
+enum eSection{E_LineTrace = 0, E_Sumo = 1};
 
 class SectionController
 {
 public:
 	SectionController();
 	~SectionController();
-	void changeSection(int setting_position);
-	int getCurPosition();
+	void changeSection(int next_section);
+	int getCurSection();
 private:
-	int cur;
+	int current_section;
 };

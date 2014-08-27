@@ -54,6 +54,7 @@ TouchSensor touch(TOUCH);
 Nxt nxt;
 Clock clk;
 
+SectionController sectionController;
 Speaker speaker;
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
@@ -186,6 +187,14 @@ extern "C" TASK(OSEK_Task_Background)
 		logToAdcC[0] = motorR.getCount();
 		logToAdcC[1] = motorL.getCount();
 		
+		switch(sectionController.getCurSection()){	
+			case 0:
+			lineTracer.lineTrace(35);
+			break;
+			case 1:
+			break;
+		}
+		
 		lcd.clear(); // clear data buffer at row 1
 		if (btConnected){		
 			hoseimX = command.mX - offsetmX;
@@ -198,8 +207,7 @@ extern "C" TASK(OSEK_Task_Background)
 		}else{
 			lcd.putf("s", "not connected", 0);
 		}
-		
 		lcd.disp();
-		clk.wait(10); /* 10msec wait */
+		clk.wait(4); /* 10msec wait */
 	}
 }

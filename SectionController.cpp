@@ -2,20 +2,20 @@
 
 SectionController::SectionController()
 {
-	cur = FIRST_SECTION;
+	current_section = 0;
 }
 
 SectionController::~SectionController()
 {
 }
 
-void SectionController::changeSection(int setting_position)
+void SectionController::changeSection(int next_section)
 {
-	cur = setting_position;
+	current_section = next_section;
 }
 
-//必要であると感じました
-int SectionController::getCurPosition()
+
+int SectionController::getCurSection()
 {
-	return cur;
+	return current_section;
 }
