@@ -24,15 +24,15 @@ void UI::calibration(void){
 			touchCount++;
 			if(touchCount == 1){
 				white = lightSensor->getBrightness();
-				speaker->playTone(442, 100, 100);
+				speaker->playTone(442, 100, 10);
 				judge = false;
 			}else if(touchCount == 2){
 				black = lightSensor->getBrightness();
-				speaker->playTone(884, 100, 100);
+				speaker->playTone(884, 100, 10);
 				judge = false;
 			}else if(touchCount == 3){
 				lineTracer->setTarget(((float)white + (float)black) / 2);
-				speaker->playTone(1326, 100, 100);
+				speaker->playTone(1326, 100, 10);
 				judge = false;
 				break;
 			}

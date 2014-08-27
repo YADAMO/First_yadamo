@@ -87,3 +87,36 @@ void Driver::straight(int speed){
 }
 
 
+void Driver::operate(int leftStickValue, int rightStickValue){
+	//rightStickValue is steer value(left:-100 ~ right:100)
+	//left is speed(-100 ~ 100)
+	int count = motorS->getCount();
+	
+	int maxAngle = rightStickValue * 3;
+	
+	if(maxAngle >= 7){
+		if(count < maxAngle)
+			motorS->setPWM(100);
+		else
+			motorS->setPWM(-100);
+	}else if(maxAngle <= 7){
+		if(count > maxAngle)
+			motorS->setPWM(-100);
+		else
+			motorS->setPWM(100);
+	}else{
+		motorS->setPWM(0);
+	}
+	
+	int speedR = (leftStickValue + (leftStickValue > 0 ? -1*rightStickValue/2 :    rightStickValue/2))*1.5;
+	int speedL = (leftStickValue + (leftStickValue > 0 ?    rightStickValue/2 : -1*rightStickValue/2))*1.5;
+	if(speedR > 127) speedR = 127;
+	else if(speedR < -128) speedR = -128;
+	if(speedL > 127) speedR = 127;
+	else if(speedL < -128) speedL = -128;
+	
+	motorR->setPWM(speedR);
+	motorL->setPWM(speedL);
+}
+
+

@@ -24,4 +24,5 @@ public:
   void straightInit();
   void straight(int speed);
   int steerAngle;
+  void operate(int leftA, int rightA);
 };
