@@ -35,11 +35,11 @@ int Pid::calcTurn(float target){
     d = kd * (diff[1] - diff[0]) / delta;
 	
 	turn = (int)(p + i + d);
-	if(turn <= -100){
-	  turn = -100;
-	}else if(turn >= 100){
-	  turn = 100;
-	}
+	// if(turn <= -100){
+	  // turn = -100;
+	// }else if(turn >= 100){
+	  // turn = 100;
+	// }
 	
     return  turn;
 }

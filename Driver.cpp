@@ -25,8 +25,8 @@ void Driver::drive(int turn, int speed){
   steerAngle = 0;
   int right, left;
   
-  right = -turn/1.5 - speed;
-  left = turn/1.5 - speed;
+  right = -turn/1 - speed;
+  left = turn/1 - speed;
   if(right >= 127)	right = 127;
   if(right <= -128)	right = -128;
   if(left >= 127)	left = 127;
@@ -37,23 +37,27 @@ void Driver::drive(int turn, int speed){
 
   steerAngle = calcSteerAngle(right, left);
 
-  if(turn > 0){
+  if(turn > 0){//左旋回  steerAngle負
     if(count > steerAngle){
-      motorS->setPWM(-turn - TURN_BASE_SPEED);
+	  if(-turn - TURN_BASE_SPEED <= -128)	motorS->setPWM(-128);
+	  else motorS->setPWM(-turn - TURN_BASE_SPEED);
     }else{
       motorS->setPWM(0);
     }
-  }else if(turn < 0){
+  }else if(turn < 0){//右旋回 steerAngle正
     if(count < steerAngle){
-      motorS->setPWM(-turn + TURN_BASE_SPEED);
+	  if(-turn + TURN_BASE_SPEED >= 127)	motorS->setPWM(127);
+	  else motorS->setPWM(-turn + TURN_BASE_SPEED);
     }else{
       motorS->setPWM(0);
     }
   }else{
     if(count > 0){
-      motorS->setPWM(-turn - TURN_BASE_SPEED);
+	  if(-turn - TURN_BASE_SPEED <= -128)	motorS->setPWM(-128);
+	  else motorS->setPWM(-turn - TURN_BASE_SPEED);
     }else if(count < 0){
-      motorS->setPWM(-turn + TURN_BASE_SPEED);
+	  if(-turn + TURN_BASE_SPEED >= 127)	motorS->setPWM(127);
+	  else motorS->setPWM(-turn + TURN_BASE_SPEED);
     }else{
       motorS->setPWM(0);
     }
@@ -108,8 +112,8 @@ void Driver::operate(int leftStickValue, int rightStickValue){
 		motorS->setPWM(0);
 	}
 	
-	int speedR = (leftStickValue + (leftStickValue > 0 ? -1*rightStickValue/2 :    rightStickValue/2))*1.5;
-	int speedL = (leftStickValue + (leftStickValue > 0 ?    rightStickValue/2 : -1*rightStickValue/2))*1.5;
+	int speedR = (leftStickValue + (leftStickValue > 0 ? -1*rightStickValue/2 :    rightStickValue/2));
+	int speedL = (leftStickValue + (leftStickValue > 0 ?    rightStickValue/2 : -1*rightStickValue/2));
 	if(speedR > 127) speedR = 127;
 	else if(speedR < -128) speedR = -128;
 	if(speedL > 127) speedR = 127;
