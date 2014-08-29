@@ -4,10 +4,11 @@
 #include "LineTracer.h"
 #include "Clock.h"
 #include "Speaker.h"
+#include "OffsetHolder.h"
 
 class UI{
 public:
-	UI(LightSensor *light, TouchJudgement *touchJ, LineTracer *lineT, Clock *clk, Speaker *spk);
+	UI(LightSensor *light, TouchJudgement *touchJ, LineTracer *lineT, Clock *clk, Speaker *spk, OffsetHolder *oH);
 	~UI();
 	void calibration(void);
 private:
@@ -19,4 +20,5 @@ private:
 	int touchCount;
 	bool judge;
 	S16 white, black;
+	OffsetHolder *oHolder;
 };
