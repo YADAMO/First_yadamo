@@ -2,7 +2,9 @@
 #include "GrayDetector.h"
 #include "PositionEstimater.h"
 #include "LineTracer.h"
+#include "Section.h"
 #include "Pid.h"
+#include <vector>
 
 namespace std {}
 using namespace std;
@@ -15,7 +17,8 @@ public:
 	SectionController();
 	~SectionController();
 	void changeSection(int setting_position);
-	int getCurSection();
+	int getCurPosition();
 private:
-	int current_section;
+	int current;
+    vector<Section> vecSection;
 };

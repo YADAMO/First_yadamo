@@ -1,7 +1,6 @@
 #pragma once
 //read neccessary header file
 #include "Motor.h"
-#include "LineTracer.h"
 
 #define MAX_STEERING_ANGLE  270
 #define TURN_BASE_SPEED 70
@@ -24,4 +23,5 @@ public:
   void straightInit();
   void straight(int speed);
   int steerAngle;
+  void operate(int leftA, int rightA);
 };
