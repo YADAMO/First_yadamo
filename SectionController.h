@@ -1,5 +1,5 @@
 #pragma once
-#include "GrayDetector.h"
+#include "ColorDetector.h"
 #include "PositionEstimater.h"
 #include "LineTracer.h"
 
