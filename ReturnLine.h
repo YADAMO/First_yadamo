@@ -11,7 +11,8 @@ class ReturnLine
 public:
 	ReturnLine(Driver *argDriver, LightSensor *argLightSensor, ColorDetector *argColorDetector);
 	~ReturnLine();
-	void returnLine();
+	void returnLineLeft();
+	void returnLineRight();
 private:
 	int returnLine_time;
 	Driver *driver;
