@@ -11,6 +11,7 @@
 #include "PositionEstimater.h"
 #include "GrayDetector.h"
 #include "Pid.h"
+#include "ReturnLine.h"
 
 #include "Motor.h"
 #include "Port.h" //difined enum of port
@@ -55,6 +56,7 @@ Nxt nxt;
 Clock clk;
 
 SectionController sectionController;
+ReturnLine returnLine;
 Speaker speaker;
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
