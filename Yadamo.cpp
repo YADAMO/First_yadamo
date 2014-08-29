@@ -12,6 +12,7 @@
 #include "ColorDetector.h"
 #include "Pid.h"
 #include "ReturnLine.h"
+#include "OffsetHolder.h"
 
 #include "Motor.h"
 #include "Port.h" //difined enum of port
@@ -55,6 +56,7 @@ TouchSensor touch(TOUCH);
 Nxt nxt;
 Clock clk;
 
+OffsetHolder oHolder;
 SectionController sectionController;
 Speaker speaker;
 ColorDetector colorDetector;
@@ -66,8 +68,13 @@ LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
+<<<<<<< HEAD
 ReturnLine returnLine(&driver, &light, &colorDetector);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker);
+=======
+UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
+ReturnLine returnLine(&driver, &light);
+>>>>>>> origin/colorD
 
 
 // LineTracer _line;
@@ -195,4 +202,5 @@ extern "C" TASK(OSEK_Task_Background)
 		lcd.disp();
 		clk.wait(4); /* 10msec wait */
 	}
+
 }
