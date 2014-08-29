@@ -4,6 +4,9 @@
 #include "Driver.h"
 #include "Pid.h"
 
+#define LEFT -1
+#define RIGHT 1
+
 class Driver;
 class LineTracer {
 private:

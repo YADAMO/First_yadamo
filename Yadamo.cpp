@@ -12,6 +12,7 @@
 #include "GrayDetector.h"
 #include "Pid.h"
 #include "ReturnLine.h"
+#include "Figure.h"
 
 #include "Motor.h"
 #include "Port.h" //difined enum of port
@@ -67,6 +68,7 @@ Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker);
+Figure figure(&lineTracer);
 
 
 // LineTracer _line;
@@ -177,7 +179,8 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(sectionController.getCurSection()){	
 			case 0:
-			lineTracer.lineTrace(60, 1);
+			figure.run();
+//			lineTracer.lineTrace(60, 1);
 			break;
 			case 1:
 			break;
