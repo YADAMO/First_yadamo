@@ -57,6 +57,7 @@ Clock clk;
 
 SectionController sectionController;
 Speaker speaker;
+ColorDetector colorDetector;
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
@@ -65,8 +66,8 @@ LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
+ReturnLine returnLine(&driver, &light, &colorDetector);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker);
-ReturnLine returnLine(&driver, &light);
 
 
 // LineTracer _line;
@@ -136,11 +137,6 @@ extern "C" TASK(OSEK_Task_Background)
 	
 	if (btConnected)
 	{
-		switch(sectionController.getCurSection()){
-			case 0:
-				//lineTracer.lineTrace(35);
-				break;
-			}
 		command = gp.get();
 		lcd.clear();
 		lcd.putf("s", (gp.isConnected() ? "connected": "not connected"));
@@ -165,7 +161,7 @@ extern "C" TASK(OSEK_Task_Background)
 	logToMotorrevC[0] = 8;
 	logToMotorrevC[1] = 9;
 	logToMotorrevC[2] = 10;
-	logToMotorrevC[3] = 11;
+	logToMotorrevC[3] = 11;	
 	
 	while(1)
 	{
