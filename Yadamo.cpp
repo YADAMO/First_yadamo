@@ -143,21 +143,6 @@ extern "C" TASK(OSEK_Task_Background)
 	
 	int hoseimX;
 	int hoseimY;
-	// S8 logToDataC[2];
-	// logToDataC[0] = 128;
-	// logToDataC[1] = 128;
-	// U16 logToBatteryC = 257;
-	// S16 logToAdcC[4];
-	// logToAdcC[0] = 3855;
-	// logToAdcC[1] = 7967;
-	// logToAdcC[2] = 1799;
-	// logToAdcC[3] = 771;
-
-	// S32 logToMotorrevC[4];
-	// logToMotorrevC[0] = 0;
-	// logToMotorrevC[1] = 0;
-	// logToMotorrevC[2] = 0;
-	// logToMotorrevC[3] = 0;
 	
 	S8 logToDataC[2];
 	logToDataC[0] = 1;
@@ -175,12 +160,9 @@ extern "C" TASK(OSEK_Task_Background)
 	logToMotorrevC[2] = 10;
 	logToMotorrevC[3] = 11;	
 	
-	int buf[1];
-	
 	while(1)
 	{
 	
-//		lineTracer.lineTrace(35);
 //		driver.operate(hoseimX, hoseimY);
 		
 		logToBatteryC = light.getBrightness();
@@ -189,7 +171,7 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(sectionController.getCurSection()){	
 			case 0:
-			lineTracer.lineTrace(35);
+			lineTracer.lineTrace(60, 1);
 			break;
 			case 1:
 			break;

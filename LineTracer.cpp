@@ -12,8 +12,9 @@ LineTracer::~LineTracer()
 
 }
 
-void LineTracer::lineTrace(int speed){
-  driver->drive(pid->calcTurn(target), speed);
+//hidari adge == 1 , migi adge == -1
+void LineTracer::lineTrace(int speed, int adge){
+  driver->drive(adge * pid->calcTurn(target), speed);
 }
 
 void LineTracer::setTarget(float tar){
