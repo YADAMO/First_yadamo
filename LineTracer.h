@@ -14,6 +14,6 @@ private:
 public:
 	LineTracer(Driver *argDriver, Pid *argPid);
 	~LineTracer();
-	void lineTrace(int speed);
+	void lineTrace(int speed, int adge);
 	void setTarget(float target);
 };

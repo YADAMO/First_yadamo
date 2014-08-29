@@ -171,7 +171,7 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(sectionController.getCurSection()){	
 			case 0:
-			lineTracer.lineTrace(35);
+			lineTracer.lineTrace(60, 1);
 			break;
 			case 1:
 			break;
