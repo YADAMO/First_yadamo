@@ -1,6 +1,8 @@
 #pragma once
 #include "GrayDetector.h"
 #include "PositionEstimater.h"
+#include "LineTracer.h"
+#include "Pid.h"
 
 namespace std {}
 using namespace std;
@@ -12,7 +14,7 @@ class SectionController
 public:
 	SectionController();
 	~SectionController();
-	void changeSection(int next_section);
+	void changeSection(int setting_position);
 	int getCurSection();
 private:
 	int current_section;
