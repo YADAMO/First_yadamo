@@ -9,10 +9,11 @@
 #include "SectionController.h"
 #include "Driver.h"
 #include "PositionEstimater.h"
-#include "GrayDetector.h"
+#include "ColorDetector.h"
 #include "Pid.h"
 #include "ReturnLine.h"
 #include "Figure.h"
+#include "OffsetHolder.h"
 
 #include "Motor.h"
 #include "Port.h" //difined enum of port
@@ -56,8 +57,8 @@ TouchSensor touch(TOUCH);
 Nxt nxt;
 Clock clk;
 
+OffsetHolder oHolder;
 SectionController sectionController;
-ReturnLine returnLine;
 Speaker speaker;
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
@@ -67,8 +68,9 @@ LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
-UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker);
 Figure figure(&lineTracer);
+UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
+ReturnLine returnLine(&driver, &light);
 
 
 // LineTracer _line;
@@ -140,8 +142,9 @@ extern "C" TASK(OSEK_Task_Background)
 	{
 		switch(sectionController.getCurSection()){
 			case 0:
-				lineTracer.lineTrace(35);
+				//lineTracer.lineTrace(35);
 				break;
+			}
 		command = gp.get();
 		lcd.clear();
 		lcd.putf("s", (gp.isConnected() ? "connected": "not connected"));
@@ -166,7 +169,7 @@ extern "C" TASK(OSEK_Task_Background)
 	logToMotorrevC[0] = 8;
 	logToMotorrevC[1] = 9;
 	logToMotorrevC[2] = 10;
-	logToMotorrevC[3] = 11;	
+	logToMotorrevC[3] = 11;
 	
 	while(1)
 	{

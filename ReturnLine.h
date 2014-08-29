@@ -1,6 +1,5 @@
 #pragma once
 #include "LightSensor.h"
-#include "Pid.h"
 #include "Driver.h"
 
 namespace std {}
@@ -9,11 +8,11 @@ using namespace std;
 class ReturnLine
 {
 public:
-	ReturnLine(Driver *argDriver, Pid *argPid);
+	ReturnLine(Driver *argDriver, LightSensor *argLightSensor);
 	~ReturnLine();
 	void returnLine();
 private:
 	int returnLine_time;
 	Driver *driver;
-  	Pid *pid;
+  	LightSensor *lightSensor;
 };
