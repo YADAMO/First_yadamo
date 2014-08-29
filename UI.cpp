@@ -1,6 +1,6 @@
 #include "UI.h"
 
-UI::UI(LightSensor *light, TouchJudgement *touchJ, LineTracer *lineT, Clock *clk, Speaker *spk){
+UI::UI(LightSensor *light, TouchJudgement *touchJ, LineTracer *lineT, Clock *clk, Speaker *spk, OffsetHolder *oH){
 	lightSensor = light;
 	touchJudgement = touchJ;
 	lineTracer = lineT;
@@ -10,6 +10,7 @@ UI::UI(LightSensor *light, TouchJudgement *touchJ, LineTracer *lineT, Clock *clk
 	judge = false;
 	white = 0;
 	black = 0;
+	oHolder = oH;
 }
 
 UI::~UI(){
@@ -24,10 +25,12 @@ void UI::calibration(void){
 			touchCount++;
 			if(touchCount == 1){
 				white = lightSensor->getBrightness();
+				oHolder->setWhite(white);
 				speaker->playTone(442, 100, 10);
 				judge = false;
 			}else if(touchCount == 2){
 				black = lightSensor->getBrightness();
+				oHolder->setBlack(black);
 				speaker->playTone(884, 100, 10);
 				judge = false;
 			}else if(touchCount == 3){

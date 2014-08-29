@@ -12,6 +12,7 @@
 #include "ColorDetector.h"
 #include "Pid.h"
 #include "ReturnLine.h"
+#include "OffsetHolder.h"
 
 #include "Motor.h"
 #include "Port.h" //difined enum of port
@@ -55,6 +56,7 @@ TouchSensor touch(TOUCH);
 Nxt nxt;
 Clock clk;
 
+OffsetHolder oHolder;
 SectionController sectionController;
 Speaker speaker;
 Motor motorL(DRIVE_L,true);
@@ -65,7 +67,7 @@ LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
-UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker);
+UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light);
 
 
