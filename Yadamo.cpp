@@ -9,7 +9,7 @@
 #include "SectionController.h"
 #include "Driver.h"
 #include "PositionEstimater.h"
-#include "GrayDetector.h"
+#include "ColorDetector.h"
 #include "Pid.h"
 #include "ReturnLine.h"
 
