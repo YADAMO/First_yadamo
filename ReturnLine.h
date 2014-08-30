@@ -1,5 +1,6 @@
 #pragma once
 #include "LightSensor.h"
+#include "ColorDetector.h"
 #include "Driver.h"
 #include "ColorDetector.h"
 
@@ -11,11 +12,11 @@ public:
 	ReturnLine(Driver *argDriver, LightSensor *argLightSensor, ColorDetector *argColorDetector);
 	~ReturnLine();
 	bool returnLineLeft();
-    bool returnLineRight();
+	bool returnLineRight();
 private:
 	int returnLine_time;
-    bool black_isleft;
+	bool black_isleft;
 	Driver *driver;
   	LightSensor *lightSensor;
-    ColorDetector *colorDetector;
+  	ColorDetector *colorDetector;
 };
