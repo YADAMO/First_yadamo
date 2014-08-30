@@ -20,7 +20,7 @@ bool Jumper::run()
 	runtime += 4;
 	switch(phase){
 		case 0://段差に上る
-			if(stepper->run(-1)){
+			if(stepper->run(1)){
 				phase++;
 				runtime = 0;
 			}
@@ -33,7 +33,7 @@ bool Jumper::run()
 			}
 			break;
 		case 2://
-			lineTracer->lineTrace(40, -1);
+			lineTracer->lineTrace(20, 1);
 			if(runtime > 4000){
 				phase++;
 				runtime = 0;
@@ -48,7 +48,7 @@ bool Jumper::run()
 			break;
 		case 4:
 			driver->straight(100);
-			if(runtime > 1000){
+			if(runtime > 700){
 				phase++;
 				runtime = 0;
 			}
