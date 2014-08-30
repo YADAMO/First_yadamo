@@ -180,7 +180,6 @@ extern "C" TASK(OSEK_Task_Background)
 	
 	int runtime = 0;
 	int phase = 0;
-	bool flag = false;
 	while(1)
 	{
 		
@@ -196,9 +195,13 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(phase){
 			case 0:
+<<<<<<< HEAD
 				if(jumper.run()){
 					phase++;
 				}
+=======
+				lineTracer.lineTrace(50, -1);
+>>>>>>> origin/master
 				break;
 			case 1:
 				driver.drive(0, 0);

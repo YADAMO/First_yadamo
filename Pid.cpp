@@ -2,9 +2,18 @@
 
 Pid::Pid(LightSensor *light){
     delta = 0.004; //処理周期：現在1msec
-    kp = 0.3;
+    // kp = 0.3;
+    // ki = 0.001;
+    // kd = 0.03;
+
+    // kp = 0.2; //ストレート
+    // ki = 0.001;//ストレート
+    // kd = 0.03;//ストレート
+
+	kp = 0.3;
     ki = 0.001;
     kd = 0.03;
+
     diff[0] = 0;
 	diff[1] = 0;
     integral = 0;
