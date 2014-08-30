@@ -68,7 +68,8 @@ LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
-Figure figure(&lineTracer);
+ColorDetector colorDetector(&light, &oHolder);
+Figure figure(&lineTracer, &colorDetector, &driver);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light);
 
@@ -199,7 +200,13 @@ extern "C" TASK(OSEK_Task_Background)
 			lcd.clear(); // clear data buffer at row 1
 			lcd.putf("dd", hoseimX,0, hoseimY, 5);
 		}else{
-			lcd.putf("s", "not connected", 0);
+			int flag = 0;
+			// if(colorDetector.blackLineDetect()){
+			// 	flag = 1;
+			// }else{
+			// 	flag = 0;
+			// }
+			lcd.putf("ddd", oHolder.getBlack(), 0, oHolder.getWhite(), 4, flag, 7);
 		}
 		lcd.disp();
 		clk.wait(4); /* 10msec wait */
