@@ -6,16 +6,16 @@
 namespace std {}
 using namespace std;
 
-class ReturnLine
+class Jumper
 {
 public:
-	ReturnLine(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper);
-	~ReturnLine();
-	bool returnLineLeft();
-	bool returnLineRight();
+	Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper);
+	~Jumper();
+	bool run();
 private:
-	int jumper_time;
+	int runtime;
+	int phase;
 	Stepper *stepper;
 	Driver *driver;
-	LineTracer *argLineTracer;
+	LineTracer *lineTracer;
 };

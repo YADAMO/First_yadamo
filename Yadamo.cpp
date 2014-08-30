@@ -35,6 +35,7 @@
 #include "StepDetector.h"
 #include "Mogul.h"
 #include "Stepper.h"
+#include "Jumper.h"
 
 using namespace ecrobot;
 
@@ -74,10 +75,11 @@ TouchJudgement touchJudgement(&touch);
 ColorDetector colorDetector(&light, &oHolder);
 Figure figure(&lineTracer, &colorDetector, &driver);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
-ReturnLine returnLine(&driver, &light);
+ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);
+Jumper jumper(&driver, &lineTracer, &stepper);
 
 
 // LineTracer _line;
@@ -194,13 +196,12 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(phase){
 			case 0:
-				if(mogul.run()){
+				if(jumper.run()){
 					phase++;
 				}
 				break;
 			case 1:
-				driver.straightInit();
-				driver.straight(0);
+				driver.drive(0, 0);
 				break;
 		}
 		lcd.clear(); // clear data buffer at row 1

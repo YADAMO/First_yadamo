@@ -1,48 +1,63 @@
 #include "Jumper.h"
 
-ReturnLine::ReturnLine(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper)
+Jumper::Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper)
 {
-	jumper_time = 0;
+	runtime = 0;
+	phase = 0;
 	stepper = argStepper;
 	lineTracer = argLineTracer;
 	driver = argDriver;
 }
 
-ReturnLine::~ReturnLine()
+Jumper::~Jumper()
 {
 }
 
 //左エッジで復帰したい場合
 //これのtrueを確認したあとに左エッジの低速ライントレース
-bool ReturnLine::returnLineLeft()
+bool Jumper::run()
 {
-	returnLine_time += 4;
-	if(!black_isleft){
-		if(returnLine_time < 3000){
-			driver->drive(-40, 20);
-			if(colorDetector->blackLineDetect()){
-				black_isleft = true;
-				returnLine_time = 0;
+	runtime += 4;
+	switch(phase){
+		case 0://段差に上る
+			if(stepper->run(-1)){
+				phase++;
+				runtime = 0;
 			}
-			return false;
-		}else if(returnLine_time < 5000){
-			driver->drive(-40, 0);
-			return false;
-		}else if(returnLine_time < 8000){
-			driver->drive(-40, -20);
-			return false;
-		}else if(returnLine_time < 11000){
-			driver->drive(0, 0);
+			break;
+		case 1://１秒止まる
+			driver->straight(0);
+			if(runtime > 1000){
+				phase++;
+				runtime = 0;
+			}
+			break;
+		case 2://
+			lineTracer->lineTrace(40, -1);
+			if(runtime > 4000){
+				phase++;
+				runtime = 0;
+			}
+			break;
+		case 3://
+			driver->straight(-20);
+			if(runtime > 1500){
+				phase++;
+				runtime = 0;
+			}
+			break;
+		case 4:
+			driver->straight(100);
+			if(runtime > 1000){
+				phase++;
+				runtime = 0;
+			}
+			break;
+		case 5:
+			lineTracer->lineTrace(20, -1);
 			return true;
-		}
-	}else{
-		if(returnLine_time < 500){
-			driver->drive(40, 20);
-			return false;
-		}else{
-			driver->drive(0, 0);
-			return true;
-		}
+			break;
+
 	}
 	return false;
 }
