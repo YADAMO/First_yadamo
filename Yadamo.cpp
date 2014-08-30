@@ -11,7 +11,7 @@
 #include "PositionEstimater.h"
 #include "ColorDetector.h"
 #include "Pid.h"
-// #include "ReturnLine.h"
+#include "ReturnLine.h"
 #include "Figure.h"
 #include "OffsetHolder.h"
 
@@ -74,7 +74,7 @@ TouchJudgement touchJudgement(&touch);
 ColorDetector colorDetector(&light, &oHolder);
 Figure figure(&lineTracer, &colorDetector, &driver);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
-// ReturnLine returnLine(&driver, &light);
+ReturnLine returnLine(&driver, &light);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);

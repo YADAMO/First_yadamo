@@ -53,7 +53,11 @@ bool Stepper::run(int edge){
 			}
 			break;
 		case 3:
-			lineTracer->lineTrace(INSPEED, edge);
+			if(!sflag){
+				driver->straightInit();
+				sflag = true;
+			}
+			driver->straight(INSPEED);
 			if(stepDetector->detect() && runtime > 500){
 				phase++;
 				runtime = 0;
