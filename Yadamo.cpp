@@ -178,7 +178,6 @@ extern "C" TASK(OSEK_Task_Background)
 	
 	int runtime = 0;
 	int phase = 0;
-	bool flag = false;
 	while(1)
 	{
 		
@@ -194,9 +193,7 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(phase){
 			case 0:
-				if(mogul.run()){
-					phase++;
-				}
+				lineTracer.lineTrace(50, -1);
 				break;
 			case 1:
 				driver.straightInit();
