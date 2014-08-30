@@ -73,11 +73,11 @@ Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
 ColorDetector colorDetector(&light, &oHolder);
-Figure figure(&lineTracer, &colorDetector, &driver);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver);
+Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);
 Jumper jumper(&driver, &lineTracer, &stepper);
 
@@ -195,13 +195,11 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(phase){
 			case 0:
-				if(jumper.run()){
-					phase++;
-				}
-				break;
+			// driver.straight(30);
+			figure.run();
+			break;
 			case 1:
-				driver.drive(0, 0);
-				break;
+			break;
 		}
 		lcd.clear(); // clear data buffer at row 1
 		if (btConnected){		
