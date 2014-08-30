@@ -12,6 +12,7 @@
 #include "ColorDetector.h"
 #include "Pid.h"
 #include "ReturnLine.h"
+#include "Figure.h"
 #include "OffsetHolder.h"
 
 #include "Motor.h"
@@ -31,6 +32,9 @@
 #include "Distance.h"
 #include "TouchJudgement.h"
 #include "UI.h"
+#include "StepDetector.h"
+#include "Mogul.h"
+#include "Stepper.h"
 
 using namespace ecrobot;
 
@@ -59,7 +63,6 @@ Clock clk;
 OffsetHolder oHolder;
 SectionController sectionController;
 Speaker speaker;
-ColorDetector colorDetector;
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
@@ -68,13 +71,13 @@ LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
 TouchJudgement touchJudgement(&touch);
-<<<<<<< HEAD
-ReturnLine returnLine(&driver, &light, &colorDetector);
-UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker);
-=======
+ColorDetector colorDetector(&light, &oHolder);
+Figure figure(&lineTracer, &colorDetector, &driver);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light);
->>>>>>> origin/colorD
+StepDetector stepDetector(&motorR, &motorL, &speaker);
+Stepper stepper(&stepDetector, &lineTracer, &driver);
+Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);
 
 
 // LineTracer _line;
@@ -113,6 +116,9 @@ void ecrobot_device_terminate()
 
 /* nxtOSEK hook to be invoked from an ISR in category 2 */
 void user_1ms_isr_type2(void){ /* do nothing */ }
+
+
+
 
 extern "C" TASK(OSEK_Task_Background)
 {
@@ -170,23 +176,33 @@ extern "C" TASK(OSEK_Task_Background)
 	logToMotorrevC[2] = 10;
 	logToMotorrevC[3] = 11;	
 	
+	int runtime = 0;
+	int phase = 0;
+	bool flag = false;
 	while(1)
 	{
-	
-//		driver.operate(hoseimX, hoseimY);
 		
+//		driver.operate(hoseimX, hoseimY);
+		if(runtime % 100 == 0){
+			motorR.setDiff();
+			motorL.setDiff();
+		}
+
 		logToBatteryC = light.getBrightness();
 		logToAdcC[0] = motorR.getCount();
 		logToAdcC[1] = motorL.getCount();
 		
-		switch(sectionController.getCurSection()){	
+		switch(phase){
 			case 0:
-			returnLine.returnLine();
-			break;
+				if(mogul.run()){
+					phase++;
+				}
+				break;
 			case 1:
-			break;
+				driver.straightInit();
+				driver.straight(0);
+				break;
 		}
-		
 		lcd.clear(); // clear data buffer at row 1
 		if (btConnected){		
 			hoseimX = command.mX - offsetmX;
@@ -197,10 +213,18 @@ extern "C" TASK(OSEK_Task_Background)
 			lcd.clear(); // clear data buffer at row 1
 			lcd.putf("dd", hoseimX,0, hoseimY, 5);
 		}else{
-			lcd.putf("s", "not connected", 0);
+			int flag = 0;
+			// if(colorDetector.blackLineDetect()){
+			// 	flag = 1;
+			// }else{
+			// 	flag = 0;
+			// }
+			lcd.putf("ddd", oHolder.getBlack(), 0, oHolder.getWhite(), 4, flag, 7);
 		}
 		lcd.disp();
 		clk.wait(4); /* 10msec wait */
+
+		runtime += 4;
 	}
 
 }

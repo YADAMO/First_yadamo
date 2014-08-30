@@ -19,26 +19,26 @@ bool ReturnLine::returnLineLeft()
 {
 	returnLine_time += 4;
 	if(!black_isleft){
-		if(returnLine_time < 3000){
-			driver->drive(-40, 20);
+		if(returnLine_time < 5000){
+			driver->drive(-60, 20);
 			if(colorDetector->blackLineDetect()){
 				black_isleft = true;
 				returnLine_time = 0;
 			}
 			return false;
-		}else if(returnLine_time < 5000){
-			driver->drive(-40, 0);
-			return false;
-		}else if(returnLine_time < 8000){
-			driver->drive(-40, -20);
+		}else if(returnLine_time < 6000){
+			driver->drive(-60, 0);
 			return false;
 		}else if(returnLine_time < 11000){
+			driver->drive(-60, -20);
+			return false;
+		}else if(returnLine_time < 16000){
 			driver->drive(0, 0);
 			return true;
 		}
 	}else{
-		if(returnLine_time < 500){
-			driver->drive(40, 20);
+		if(returnLine_time < 2000){
+			driver->drive(80, 10);
 			return false;
 		}else{
 			driver->drive(0, 0);
@@ -61,19 +61,19 @@ bool ReturnLine::returnLineRight()
 				returnLine_time = 0;
 			}
 			return false;
-		}else if(returnLine_time < 8000){
+		}else if(returnLine_time < 6000){
 			driver->drive(60, 0);
 			return false;
-		}else if(returnLine_time < 13000){
+		}else if(returnLine_time < 11000){
 			driver->drive(60, -20);
 			return false;
-		}else if(returnLine_time < 18000){
+		}else if(returnLine_time < 16000){
 			driver->drive(0, 0);
 			return true;
 		}
 	}else{
 		if(returnLine_time < 2000){
-			driver->drive(-60, 20);
+			driver->drive(-80, 10);
 			return false;
 		}else{
 			driver->drive(0, 0);

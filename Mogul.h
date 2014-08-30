@@ -1,13 +1,22 @@
 #pragma once
 
-#include "Motor.h"
+#include "Driver.h"
+#include "LineTracer.h"
+#include "StepDetector.h"
+#include "Stepper.h"
 
 class Mogul{
 private:
-	Motor *rightMotor;
-	Motor *leftMotor;
-
+	Driver *driver;
+	LineTracer *lineTracer;
+	StepDetector *stepDetector;
+	Stepper *stepper;
+	int phase;
+	int runtime;
+	int hillnum;
+	bool sflag;
 public:
-	Mogul(Motor *rightMotor,);
+	Mogul(Driver *dr, LineTracer *lt, StepDetector *sd, Stepper *stepper);
+	~Mogul();
 	bool run();
-}
+};

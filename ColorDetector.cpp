@@ -17,18 +17,20 @@ bool ColorDetector::grayDetect(){
 }
 
 bool ColorDetector::blackLineDetect(){
-    if(runtime < 60){
-    	buffer[runtime/4] = lightSensor->getBrightness();
+    if(runtime < 56){
+    	runtime += 4;
+    }else{
+    	runtime = 0;
     }
+   	buffer[runtime/4] = lightSensor->getBrightness();
 
     int sum = 0;
     for(int i = 0; i < 15; i++){
     	sum += (int)buffer[i];
     }
 
-    runtime += 4;
 
-    if(sum / 15 < oHolder->getBlack() + 20){
+    if(buffer[0] < oHolder->getBlack() + 20){
     	return true;
     }else{
     	return false;
