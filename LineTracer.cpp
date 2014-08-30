@@ -20,3 +20,7 @@ void LineTracer::lineTrace(int speed, int adge){
 void LineTracer::setTarget(float tar){
 	target = tar;
 }
+
+float LineTracer::getTarget(){
+	return target;
+}

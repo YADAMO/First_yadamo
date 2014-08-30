@@ -19,4 +19,5 @@ public:
 	~LineTracer();
 	void lineTrace(int speed, int adge);
 	void setTarget(float target);
+	float getTarget();
 };

@@ -30,7 +30,7 @@ bool ColorDetector::blackLineDetect(){
     }
 
 
-    if(buffer[0] < oHolder->getBlack() + 20){
+    if(buffer[0] < oHolder->getBlack() + 10){
     	return true;
     }else{
     	return false;
