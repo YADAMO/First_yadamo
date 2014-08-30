@@ -35,6 +35,7 @@
 #include "StepDetector.h"
 #include "Mogul.h"
 #include "Stepper.h"
+#include "Jumper.h"
 
 using namespace ecrobot;
 
@@ -78,6 +79,7 @@ StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);
+Jumper jumper(&driver, &lineTracer, &stepper);
 
 
 // LineTracer _line;
