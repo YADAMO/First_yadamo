@@ -13,6 +13,7 @@ Motor::Motor(ePortM port, bool brake)
 :
 mPort(port),
 mBrake(brake),
+
 mPWM(0)
 {
 	AssertDeviceConstructor("Motor Assert");
@@ -47,5 +48,17 @@ void Motor::setBrake(bool brake)
 {
 	mBrake = brake;
 	setPWM(mPWM);
+}
+
+
+void Motor::setDiff(void){
+	diff.push_back((int)getCount());
+	if(diff.size() > 4){
+		diff.pop_front();
+	}
+}
+
+bool Motor::isStep(void){
+	return (diff.front() == getCount());
 }
 

@@ -10,8 +10,8 @@ private:
 public:
 	OffsetHolder();
 	~OffsetHolder();
-	void OffsetHolder::setBlack(S16 value);
-	S16 OffsetHolder::getBlack();
-	void OffsetHolder::setWhite(S16 value);
-	S16 OffsetHolder::getWhite();
+	void setBlack(S16 value);
+	S16 getBlack();
+	void setWhite(S16 value);
+	S16 getWhite();
 };

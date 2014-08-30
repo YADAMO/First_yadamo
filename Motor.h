@@ -8,13 +8,14 @@
 #define MOTOR_H_
 
 #include "Port.h"
+#include <list>
 
 extern "C"
 {
 	#include "ecrobot_interface.h"
 	#include "rtoscalls.h"
 };
-
+ 
 namespace ecrobot
 {
 /**
@@ -90,6 +91,10 @@ public:
 	 */
 	void setBrake(bool brake);
 
+
+	bool isStep(void);
+
+	void setDiff(void);
 protected:
 	/**
 	 * Get motor connected port.
@@ -116,6 +121,8 @@ private:
    ePortM mPort;
 	bool mBrake;
 	S8 mPWM;
+	std::list<S32> diff;
+
 };
 }
 

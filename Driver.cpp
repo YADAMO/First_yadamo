@@ -87,6 +87,7 @@ void Driver::straight(int speed){
   
 	motorL->setPWM(left);
 	motorR->setPWM(right);
+  motorS->setPWM(-motorS->getCount());
 	
 }
 
