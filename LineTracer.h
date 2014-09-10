@@ -4,8 +4,8 @@
 #include "Driver.h"
 #include "Pid.h"
 
-#define RIGHTADGE 1
-#define LEFTADGE -1
+#define RIGHTEDGE 1
+#define LEFTEDGE -1
 
 class Driver;
 class LineTracer {
