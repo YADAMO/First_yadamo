@@ -5,10 +5,10 @@ Distance::Distance(){
 	leftOffset = 0;
 }
 
-Distance::Distance(S32 L, S32 R){
-	rightOffset = R;
-	leftOffset = L;
-}
+// Distance::Distance(S32 L, S32 R){
+// 	rightOffset = R;
+// 	leftOffset = L;
+// }
 
 Distance::~Distance(){
 

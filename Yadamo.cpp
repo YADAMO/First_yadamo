@@ -36,6 +36,7 @@
 #include "Mogul.h"
 #include "Stepper.h"
 #include "Jumper.h"
+#include "Basic.h"
 
 using namespace ecrobot;
 
@@ -64,6 +65,7 @@ Clock clk;
 OffsetHolder oHolder;
 SectionController sectionController;
 Speaker speaker;
+Distance distance;
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
@@ -80,6 +82,9 @@ Stepper stepper(&stepDetector, &lineTracer, &driver);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);
 Jumper jumper(&driver, &lineTracer, &stepper);
+Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
+
+
 
 
 // LineTracer _line;
@@ -163,19 +168,19 @@ extern "C" TASK(OSEK_Task_Background)
 	int hoseimY;
 	
 	S8 logToDataC[2];
-	logToDataC[0] = 1;
-	logToDataC[1] = 2;
-	U16 logToBatteryC = 3;
+	logToDataC[0] = 1;//data1
+	logToDataC[1] = 2;//data2
+	U16 logToBatteryC = 3;//data3
 	S16 logToAdcC[4];
-	logToAdcC[0] = 4;
-	logToAdcC[1] = 5;
-	logToAdcC[2] = 6;
+	logToAdcC[0] = 4;//data7
+	logToAdcC[1] = 5;//data8
+	logToAdcC[2] = 6;//data9
 	logToAdcC[3] = 7;
 
 	S32 logToMotorrevC[4];
-	logToMotorrevC[0] = 8;
-	logToMotorrevC[1] = 9;
-	logToMotorrevC[2] = 10;
+	logToMotorrevC[0] = 8;//data4
+	logToMotorrevC[1] = 9;//data5
+	logToMotorrevC[2] = 10;//data6
 	logToMotorrevC[3] = 11;	
 	
 	int runtime = 0;
@@ -184,22 +189,28 @@ extern "C" TASK(OSEK_Task_Background)
 	{
 		
 //		driver.operate(hoseimX, hoseimY);
-		if(runtime % 100 == 0){
-			motorR.setDiff();
-			motorL.setDiff();
-		}
+		// if(runtime % 100 == 0){
+		// 	motorR.setDiff();
+		// 	motorL.setDiff();
+		// }
 
 		logToBatteryC = light.getBrightness();
-		logToAdcC[0] = motorR.getCount();
-		logToAdcC[1] = motorL.getCount();
+		logToMotorrevC[0] = distance.getDistance(motorL.getCount(), motorR.getCount());
+		logToMotorrevC[1] = motorL.getCount();
+		logToMotorrevC[2] = motorR.getCount();
 		
 		switch(phase){
 			case 0:
-			// driver.straight(30);
-			figure.run();
-			break;
+				// pid.changePid(0.27, 0.001, 0.023);
+				// lineTracer.lineTrace(40, 1);
+				// if(runtime > 400){
+				// 	phase++;
+				// }
+				basic.runIN();
+				break;
 			case 1:
-			break;
+				// lineTracer.lineTrace(90, 1);
+				break;
 		}
 		lcd.clear(); // clear data buffer at row 1
 		if (btConnected){		
@@ -217,7 +228,7 @@ extern "C" TASK(OSEK_Task_Background)
 			// }else{
 			// 	flag = 0;
 			// }
-			lcd.putf("ddd", oHolder.getBlack(), 0, oHolder.getWhite(), 4, flag, 7);
+			// lcd.putf("ddd", oHolder.getBlack(), 0, oHolder.getWhite(), 4, flag, 7);
 		}
 		lcd.disp();
 		clk.wait(4); /* 10msec wait */
