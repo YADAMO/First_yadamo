@@ -3,8 +3,6 @@
 #include "Stepper.h"
 #include "Driver.h"
 
-namespace std {}
-using namespace std;
 
 class Jumper
 {

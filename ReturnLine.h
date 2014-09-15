@@ -4,7 +4,6 @@
 #include "Driver.h"
 #include "ColorDetector.h"
 
-using namespace std;
 
 class ReturnLine
 {

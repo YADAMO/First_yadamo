@@ -3,8 +3,6 @@
 #include "PositionEstimater.h"
 #include "LineTracer.h"
 
-namespace std {}
-using namespace std;
 
 class SectionController
 {
