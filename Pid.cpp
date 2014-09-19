@@ -10,9 +10,9 @@ Pid::Pid(LightSensor *light){
  //    ki = 0.001;//ストレート
  //    kd = 0.03;//ストレート
 
-	kp = 0.3;
+	kp = 0.25;
     ki = 0.001;
-    kd = 0.03;
+    kd = 0.02;
 
     diff[0] = 0;
 	diff[1] = 0;

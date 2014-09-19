@@ -25,8 +25,8 @@ void Driver::drive(int turn, int speed){
   steerAngle = 0;
   int right, left;
   
-  right = -turn/1 - speed;
-  left = turn/1 - speed;
+  right = -turn - speed;
+  left = turn - speed;
   if(right >= 127)	right = 127;
   if(right <= -128)	right = -128;
   if(left >= 127)	left = 127;

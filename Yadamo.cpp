@@ -36,6 +36,7 @@
 #include "Mogul.h"
 #include "Stepper.h"
 #include "Jumper.h"
+#include "GridRunner.h"
 
 using namespace ecrobot;
 
@@ -80,6 +81,7 @@ Stepper stepper(&stepDetector, &lineTracer, &driver);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);
 Jumper jumper(&driver, &lineTracer, &stepper);
+GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector);
 
 
 // LineTracer _line;
@@ -196,7 +198,7 @@ extern "C" TASK(OSEK_Task_Background)
 		switch(phase){
 			case 0:
 			// driver.straight(30);
-			figure.run();
+			gridRunner.run();
 			break;
 			case 1:
 			break;
@@ -217,7 +219,7 @@ extern "C" TASK(OSEK_Task_Background)
 			// }else{
 			// 	flag = 0;
 			// }
-			lcd.putf("ddd", oHolder.getBlack(), 0, oHolder.getWhite(), 4, flag, 7);
+			lcd.putf("dddd", oHolder.getBlack(), 0, oHolder.getWhite(), 4, logToBatteryC, 4, flag, 4);
 		}
 		lcd.disp();
 		clk.wait(4); /* 10msec wait */
