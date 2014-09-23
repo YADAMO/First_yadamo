@@ -81,9 +81,9 @@ ColorDetector colorDetector(&light, &oHolder);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
-Stepper stepper(&stepDetector, &lineTracer, &driver, &pid);
+Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
-Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &motorR, &motorL);
+Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance);
 Jumper jumper(&driver, &lineTracer, &stepper);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
@@ -214,7 +214,6 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
-				// driver.straight(50);
 				break;
 			case 1:
 				// lineTracer.lineTrace(90, 1);
