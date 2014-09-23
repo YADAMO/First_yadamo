@@ -72,6 +72,7 @@ Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
 Driver driver(&motorL, &motorR, &motorS);
+Distance distance(&motorR, &motorL);
 LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
@@ -80,9 +81,9 @@ ColorDetector colorDetector(&light, &oHolder);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
-Stepper stepper(&stepDetector, &lineTracer, &driver);
+Stepper stepper(&stepDetector, &lineTracer, &driver, &pid);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
-Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);
+Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &motorR, &motorL);
 Jumper jumper(&driver, &lineTracer, &stepper);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 
@@ -191,13 +192,13 @@ extern "C" TASK(OSEK_Task_Background)
 	{
 		
 //		driver.operate(hoseimX, hoseimY);
-		// if(runtime % 100 == 0){
-		// 	motorR.setDiff();
-		// 	motorL.setDiff();
-		// }
+		if(runtime % 100 == 0){
+			motorR.setDiff();
+			motorL.setDiff();
+		}
 
 		logToBatteryC = light.getBrightness();
-		logToMotorrevC[0] = distance.getDistance(motorL.getCount(), motorR.getCount());
+		logToMotorrevC[0] = distance.getDistance();
 		logToMotorrevC[1] = motorL.getCount();
 		logToMotorrevC[2] = motorR.getCount();
 
@@ -211,6 +212,8 @@ extern "C" TASK(OSEK_Task_Background)
 				// 	phase++;
 				// }
 				// basic.runIN();
+				// mogul.run();
+				driver.straight(50);
 				break;
 			case 1:
 				// lineTracer.lineTrace(90, 1);
