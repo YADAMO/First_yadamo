@@ -3,6 +3,7 @@
 #include "ColorDetector.h"
 #include "Driver.h"
 #include "Stepper.h"
+#include "OffsetHolder.h"
 
 using namespace ecrobot;
 
@@ -12,12 +13,13 @@ private:
 	ColorDetector *colorDetector;
 	Driver *driver;
 	Stepper *stepper;
+	OffsetHolder *offsetHolder;
 	int runtime;
 	bool spFlag;
 	bool detected;
 	float tmptarget;
 public:
-	Figure(LineTracer *argLineTracer, ColorDetector *argColorDetector, Driver *argDriver, Stepper *sp);
+	Figure(LineTracer *argLineTracer, ColorDetector *argColorDetector, Driver *argDriver, Stepper *sp, OffsetHolder *of);
 	~Figure();
 	bool run();
 };

@@ -15,6 +15,7 @@ Stepper::Stepper(StepDetector *sd, LineTracer *lt, Driver *dr, Pid *pd, Distance
 	phase = 0;
 	runtime = 0;
 	sflag = false;
+	stepSpeed = 40;
 }
 
 Stepper::~Stepper(){
@@ -39,9 +40,12 @@ bool Stepper::run(int edge){
 			}
 			break;
 		case 2://のぼる
-			lineTracer->lineTrace(60, edge);
+			lineTracer->lineTrace(stepSpeed, edge);
 			if(distance->getDistance() < -25){
 				phase = 10;
+			}
+			if(stepDetector->detect()){
+				stepSpeed += 1;
 			}
 			break;
 		case 3://低速でぶつける
@@ -81,6 +85,8 @@ bool Stepper::run(int edge){
 			break;
 		case 10:
 			driver->straight(0);
+			runtime = 0;
+			phase = 0;
 			return true;
 			break;
 

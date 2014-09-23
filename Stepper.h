@@ -14,9 +14,10 @@ private:
 	Distance *distance;
 	int phase;
 	int runtime;
+	int stepSpeed;
 	bool sflag;
 public:
-	Stepper(StepDetector *sd, LineTracer *lt, Driver *dr,Pid *pd, 	Distance *dis);
+	Stepper(StepDetector *sd, LineTracer *lt, Driver *dr,Pid *pd, Distance *dis);
 	~Stepper();
 	bool run(int edge);
 };

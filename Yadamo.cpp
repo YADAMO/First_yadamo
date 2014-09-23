@@ -38,6 +38,7 @@
 #include "Jumper.h"
 #include "GridRunner.h"
 #include "Basic.h"
+#include "IN.h"
 
 using namespace ecrobot;
 
@@ -82,11 +83,12 @@ UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
-Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
-Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance);
+Figure figure(&lineTracer, &colorDetector, &driver, &stepper, &oHolder);
+Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &pid);
 Jumper jumper(&driver, &lineTracer, &stepper);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
+IN in(&basic, &mogul, &figure);
 
 
 // LineTracer _line;
@@ -204,16 +206,10 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(phase){
 			case 0:
-				// driver.straight(30);
-				gridRunner.run();
-
-				// pid.changePid(0.27, 0.001, 0.023);
-				// lineTracer.lineTrace(20, 1);
-				// if(runtime > 400){
-				// 	phase++;
-				// }
-				// basic.runIN();
-				// mogul.run();
+				if(in.run()){
+					break;
+					// lineTracer.lineTrace(40, LEFTEDGE);
+				}
 				break;
 			case 1:
 				// lineTracer.lineTrace(90, 1);
