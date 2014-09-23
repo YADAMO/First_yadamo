@@ -4,10 +4,8 @@
 #include "Driver.h"
 #include "Stepper.h"
 #include "ColorDetector.h"
-
-#define GOSTRAIGHT 1
-#define TURNLEFT 2
-#define TURNRIGHT 3
+#include "Distance.h"
+#include "RunPattern.h"
 
 class GridRunner{
 private:
@@ -15,16 +13,17 @@ private:
 	Driver *driver;
 	Stepper *stepper;
 	ColorDetector *colorDetector;
-	// int scenario[15];
+	Distance *distance;
 	int runtime;
-	int curScene;
+	RunPattern curPattern;
+	int patIndex;
 	bool detected;
 	bool spFlag;
-	bool goStraight();
-	bool turnRight();
-	bool turnLeft();
+	void goStraight();
+	void turn();
+	void changePattern();
 public:
-	GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *cd);
+	GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *cd, Distance *dis);
 	~GridRunner();
 	bool run();
 };

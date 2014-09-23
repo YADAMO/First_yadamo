@@ -1,14 +1,18 @@
 #include "GridRunner.h"
 
-int scenario[] = {TURNLEFT, 0};//, GOSTRAIGHT, TURNRIGHT, GOSTRAIGHT, GOSTRAIGHT, GOSTRAIGHT};
+RunPattern runPatterns[] = {
+	RunPattern(1,1,1),
+	RunPattern()
+};
 
-GridRunner::GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *cd){
+GridRunner::GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *cd, Distance *dis){
 	lineTracer = lt;
 	driver = dr;
 	stepper = sp;
 	colorDetector = cd;
-//	scenario[15] = ;
-	curScene = 0;
+	distance = dis;
+	patIndex = 0;
+	curPattern = runPatterns[0];
 	detected = false;
 	spFlag = true;
 	runtime = 0;
@@ -18,99 +22,28 @@ GridRunner::~GridRunner(){
 
 }
 
-bool GridRunner::goStraight(){
-	bool st = false;
-	if(!detected){
-		if(runtime < 2000){
-		}else{
-			if(colorDetector->blackLineDetect()){
-				detected = true;
-				driver->straightInit();
-				runtime = 0;
-			}
-		}
-		lineTracer->lineTrace(20, LEFTEDGE);
-	}else{
-		if(runtime < 1000){
-			driver->straight(20);
-		}else if(runtime < 2000){
-			lineTracer->lineTrace(20, LEFTEDGE);
-			driver->straightInit();
-		}else if(runtime < 3000){
-			driver->straight(0);
-		}else{
-			st = true;
-			detected = false;
-			runtime = 0;
-		}
-	}
-	runtime += 4;
-	return st;
+void GridRunner::changePattern(){
+	patIndex++;
+	curPattern = runPatterns[patIndex];
+	distance->init(0, 0);
+	runtime = 0;
 }
 
-bool GridRunner::turnRight(){
-	bool st = false;
-	if(!detected){
-		if(runtime < 2000){
-		}else{
-			if(colorDetector->blackLineDetect()){
-				detected = true;
-				runtime = 0;
-			}
-		}
-		lineTracer->lineTrace(20, LEFTEDGE);
+void GridRunner::goStraight(){
+	if(distance->getDistance(0,0) < curPattern.param){
+		driver->straight(40);
 	}else{
-		if(runtime < 500){
-			driver->drive(-100, 0);
-		}else if(runtime < 1500){
-			lineTracer->lineTrace(20, LEFTEDGE);
-		}else if(runtime < 2500){
-			driver->straight(0);
-		}else{
-			st = true;
-			detected = false;
-			runtime = 0;
-		}
+		changePattern();
 	}
-	runtime += 4;
-	return st;
 }
 
-bool GridRunner::turnLeft(){
-	bool st = false;
-	if(!detected){
-		if(runtime < 1000){
-		}else{
-			if(colorDetector->blackLineDetect()){
-				detected = true;
-				runtime = 0;
-				driver->straightInit();
-			}
-		}
-		lineTracer->lineTrace(20, LEFTEDGE);
+void GridRunner::turn(){
+	if(runtime < 500){
+		driver->drive(100, 0);
 	}else{
-		if(runtime < 1000){
-			driver->straight(0);
-		}else if(runtime < 2000){
-			driver->straight(-20);
-		}else if(runtime < 3000){
-			driver->drive(40, 40);
-			driver->straightInit();
-		}else if(runtime < 4000){
-			driver->straight(0);
-		}else if(runtime < 5500){
-			lineTracer->lineTrace(20, LEFTEDGE);
-			driver->straightInit();
-		}else if(runtime < 7000){
-			driver->straight(0);
-		}else{
-			st = true;
-			detected = false;
-			runtime = 0;
-		}
+		changePattern();
 	}
 	runtime += 4;
-	return st;
 }
 
 bool GridRunner::run(){
@@ -120,26 +53,16 @@ bool GridRunner::run(){
 			spFlag = true;
 		}
 	}else{
-		switch(scenario[curScene]){
+		switch(curPattern.pattern){
 			case GOSTRAIGHT:
-			if(goStraight()){
-				curScene++;
-			}
+			goStraight();
 			break;
 
-			case TURNRIGHT:
-			if(turnRight()){
-				curScene++;
-			}
+			case TURN:
+			turn();
 			break;
 
-			case TURNLEFT:
-			if(turnLeft()){
-				curScene++;
-			}
-			break;
-
-			case 0:
+			default:
 			driver->straight(0);
 			st = true;
 			break;

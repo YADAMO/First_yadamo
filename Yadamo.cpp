@@ -85,7 +85,7 @@ Stepper stepper(&stepDetector, &lineTracer, &driver);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);
 Jumper jumper(&driver, &lineTracer, &stepper);
-GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector);
+GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 
 
@@ -154,11 +154,10 @@ extern "C" TASK(OSEK_Task_Background)
 	Daq daq(bt);
 	VectorT<S8> command;
 	
-	int offsetmX;
-	int offsetmY;
+	int offsetmX = 0;
+	int offsetmY = 0;
 	
-	if (btConnected)
-	{
+	if (btConnected){
 		command = gp.get();
 		lcd.clear();
 		lcd.putf("s", (gp.isConnected() ? "connected": "not connected"));
@@ -197,7 +196,7 @@ extern "C" TASK(OSEK_Task_Background)
 		// }
 
 		logToBatteryC = light.getBrightness();
-		logToMotorrevC[0] = distance.getDistance(motorL.getCount(), motorR.getCount());
+		logToMotorrevC[0] = (S32)distance.getDistance(motorL.getCount(), motorR.getCount());
 		logToMotorrevC[1] = motorL.getCount();
 		logToMotorrevC[2] = motorR.getCount();
 
@@ -229,7 +228,7 @@ extern "C" TASK(OSEK_Task_Background)
 			lcd.clear(); // clear data buffer at row 1
 			lcd.putf("dd", hoseimX,0, hoseimY, 5);
 		}else{
-			int flag = 0;
+			// int flag = 0;
 			// if(colorDetector.blackLineDetect()){
 			// 	flag = 1;
 			// }else{
