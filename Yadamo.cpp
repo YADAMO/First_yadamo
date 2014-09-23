@@ -79,7 +79,7 @@ ColorDetector colorDetector(&light, &oHolder);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
-Stepper stepper(&stepDetector, &lineTracer, &driver, &pid);
+Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &motorR, &motorL);
 Jumper jumper(&driver, &lineTracer, &stepper);
@@ -202,13 +202,8 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(phase){
 			case 0:
-				// pid.changePid(0.27, 0.001, 0.023);
-				// lineTracer.lineTrace(40, 1);
-				// if(runtime > 400){
-				// 	phase++;
-				// }
-				// mogul.run();
-				driver.straight(50);
+				figure.run();
+				// basic.runIN();
 				break;
 			case 1:
 				// lineTracer.lineTrace(90, 1);
