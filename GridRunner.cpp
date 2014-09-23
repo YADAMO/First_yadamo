@@ -1,21 +1,18 @@
 #include "GridRunner.h"
 
-RunPattern runPatterns[] = {
-	RunPattern(1,1,1),
-	RunPattern()
-};
-
-GridRunner::GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *cd, Distance *dis){
+GridRunner::GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *cd, Distance *dis, StepDetector *sd){
 	lineTracer = lt;
 	driver = dr;
 	stepper = sp;
 	colorDetector = cd;
 	distance = dis;
+	stepDetector = sd;
 	patIndex = 0;
 	curPattern = runPatterns[0];
 	detected = false;
 	spFlag = true;
 	runtime = 0;
+	disOffset = 0;
 }
 
 GridRunner::~GridRunner(){
@@ -25,25 +22,42 @@ GridRunner::~GridRunner(){
 void GridRunner::changePattern(){
 	patIndex++;
 	curPattern = runPatterns[patIndex];
-	distance->init(0, 0);
+	distance->init();
+	driver->straightInit();
 	runtime = 0;
 }
 
+void GridRunner::back(){
+	if(distance->getDistance() - disOffset < 18){
+		driver->drive(10, -30);
+	}else{
+		driver->straightInit();
+		detected = false;
+		runtime = 0;
+	}
+}
+
 void GridRunner::goStraight(){
-	if(distance->getDistance(0,0) < curPattern.param){
-		driver->straight(40);
+	if(stepDetector->detect() && runtime > 1000){
+		detected = true;
+		disOffset = distance->getDistance();
+	}
+
+	if(detected){
+		back();
+	}else if(distance->getDistance() > curPattern.param){
+		driver->straight(curPattern.param2);
 	}else{
 		changePattern();
 	}
 }
 
 void GridRunner::turn(){
-	if(runtime < 500){
-		driver->drive(100, 0);
+	if(distance->getDiff() < (int)(490.0 * ((float)curPattern.param2 / 90.0))){
+		driver->drive(90 * -curPattern.param, 0);
 	}else{
 		changePattern();
 	}
-	runtime += 4;
 }
 
 bool GridRunner::run(){
@@ -51,22 +65,22 @@ bool GridRunner::run(){
 	if(!spFlag){
 		if(stepper->run(RIGHTEDGE)){
 			spFlag = true;
+			distance->init();
 		}
 	}else{
 		switch(curPattern.pattern){
 			case GOSTRAIGHT:
-			goStraight();
-			break;
-
+				goStraight();
+				break;
 			case TURN:
-			turn();
-			break;
-
-			default:
-			driver->straight(0);
-			st = true;
-			break;
+				turn();
+				break;
+			case 0:
+				driver->straight(0);
+				st = true;
+				break;
 		}
 	}
+	runtime += 4;
 	return st;
 }

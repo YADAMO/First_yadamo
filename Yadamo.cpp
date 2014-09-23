@@ -67,12 +67,12 @@ Clock clk;
 OffsetHolder oHolder;
 SectionController sectionController;
 Speaker speaker;
-Distance distance;
 GyroSensor gyroSensor(GYRO);
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
 Driver driver(&motorL, &motorR, &motorS);
+Distance distance(&motorR, &motorL);
 LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid);
@@ -81,11 +81,11 @@ ColorDetector colorDetector(&light, &oHolder);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
-Stepper stepper(&stepDetector, &lineTracer, &driver);
+Stepper stepper(&stepDetector, &lineTracer, &driver, &pid);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
-Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper);
+Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &motorR, &motorL);
 Jumper jumper(&driver, &lineTracer, &stepper);
-GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance);
+GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 
 
@@ -190,13 +190,13 @@ extern "C" TASK(OSEK_Task_Background)
 	{
 		
 //		driver.operate(hoseimX, hoseimY);
-		// if(runtime % 100 == 0){
-		// 	motorR.setDiff();
-		// 	motorL.setDiff();
-		// }
+		if(runtime % 100 == 0){
+			motorR.setDiff();
+			motorL.setDiff();
+		}
 
 		logToBatteryC = light.getBrightness();
-		logToMotorrevC[0] = (S32)distance.getDistance(motorL.getCount(), motorR.getCount());
+		logToMotorrevC[0] = (S32)distance.getDistance();
 		logToMotorrevC[1] = motorL.getCount();
 		logToMotorrevC[2] = motorR.getCount();
 
@@ -213,6 +213,8 @@ extern "C" TASK(OSEK_Task_Background)
 				// 	phase++;
 				// }
 				// basic.runIN();
+				// mogul.run();
+				// driver.straight(50);
 				break;
 			case 1:
 				// lineTracer.lineTrace(90, 1);
@@ -228,13 +230,13 @@ extern "C" TASK(OSEK_Task_Background)
 			lcd.clear(); // clear data buffer at row 1
 			lcd.putf("dd", hoseimX,0, hoseimY, 5);
 		}else{
-			// int flag = 0;
+			int flag = 0;
 			// if(colorDetector.blackLineDetect()){
 			// 	flag = 1;
 			// }else{
 			// 	flag = 0;
 			// }
-			// lcd.putf("ddd", oHolder.getBlack(), 0, oHolder.getWhite(), 4, flag, 7);
+			lcd.putf("ddd", motorS.getCount(), 0, oHolder.getWhite(), 4, flag, 7);
 		}
 		lcd.disp();
 		clk.wait(4); /* 10msec wait */

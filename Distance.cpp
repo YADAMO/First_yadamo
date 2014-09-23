@@ -1,6 +1,8 @@
 #include "Distance.h"
 
-Distance::Distance(){
+Distance::Distance(Motor *rm, Motor *lm){
+	motorR = rm;
+	motorL = lm;
 	rightOffset = 0;
 	leftOffset = 0;
 }
@@ -14,19 +16,28 @@ Distance::~Distance(){
 
 }
 
-void Distance::init(S32 L, S32 R){
-	leftOffset = L;
-	rightOffset = R;
+void Distance::init(void){
+	leftOffset = motorL->getCount();
+	rightOffset = motorR->getCount();
 }
 
-F32 Distance::getDistance(S32 L, S32 R){
+F32 Distance::getDistance(void){
 	static const F32 DPOD = 0.06981317F;
 	
-	distanceL = L - leftOffset;
-	distanceR = R - rightOffset;
+	distanceL = motorL->getCount() - leftOffset;
+	distanceR = motorR->getCount() - rightOffset;
 	
 	distance = F32(distanceL + distanceR) / 2.0;
 	distance = distance * DPOD;
 	
 	return distance;
+}
+
+int Distance::getDiff(void){
+	distanceL = motorL->getCount() - leftOffset;
+	distanceR = motorR->getCount() - rightOffset;
+	
+	distance = distanceL - distanceR;
+	
+	return abs(distance);
 }
