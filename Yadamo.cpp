@@ -81,7 +81,7 @@ ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
-Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &motorR, &motorL);
+Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance);
 Jumper jumper(&driver, &lineTracer, &stepper);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 
@@ -202,8 +202,10 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(phase){
 			case 0:
-				basic.runIN();
 				// basic.runIN();
+				if(mogul.run()){
+					lineTracer.lineTrace(40, LEFTEDGE);
+				}
 				break;
 			case 1:
 				// lineTracer.lineTrace(90, 1);
