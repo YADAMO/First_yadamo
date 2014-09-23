@@ -39,6 +39,7 @@
 #include "GridRunner.h"
 #include "Basic.h"
 #include "ParkingL.h"
+#include "IN.h"
 
 using namespace ecrobot;
 
@@ -83,12 +84,13 @@ UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
-Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
-Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance);
+Figure figure(&lineTracer, &colorDetector, &driver, &stepper, &oHolder);
+Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &pid);
 Jumper jumper(&driver, &lineTracer, &stepper);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
+IN in(&basic, &mogul, &figure);
 
 
 // LineTracer _line;
@@ -218,6 +220,10 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
+				// if(in.run()){
+				// 	break;
+				// 	// lineTracer.lineTrace(40, LEFTEDGE);
+				// }
 				break;
 			case 1:
 				figure.run();

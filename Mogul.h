@@ -14,12 +14,13 @@ private:
 	StepDetector *stepDetector;
 	Stepper *stepper;
 	Distance *distance;
+	Pid *pid;
 	int phase;
 	int runtime;
 	int hillnum;
 	bool sflag;
 public:
-	Mogul(Driver *dr, LineTracer *lt, StepDetector *sd, Stepper *stepper, Distance *ds);
+	Mogul(Driver *dr, LineTracer *lt, StepDetector *sd, Stepper *stepper, Distance *ds, Pid *pd);
 	~Mogul();
 	bool run();
 };
