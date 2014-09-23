@@ -34,7 +34,7 @@ bool Basic::runIN(void){
 		case 0:
 			pid->changePid(0.2, 0.001, 0.058);
 			lineTracer->lineTrace(110, RIGHTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_STRAIGHT_END){
+			if((distance->getDistance()) < IN_STRAIGHT_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}
@@ -42,7 +42,7 @@ bool Basic::runIN(void){
 		case 1:
 			pid->changePid(0.286, 0.001, 0.03);
 			lineTracer->lineTrace(70, RIGHTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_SHARPCURVE_END){
+			if((distance->getDistance()) < IN_SHARPCURVE_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}
@@ -51,7 +51,7 @@ bool Basic::runIN(void){
 		case 2:
 			pid->changePid(0.286, 0.001, 0.03);
 			lineTracer->lineTrace(65, RIGHTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_SLOWCURVE_END){
+			if((distance->getDistance()) < IN_SLOWCURVE_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}
@@ -60,7 +60,7 @@ bool Basic::runIN(void){
 		case 3:
 			pid->changePid(0.27, 0.001, 0.05);
 			lineTracer->lineTrace(85, RIGHTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_LARGECURVE_END){
+			if((distance->getDistance()) < IN_LARGECURVE_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}
@@ -69,7 +69,7 @@ bool Basic::runIN(void){
 		case 4:
 			pid->changePid(0.29, 0.001, 0.03);
 			lineTracer->lineTrace(65, RIGHTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_SHARPCURVE2_END){
+			if((distance->getDistance()) < IN_SHARPCURVE2_END){
 				speaker->playTone(442, 500, 100);
 				tmptarget = lineTracer->getTarget();
 				lineTracer->setTarget((tmptarget + offsetHolder->getBlack() * 3) / 4);
@@ -80,7 +80,7 @@ bool Basic::runIN(void){
 		case 5:
 			pid->changePid(0.22, 0.001, 0.045);
 			lineTracer->lineTrace(65, RIGHTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_CHANGEEDGE_END){
+			if((distance->getDistance()) < IN_CHANGEEDGE_END){
 				speaker->playTone(442, 500, 100);
 				lineTracer->setTarget(tmptarget);
 				phase++;
@@ -90,7 +90,7 @@ bool Basic::runIN(void){
 		case 6:
 			pid->changePid(0.22, 0.001, 0.058);
 			lineTracer->lineTrace(70, LEFTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_STRAIGHT2_END){
+			if((distance->getDistance()) < IN_STRAIGHT2_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}
@@ -99,7 +99,7 @@ bool Basic::runIN(void){
 		case 7:
 			pid->changePid(0.4, 0.001, 0.035);
 			lineTracer->lineTrace(30, LEFTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_SNAKEHEAD_END){
+			if((distance->getDistance()) < IN_SNAKEHEAD_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}
@@ -108,7 +108,7 @@ bool Basic::runIN(void){
 		case 8:
 			pid->changePid(0.3, 0.001, 0.03);
 			lineTracer->lineTrace(60, LEFTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_SNAKECHEST_END){
+			if((distance->getDistance()) < IN_SNAKECHEST_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}
@@ -117,7 +117,7 @@ bool Basic::runIN(void){
 		case 9:
 			pid->changePid(0.35, 0.001, 0.03);
 			lineTracer->lineTrace(30, LEFTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_SNAKEBODY_END){
+			if((distance->getDistance()) < IN_SNAKEBODY_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}
@@ -126,7 +126,7 @@ bool Basic::runIN(void){
 		case 10:
 			pid->changePid(0.3, 0.001, 0.03);
 			lineTracer->lineTrace(60, LEFTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_SNAKETAIL_END){
+			if((distance->getDistance()) < IN_SNAKETAIL_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}
@@ -135,7 +135,7 @@ bool Basic::runIN(void){
 		case 11:
 			pid->changePid(0.2, 0.001, 0.058);
 			lineTracer->lineTrace(110, LEFTEDGE);
-			if((distance->getDistance(leftMotor->getCount(), rightMotor->getCount())) < IN_STRAIGHT3_END){
+			if((distance->getDistance()) < IN_STRAIGHT3_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
 			}

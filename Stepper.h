@@ -9,11 +9,12 @@ private:
 	StepDetector *stepDetector;
 	LineTracer *lineTracer;
 	Driver *driver;
+	Pid *pid;
 	int phase;
 	int runtime;
 	bool sflag;
 public:
-	Stepper(StepDetector *sd, LineTracer *lt, Driver *dr);
+	Stepper(StepDetector *sd, LineTracer *lt, Driver *dr,Pid *pd);
 	~Stepper();
 	bool run(int edge);
 };
