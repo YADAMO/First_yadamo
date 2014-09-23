@@ -202,7 +202,7 @@ extern "C" TASK(OSEK_Task_Background)
 		
 		switch(phase){
 			case 0:
-				figure.run();
+				basic.runIN();
 				// basic.runIN();
 				break;
 			case 1:

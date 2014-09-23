@@ -82,7 +82,8 @@ bool Basic::runIN(void){
 			lineTracer->lineTrace(65, RIGHTEDGE);
 			if((distance->getDistance()) < IN_CHANGEEDGE_END){
 				speaker->playTone(442, 500, 100);
-				lineTracer->setTarget(tmptarget);
+				tmptarget = lineTracer->getTarget();
+				lineTracer->setTarget((tmptarget + offsetHolder->getWhite() * 3) / 4);
 				phase++;
 			}
 			break;
@@ -93,6 +94,7 @@ bool Basic::runIN(void){
 			if((distance->getDistance()) < IN_STRAIGHT2_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
+				lineTracer->setTarget((offsetHolder->getWhite() + offsetHolder->getBlack()) / 2);
 			}
 			break;
 
