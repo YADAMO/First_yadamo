@@ -38,6 +38,7 @@
 #include "Jumper.h"
 #include "GridRunner.h"
 #include "Basic.h"
+#include "ParkingL.h"
 
 using namespace ecrobot;
 
@@ -87,6 +88,7 @@ Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance);
 Jumper jumper(&driver, &lineTracer, &stepper);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
+ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
 
 
 // LineTracer _line;
@@ -205,7 +207,9 @@ extern "C" TASK(OSEK_Task_Background)
 		switch(phase){
 			case 0:
 				// driver.straight(30);
-				gridRunner.run();
+				if(parkingL.run()){
+					phase++;
+				}
 
 				// pid.changePid(0.27, 0.001, 0.023);
 				// lineTracer.lineTrace(20, 1);
@@ -216,7 +220,8 @@ extern "C" TASK(OSEK_Task_Background)
 				// mogul.run();
 				break;
 			case 1:
-				// lineTracer.lineTrace(90, 1);
+				figure.run();
+				// driver.straight(0);
 				break;
 		}
 		lcd.clear(); // clear data buffer at row 1
@@ -235,7 +240,7 @@ extern "C" TASK(OSEK_Task_Background)
 			// }else{
 			// 	flag = 0;
 			// }
-			lcd.putf("ddd", motorS.getCount(), 0, oHolder.getWhite(), 4, flag, 7);
+			lcd.putf("ddd", (int)distance.getDistance(), 0, oHolder.getWhite(), 4, flag, 7);
 		}
 		lcd.disp();
 		clk.wait(4); /* 10msec wait */

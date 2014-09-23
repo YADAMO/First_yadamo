@@ -64,10 +64,52 @@ void Driver::drive(int turn, int speed){
   }
 }
 
+void Driver::backDrive(int turn, int speed){
+	int count = motorS->getCount();
+	steerAngle = 0;
+	int right, left;
+
+	right = turn + speed;
+	left = -turn + speed;
+
+	if(right >= 127)	right = 127;
+	if(right <= -128)	right = -128;
+	if(left >= 127)	left = 127;
+	if(left <= -128)	left = -128;
+
+	motorL->setPWM(left);
+	motorR->setPWM(right);
+
+	  if(turn > 0){//左旋回  steerAngle負
+	    if(count > turn * -6){
+		  motorS->setPWM(-100);
+	    }else{
+	      motorS->setPWM(0);
+	    }
+	  }else{//右旋回 steerAngle正
+	    if(count < turn * -6){
+		  motorS->setPWM(100);
+	    }else{
+	      motorS->setPWM(0);
+	    }
+	  }
+}
+
 void Driver::turn(int angle){
-  /*
-    モーターエンコード値と旋回角度の相関を計算してください
-  */
+	  int count = motorS->getCount();
+	if(angle > 0){//左旋回  steerAngle負
+	    if(count > angle * -6){
+		  motorS->setPWM(-100);
+	    }else{
+	      motorS->setPWM(0);
+	    }
+	  }else{//右旋回 steerAngle正
+	    if(count < angle * -6){
+		  motorS->setPWM(100);
+	    }else{
+	      motorS->setPWM(0);
+	    }
+	  }
 }
 
 void Driver::straightInit(){

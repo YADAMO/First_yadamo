@@ -18,7 +18,8 @@ private:
 public:
   Driver(Motor *L, Motor *R, Motor *S);
   ~Driver();   
-  void drive(int turn, int speed); 
+  void drive(int turn, int speed);
+  void backDrive(int turn, int speed); 
   void turn(int angle);
   void straightInit();
   void straight(int speed);
