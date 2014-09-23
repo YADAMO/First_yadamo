@@ -28,9 +28,9 @@ bool Figure::run(){
 		driver->straight(0);
 	}else if(runtime < 3000){
 		lineTracer->lineTrace(20, RIGHTEDGE);
-	}else if(runtime < 5000){
+	}else if(runtime < 4000){
 		driver->straight(0);
-	}else if(runtime < 7000){
+	}else if(runtime < 5000){
 		lineTracer->setTarget(tmptarget);
 		detected = false;
 		colorDetector->blackLineDetect();
