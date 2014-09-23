@@ -6,11 +6,12 @@
 #define SSTEPTIME 500
 #define STOPTIME 1000
 
-Stepper::Stepper(StepDetector *sd, LineTracer *lt, Driver *dr, Pid *pd){
+Stepper::Stepper(StepDetector *sd, LineTracer *lt, Driver *dr, Pid *pd, Distance *dis){
 	stepDetector = sd;
 	lineTracer = lt;
 	driver = dr;
 	pid = pd;
+	distance = dis;
 	phase = 0;
 	runtime = 0;
 	sflag = false;
@@ -23,35 +24,24 @@ Stepper::~Stepper(){
 bool Stepper::run(int edge){
 	switch(phase){
 		case 0://低速でぶつける
-			pid->changePid(0.2, 0.001, 0.03);
+			pid->changePid(0.15, 0.001, 0.02);
 			lineTracer->lineTrace(INSPEED, edge);
 			if(stepDetector->detect() && runtime > 500){
 				phase++;
 				runtime = 0;
+				distance->init();
 			}
 			break;
 		case 1://ちょっと下がる
-			if(!sflag){
-				driver->straightInit();
-				sflag = true;
-			}
-			driver->straight(-20);
-			if(runtime > 1500){
+			lineTracer->lineTrace(-20, edge);
+			if(distance->getDistance() > 10){
 				phase++;
-				runtime = 0;
-				sflag = false;
 			}
 			break;
 		case 2://のぼる
-			if(!sflag){
-				driver->straightInit();
-				sflag = true;
-			}
-			driver->straight(50);
-			if(runtime > 800){
-				phase++;
-				runtime = 0;
-				sflag = false;
+			lineTracer->lineTrace(60, edge);
+			if(distance->getDistance() < -25){
+				phase = 10;
 			}
 			break;
 		case 3://低速でぶつける
@@ -89,7 +79,10 @@ bool Stepper::run(int edge){
 			driver->straight(0);
 			return true;
 			break;
-
+		case 10:
+			driver->straight(0);
+			return true;
+			break;
 
 	}
 	runtime += 4;

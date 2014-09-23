@@ -3,6 +3,7 @@
 #include "StepDetector.h"
 #include "LineTracer.h"
 #include "Driver.h"
+#include "Distance.h"
 
 class Stepper{
 private:
@@ -10,11 +11,12 @@ private:
 	LineTracer *lineTracer;
 	Driver *driver;
 	Pid *pid;
+	Distance *distance;
 	int phase;
 	int runtime;
 	bool sflag;
 public:
-	Stepper(StepDetector *sd, LineTracer *lt, Driver *dr,Pid *pd);
+	Stepper(StepDetector *sd, LineTracer *lt, Driver *dr,Pid *pd, 	Distance *dis);
 	~Stepper();
 	bool run(int edge);
 };
