@@ -13,4 +13,5 @@ public:
 	~Distance();
 	void init();
 	F32 getDistance();
+	int getDiff();
 };

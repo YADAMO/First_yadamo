@@ -32,3 +32,12 @@ F32 Distance::getDistance(void){
 	
 	return distance;
 }
+
+int Distance::getDiff(void){
+	distanceL = motorL->getCount() - leftOffset;
+	distanceR = motorR->getCount() - rightOffset;
+	
+	distance = distanceL - distanceR;
+	
+	return abs(distance);
+}

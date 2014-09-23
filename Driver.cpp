@@ -25,8 +25,8 @@ void Driver::drive(int turn, int speed){
   steerAngle = 0;
   int right, left;
   
-  right = -turn/1 - speed;
-  left = turn/1 - speed;
+  right = -turn - speed;
+  left = turn - speed;
   if(right >= 127)	right = 127;
   if(right <= -128)	right = -128;
   if(left >= 127)	left = 127;
@@ -84,11 +84,14 @@ void Driver::straight(int speed){
 	if(right <= -128)	right = -128;
 	if(left >= 127)	left = 127;
 	if(left <= -128)	left = -128;
+
+	int handle = motorS->getCount();
+	if(handle >= 127)	handle = 126;
+	if(handle <= -128)	handle = -127;
   
 	motorL->setPWM(left);
 	motorR->setPWM(right);
-  motorS->setPWM(-motorS->getCount());
-	
+  motorS->setPWM(-handle);
 }
 
 

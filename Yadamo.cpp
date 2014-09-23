@@ -36,6 +36,7 @@
 #include "Mogul.h"
 #include "Stepper.h"
 #include "Jumper.h"
+#include "GridRunner.h"
 #include "Basic.h"
 
 using namespace ecrobot;
@@ -54,6 +55,7 @@ using namespace ecrobot;
 #define DRIVE_R	PORT_B
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
+#define GYRO	PORT_1
 
 Bluetooth bt;
 static const CHAR* PASSKEY = "YADAMO";
@@ -65,7 +67,7 @@ Clock clk;
 OffsetHolder oHolder;
 SectionController sectionController;
 Speaker speaker;
-
+GyroSensor gyroSensor(GYRO);
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
@@ -83,9 +85,8 @@ Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance);
 Jumper jumper(&driver, &lineTracer, &stepper);
+GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
-
-
 
 
 // LineTracer _line;
@@ -153,11 +154,10 @@ extern "C" TASK(OSEK_Task_Background)
 	Daq daq(bt);
 	VectorT<S8> command;
 	
-	int offsetmX;
-	int offsetmY;
+	int offsetmX = 0;
+	int offsetmY = 0;
 	
-	if (btConnected)
-	{
+	if (btConnected){
 		command = gp.get();
 		lcd.clear();
 		lcd.putf("s", (gp.isConnected() ? "connected": "not connected"));
@@ -196,16 +196,24 @@ extern "C" TASK(OSEK_Task_Background)
 		}
 
 		logToBatteryC = light.getBrightness();
-		logToMotorrevC[0] = distance.getDistance();
+		logToMotorrevC[0] = (S32)distance.getDistance();
 		logToMotorrevC[1] = motorL.getCount();
 		logToMotorrevC[2] = motorR.getCount();
+
+		logToAdcC[0] = gyroSensor.getAnglerVelocity();
 		
 		switch(phase){
 			case 0:
+				// driver.straight(30);
+				gridRunner.run();
+
+				// pid.changePid(0.27, 0.001, 0.023);
+				// lineTracer.lineTrace(20, 1);
+				// if(runtime > 400){
+				// 	phase++;
+				// }
 				// basic.runIN();
-				if(mogul.run()){
-					lineTracer.lineTrace(40, LEFTEDGE);
-				}
+				// mogul.run();
 				break;
 			case 1:
 				// lineTracer.lineTrace(90, 1);
@@ -227,7 +235,7 @@ extern "C" TASK(OSEK_Task_Background)
 			// }else{
 			// 	flag = 0;
 			// }
-			// lcd.putf("ddd", oHolder.getBlack(), 0, oHolder.getWhite(), 4, flag, 7);
+			lcd.putf("ddd", motorS.getCount(), 0, oHolder.getWhite(), 4, flag, 7);
 		}
 		lcd.disp();
 		clk.wait(4); /* 10msec wait */
