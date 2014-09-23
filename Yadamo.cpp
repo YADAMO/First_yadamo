@@ -90,7 +90,7 @@ Jumper jumper(&driver, &lineTracer, &stepper);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
-IN in(&basic, &mogul, &figure);
+IN in(&basic, &mogul, &figure, &parkingL);
 
 
 // LineTracer _line;
@@ -209,9 +209,6 @@ extern "C" TASK(OSEK_Task_Background)
 		switch(phase){
 			case 0:
 				// driver.straight(30);
-				if(parkingL.run()){
-					phase++;
-				}
 
 				// pid.changePid(0.27, 0.001, 0.023);
 				// lineTracer.lineTrace(20, 1);
@@ -220,13 +217,15 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
-				// if(in.run()){
-				// 	break;
+				if(in.run()){
+					phase++;
+					driver.straightInit();
+					break;
 				// 	// lineTracer.lineTrace(40, LEFTEDGE);
-				// }
+				}
 				break;
 			case 1:
-				figure.run();
+				driver.straight(0);
 				// driver.straight(0);
 				break;
 		}

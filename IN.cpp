@@ -1,10 +1,11 @@
 #include "IN.h"
 
-IN::IN(Basic *bs, Mogul *mg, Figure *fg){
+IN::IN(Basic *bs, Mogul *mg, Figure *fg, ParkingL *pL){
 	basic = bs;
 	mogul = mg;
 	figure = fg;
-	phase = 1;
+	parkingL = pL;
+	phase = 0;
 }
 
 IN::~IN(){
@@ -29,11 +30,16 @@ bool IN::run(){
 			}
 			break;
 		case 3:
-			if(figure->run()){
+			if(parkingL->run()){
 				phase++;
 			}
 			break;
 		case 4:
+			if(figure->run()){
+				phase++;
+			}
+			break;
+		case 5:
 			return true;
 			break;
 	}
