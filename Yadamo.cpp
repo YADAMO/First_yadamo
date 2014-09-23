@@ -54,6 +54,7 @@ using namespace ecrobot;
 #define DRIVE_R	PORT_B
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
+#define GYRO	PORT_1
 
 Bluetooth bt;
 static const CHAR* PASSKEY = "YADAMO";
@@ -66,6 +67,7 @@ OffsetHolder oHolder;
 SectionController sectionController;
 Speaker speaker;
 Distance distance;
+GyroSensor gyroSensor(GYRO);
 Motor motorL(DRIVE_L,true);
 Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
@@ -198,15 +200,17 @@ extern "C" TASK(OSEK_Task_Background)
 		logToMotorrevC[0] = distance.getDistance(motorL.getCount(), motorR.getCount());
 		logToMotorrevC[1] = motorL.getCount();
 		logToMotorrevC[2] = motorR.getCount();
+
+		logToAdcC[0] = gyroSensor.getAnglerVelocity();
 		
 		switch(phase){
 			case 0:
 				// pid.changePid(0.27, 0.001, 0.023);
-				// lineTracer.lineTrace(40, 1);
+				lineTracer.lineTrace(20, 1);
 				// if(runtime > 400){
 				// 	phase++;
 				// }
-				basic.runIN();
+				// basic.runIN();
 				break;
 			case 1:
 				// lineTracer.lineTrace(90, 1);
