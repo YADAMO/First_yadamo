@@ -38,6 +38,9 @@ int Distance::getDiff(void){
 	distanceR = motorR->getCount() - rightOffset;
 	
 	distance = distanceL - distanceR;
-	
-	return abs(distance);
+	if(distance < 0){
+		distance = -distance;
+	}
+
+	return distance;
 }

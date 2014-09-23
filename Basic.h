@@ -19,8 +19,10 @@ private:
     OffsetHolder *offsetHolder;
     int phase;
     int tmptarget;
+    bool dflag;
 public:
 	Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Motor *lm, OffsetHolder *oh);
     ~Basic();
 	bool runIN(void);
+    bool runToFigure(void);
 };

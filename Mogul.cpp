@@ -1,11 +1,12 @@
 #include "Mogul.h"
 
-Mogul::Mogul(Driver *dr, LineTracer *lt, StepDetector *sd, Stepper *sp, Distance *ds){
+Mogul::Mogul(Driver *dr, LineTracer *lt, StepDetector *sd, Stepper *sp, Distance *ds, Pid *pd){
 	driver = dr;
 	lineTracer = lt;
 	stepDetector = sd;
 	stepper = sp;
 	distance = ds;
+	pid = pd;
 	phase = 0;
 	runtime = 0;
 	hillnum = 0;
@@ -26,7 +27,8 @@ bool Mogul::run(){
 			}
 			break;
 		case 1://
-			lineTracer->lineTrace(40, LEFTEDGE);
+			pid->changePid(0.15, 0.001, 0.02);
+			lineTracer->lineTrace(50, LEFTEDGE);
 			if(distance->getDistance() < -55){
 				phase++;
 				distance->init();

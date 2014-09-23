@@ -1,10 +1,11 @@
 #include "Figure.h"
 
-Figure::Figure(LineTracer *argLineTracer, ColorDetector *argColorDetector, Driver *argDriver, Stepper *sp){
+Figure::Figure(LineTracer *argLineTracer, ColorDetector *argColorDetector, Driver *argDriver, Stepper *sp, OffsetHolder *of){
 	lineTracer = argLineTracer;
 	colorDetector = argColorDetector;
 	driver = argDriver;
 	stepper = sp;
+	offsetHolder = of;
 	runtime = 0;
 	detected = false;
 	spFlag = false;
@@ -19,7 +20,7 @@ bool Figure::run(){
 	if(!spFlag){
 		if(stepper->run(RIGHTEDGE)){
 			spFlag = true;
-			lineTracer->setTarget(tmptarget - 40);
+			lineTracer->setTarget((tmptarget + offsetHolder->getBlack() * 3) / 4);
 		}else{
 			tmptarget = lineTracer->getTarget();
 		}
@@ -29,8 +30,6 @@ bool Figure::run(){
 	}else if(runtime < 3000){
 		lineTracer->lineTrace(20, RIGHTEDGE);
 	}else if(runtime < 4000){
-		driver->straight(0);
-	}else if(runtime < 5000){
 		lineTracer->setTarget(tmptarget);
 		detected = false;
 		colorDetector->blackLineDetect();
@@ -41,17 +40,13 @@ bool Figure::run(){
 			runtime = 10000;
 		}
 		lineTracer->lineTrace(20, LEFTEDGE);
-	}else if(runtime < 11000){
-		driver->straight(0);
-	}else if(runtime < 11300){
-		driver->straight(0);
-	}else if(runtime < 12000){
-		driver->straight(0);
-	}else if(runtime < 12500){
+	}else if(runtime < 10500){
 		driver->drive(100, 0);
-	}else{
+	}else if(runtime < 17500){
 		lineTracer->lineTrace(20, LEFTEDGE);
+	}else{
+		driver->straight(0);
 	}
 	runtime += 4;
-	return true;
+	return false;
 }
