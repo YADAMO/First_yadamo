@@ -87,7 +87,7 @@ StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper, &oHolder, &distance);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &pid);
-Jumper jumper(&driver, &lineTracer, &stepper, &distance);
+Jumper jumper(&driver, &lineTracer, &stepper, &distance, &stepDetector);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
@@ -220,15 +220,15 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
-				if(parkingP.run()){
-				// if(parkingL.run()){
+				// if(parkingP.run()){
+				// // if(parkingL.run()){
 
-					phase++;
-					driver.straightInit();
-					break;
-				}
+				// 	phase++;
+				// 	driver.straightInit();
+				// 	break;
+				// }
 				// 	// lineTracer.lineTrace(40, LEFTEDGE);
-				
+				jumper.run();
 				break;
 			case 1:
 				lineTracer.lineTrace(40,RIGHTEDGE);
