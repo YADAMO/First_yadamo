@@ -111,7 +111,7 @@ bool Basic::runIN(void){
 			break;
 
 		case 7:
-			pid->changePid(0.4, 0.001, 0.035);
+			pid->changePid(0.42, 0.001, 0.035);
 			lineTracer->lineTrace(30, LEFTEDGE);
 			if((distance->getDistance()) < IN_SNAKEHEAD_END){
 				speaker->playTone(442, 500, 100);
@@ -130,7 +130,7 @@ bool Basic::runIN(void){
 			break;
 
 		case 9:
-			pid->changePid(0.35, 0.001, 0.035);
+			pid->changePid(0.36, 0.001, 0.025);
 			lineTracer->lineTrace(60, LEFTEDGE);
 			if((distance->getDistance()) < IN_SNAKEBODY_END){
 				speaker->playTone(442, 500, 100);
@@ -144,14 +144,16 @@ bool Basic::runIN(void){
 			lineTracer->lineTrace(80, LEFTEDGE);
 			if((distance->getDistance()) < IN_SNAKEHIP_END){
 				speaker->playTone(442, 500, 100);
+				lineTracer->setTarget((offsetHolder->getWhite()*3 + offsetHolder->getBlack()*2) / 5);
 				phase++;
 			}
 			break;
 		case 11:
-			pid->changePid(0.315, 0.001, 0.03);
+			pid->changePid(0.32, 0.001, 0.03);
 			lineTracer->lineTrace(60, LEFTEDGE);
 			if((distance->getDistance()) < IN_SNAKETAIL_END){
 				speaker->playTone(442, 500, 100);
+				lineTracer->setTarget((offsetHolder->getWhite() + offsetHolder->getBlack()) / 2);
 				phase++;
 			}
 			break;
