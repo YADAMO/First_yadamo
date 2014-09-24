@@ -2,12 +2,12 @@
 #include "LineTracer.h"
 #include "Stepper.h"
 #include "Driver.h"
-
+#include "Distance.h"
 
 class Jumper
 {
 public:
-	Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper);
+	Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper, Distance *argDistance);
 	~Jumper();
 	bool run();
 private:
@@ -16,4 +16,5 @@ private:
 	Stepper *stepper;
 	Driver *driver;
 	LineTracer *lineTracer;
+	Distance *distance;
 };

@@ -1,12 +1,13 @@
 #include "Jumper.h"
 
-Jumper::Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper)
+Jumper::Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper, Distance *argDistance)
 {
 	runtime = 0;
 	phase = 0;
 	stepper = argStepper;
 	lineTracer = argLineTracer;
 	driver = argDriver;
+	distance = argDistance;
 }
 
 Jumper::~Jumper()
@@ -30,31 +31,31 @@ bool Jumper::run()
 			if(runtime > 1000){
 				phase++;
 				runtime = 0;
+				distance->init();
 			}
 			break;
 		case 2://
-			lineTracer->lineTrace(20, 1);
-			if(runtime > 4000){
+			lineTracer->lineTrace(40, 1);
+			if(distance->getDistance() < -20){
 				phase++;
 				runtime = 0;
 			}
 			break;
 		case 3://
 			driver->straight(-20);
-			if(runtime > 1500){
+			if(runtime > 1500){//直して
 				phase++;
 				runtime = 0;
 			}
 			break;
 		case 4:
-			driver->straight(100);
-			if(runtime > 700){
+			driver->straight(80);
+			if(runtime > 600){//直して
 				phase++;
 				runtime = 0;
 			}
 			break;
 		case 5:
-			lineTracer->lineTrace(20, -1);
 			return true;
 			break;
 

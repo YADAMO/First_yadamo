@@ -87,7 +87,7 @@ StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper, &oHolder, &distance);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &pid);
-Jumper jumper(&driver, &lineTracer, &stepper);
+Jumper jumper(&driver, &lineTracer, &stepper, &distance);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
@@ -208,7 +208,8 @@ extern "C" TASK(OSEK_Task_Background)
 
 		logToAdcC[0] = gyroSensor.getAnglerVelocity();
 		
-		switch(phase){
+		switch(phase)
+		{
 			case 0:
 				// driver.straight(30);
 
@@ -221,15 +222,17 @@ extern "C" TASK(OSEK_Task_Background)
 				// mogul.run();
 				if(parkingP.run()){
 				// if(parkingL.run()){
-				// if(in.run()){
+
 					phase++;
 					driver.straightInit();
 					break;
-				// 	// lineTracer.lineTrace(40, LEFTEDGE);
 				}
+				// 	// lineTracer.lineTrace(40, LEFTEDGE);
+				
 				break;
 			case 1:
-				driver.straight(0);
+				lineTracer.lineTrace(40,RIGHTEDGE);
+				//driver.straight(0);
 				// driver.straight(0);
 				break;
 		}
