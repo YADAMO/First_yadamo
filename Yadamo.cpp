@@ -84,7 +84,7 @@ UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
 ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
-Figure figure(&lineTracer, &colorDetector, &driver, &stepper, &oHolder);
+Figure figure(&lineTracer, &colorDetector, &driver, &stepper, &oHolder, &distance);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &pid);
 Jumper jumper(&driver, &lineTracer, &stepper);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);

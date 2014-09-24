@@ -1,52 +1,93 @@
 #include "Figure.h"
 
-Figure::Figure(LineTracer *argLineTracer, ColorDetector *argColorDetector, Driver *argDriver, Stepper *sp, OffsetHolder *of){
+Figure::Figure(LineTracer *argLineTracer, ColorDetector *argColorDetector, Driver *argDriver, Stepper *sp, OffsetHolder *of, Distance *dis){
 	lineTracer = argLineTracer;
 	colorDetector = argColorDetector;
 	driver = argDriver;
 	stepper = sp;
 	offsetHolder = of;
+	distance = dis;
+	phase = 1;
 	runtime = 0;
 	detected = false;
-	spFlag = false;
+	st = false;
 	tmptarget = 0;
 }
 
 Figure::~Figure(){
 }
 
-bool Figure::run(){
+void Figure::changePhase(){
+	phase++;
+	runtime = 0;
+	distance->init();
+	driver->straightInit();
+}
 
-	if(!spFlag){
+bool Figure::run(){
+	st = false;
+
+	switch(phase){
+		case 1:
 		if(stepper->run(RIGHTEDGE)){
-			spFlag = true;
 			lineTracer->setTarget((tmptarget + offsetHolder->getBlack() * 3) / 4);
+			changePhase();
 		}else{
 			tmptarget = lineTracer->getTarget();
 		}
-		runtime = 0;
-	}else if(runtime < 1000){
-		driver->straight(0);
-	}else if(runtime < 3000){
+		break;
+
+		case 2:
+		if(distance->getDistance() < -15){
+			lineTracer->setTarget(tmptarget);
+			changePhase();
+		}
 		lineTracer->lineTrace(20, RIGHTEDGE);
-	}else if(runtime < 4000){
-		lineTracer->setTarget(tmptarget);
-		detected = false;
+		break;
+
+		case 3:
+		if(distance->getDistance() < -10){
+			changePhase();
+		}
 		colorDetector->blackLineDetect();
 		lineTracer->lineTrace(30, LEFTEDGE);
-	}else if(!detected){
+		break;
+
+		case 4:
 		if(colorDetector->blackLineDetect()){
-			detected =  true;
-			runtime = 10000;
+			driver->straight(0);
+			changePhase();
+		}else{
+			lineTracer->lineTrace(30, LEFTEDGE);
+		}
+		break;
+
+		case 5:
+		if(runtime > 1000){
+			changePhase();
+		}
+		driver->turn(80);
+		break;
+
+		case 6:
+		if(distance->getDiff() > 265){
+			changePhase();
+		}
+		driver->drive(80, 0);
+		break;
+
+		case 7:
+		if(distance->getDistance() < -40){
+			changePhase();
 		}
 		lineTracer->lineTrace(20, LEFTEDGE);
-	}else if(runtime < 10500){
-		driver->drive(100, 0);
-	}else if(runtime < 17500){
-		lineTracer->lineTrace(20, LEFTEDGE);
-	}else{
+		break;
+
+		case 8:
 		driver->straight(0);
+		st = true;
+		break;
 	}
 	runtime += 4;
-	return false;
+	return st;
 }
