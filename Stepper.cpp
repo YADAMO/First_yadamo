@@ -1,6 +1,6 @@
 #include "Stepper.h"
 
-#define INSPEED 15
+#define INSPEED 40
 #define STEPFORWARD 60
 #define FSTEPTIME 300
 #define SSTEPTIME 500
@@ -28,7 +28,7 @@ bool Stepper::run(int edge){
 			pid->changePid(0.15, 0.001, 0.02);
 			lineTracer->lineTrace(INSPEED, edge);
 			if(stepDetector->detect() && runtime > 500){
-				phase++;
+				phase = 2;
 				runtime = 0;
 				distance->init();
 			}
@@ -45,7 +45,7 @@ bool Stepper::run(int edge){
 				phase = 10;
 			}
 			if(stepDetector->detect()){
-				stepSpeed += 2;
+				stepSpeed += 3;
 			}
 			break;
 		case 3://低速でぶつける
