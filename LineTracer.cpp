@@ -1,10 +1,15 @@
 #include "LineTracer.h"
 
-LineTracer::LineTracer(Driver *argDriver, Pid *argPid)
+LineTracer::LineTracer(Driver *argDriver, Pid *argPid, OffsetHolder *oh)
 {
   driver = argDriver;
   pid = argPid;
+  offsetHolder = oh;
   target = 600;
+  nearblack = 0;
+  nearnearblack = 0;
+  nearnearwhite = 0;
+  nearwhite = 0;
 }
 
 LineTracer::~LineTracer()
@@ -27,4 +32,11 @@ float LineTracer::getTarget(){
 
 void LineTracer::changePid(float p, float i, float d){
 	pid->changePid(p, i, d);
+}
+
+void LineTracer::calcAllTarget(){
+	nearnearblack = (offsetHolder->getWhite() * 2 + offsetHolder->getBlack() * 3) / 5;
+	nearblack = (offsetHolder->getWhite() + offsetHolder->getBlack() * 3) / 4;
+	nearwhite = (offsetHolder->getWhite() * 3 + offsetHolder->getBlack()) / 4;
+	nearnearblack = (offsetHolder->getWhite() * 3 + offsetHolder->getBlack() * 2) / 5;
 }

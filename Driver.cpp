@@ -97,19 +97,24 @@ void Driver::backDrive(int turn, int speed){
 
 void Driver::turn(int angle){
 	  int count = motorS->getCount();
+	int handle = 0;
 	if(angle > 0){//左旋回  steerAngle負
 	    if(count > angle * -6){
-		  motorS->setPWM(-100);
+		  handle = -100;
 	    }else{
-	      motorS->setPWM(0);
+	      handle = 0;
 	    }
 	  }else{//右旋回 steerAngle正
 	    if(count < angle * -6){
-		  motorS->setPWM(100);
+		  handle = 100;
 	    }else{
-	      motorS->setPWM(0);
+	      handle = 0;
 	    }
 	  }
+
+	motorS->setPWM(handle);
+	motorL->setPWM(0);
+	motorR->setPWM(0);
 }
 
 void Driver::straightInit(){

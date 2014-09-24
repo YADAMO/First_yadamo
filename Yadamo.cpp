@@ -39,6 +39,7 @@
 #include "GridRunner.h"
 #include "Basic.h"
 #include "ParkingL.h"
+#include "ParkingP.h"
 #include "IN.h"
 
 using namespace ecrobot;
@@ -77,7 +78,7 @@ Driver driver(&motorL, &motorR, &motorS);
 Distance distance(&motorR, &motorL);
 LightSensor light(LIGHT);
 Pid pid(&light);
-LineTracer lineTracer(&driver, &pid);
+LineTracer lineTracer(&driver, &pid, &oHolder);
 TouchJudgement touchJudgement(&touch);
 ColorDetector colorDetector(&light, &oHolder);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);
@@ -90,6 +91,7 @@ Jumper jumper(&driver, &lineTracer, &stepper);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
+ParkingP parkingP(&lineTracer, &driver, &colorDetector, &distance);
 IN in(&basic, &mogul, &figure, &parkingL);
 
 
@@ -217,8 +219,9 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
+				if(parkingP.run()){
 				// if(parkingL.run()){
-				if(in.run()){
+				// if(in.run()){
 					phase++;
 					driver.straightInit();
 					break;

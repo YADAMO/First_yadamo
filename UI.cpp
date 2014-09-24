@@ -35,6 +35,7 @@ void UI::calibration(void){
 				judge = false;
 			}else if(touchCount == 3){
 				lineTracer->setTarget(((float)white + (float)black) / 2);
+				lineTracer->calcAllTarget();
 				speaker->playTone(1326, 100, 10);
 				judge = false;
 				break;
