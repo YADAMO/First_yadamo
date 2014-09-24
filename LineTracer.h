@@ -16,10 +16,6 @@ private:
   Pid *pid;
   OffsetHolder *offsetHolder;
   float target;
-  float nearblack;
-  float nearnearblack;
-  float nearnearwhite;
-  float nearwhite;
 public:
 	LineTracer(Driver *argDriver, Pid *argPid, OffsetHolder *oh);
 	~LineTracer();
@@ -28,4 +24,8 @@ public:
 	float getTarget();
 	void changePid(float p, float i, float d);
 	void calcAllTarget();
+	float nearblack;
+	float nearnearblack;
+	float nearnearwhite;
+	float nearwhite;
 };

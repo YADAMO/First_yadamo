@@ -24,6 +24,13 @@
 #define IN_CHANGEEDGE2_END -320
 #define IN_TOFIGURE_END -440
 
+#define OUT_STRAIGHT_END -220
+#define OUT_SHARPCURVE_END -380
+
+#define OUT_SHARPCURVE2_END -130
+#define OUT_STRAIGHT2_END -495
+#define OUT_SHARPCURVE3_END -595
+
 Basic::Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Motor *lm, OffsetHolder *oh){
 	lineTracer = lt;
 	pid = pd;
@@ -251,6 +258,68 @@ bool Basic::runToFigure(void){
 			break;
 		case 5:
 			pid->changePid(0.22, 0.001, 0.05);
+			phase = 0;
+			return true;
+			break;
+	}
+	return false;
+}
+
+bool Basic::runOUT(void){
+	switch(phase){
+		case 0:
+			pid->changePid(0.25, 0.001, 0.058);
+			lineTracer->lineTrace(110, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_STRAIGHT_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+			}
+			break;
+		case 1:
+			pid->changePid(0.286, 0.001, 0.03);
+			lineTracer->lineTrace(90, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_SHARPCURVE_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+			}
+			break;
+		case 2:
+			phase = 0;
+			return true;
+			break;
+	}
+	return false;
+}
+
+bool Basic::runToGrid(void){
+	switch(phase){
+		case 0:
+			pid->changePid(0.29, 0.001, 0.036);
+			lineTracer->lineTrace(90, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_SHARPCURVE2_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+				lineTracer->setTarget((offsetHolder->getWhite() * 3 + offsetHolder->getBlack() * 2) / 5);
+			}
+			break;
+		case 1:
+			pid->changePid(0.22, 0.001, 0.058);
+			lineTracer->lineTrace(110, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_STRAIGHT2_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+				lineTracer->setTarget((offsetHolder->getWhite() + offsetHolder->getBlack()) / 2);
+			}
+			break;
+		case 2:
+			pid->changePid(0.26, 0.001, 0.038);
+			lineTracer->lineTrace(50, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_SHARPCURVE3_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+			}
+			break;
+		case 3:
 			phase = 0;
 			return true;
 			break;

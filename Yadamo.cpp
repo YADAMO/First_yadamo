@@ -41,6 +41,7 @@
 #include "ParkingL.h"
 #include "ParkingP.h"
 #include "IN.h"
+#include "OUT.h"
 
 using namespace ecrobot;
 
@@ -93,6 +94,7 @@ Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
 ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
 ParkingP parkingP(&lineTracer, &driver, &colorDetector, &distance);
 IN in(&basic, &mogul, &figure, &parkingL);
+OUT out(&basic, &jumper, &gridRunner, &parkingP);
 
 
 // LineTracer _line;
@@ -220,9 +222,10 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
-				if(parkingP.run()){
+				// if(parkingP.run()){
 				// if(parkingL.run()){
-
+				if(basic.runOUT()){
+				// if(basic.runToGrid()){
 					phase++;
 					driver.straightInit();
 					break;
@@ -231,9 +234,7 @@ extern "C" TASK(OSEK_Task_Background)
 				
 				break;
 			case 1:
-				lineTracer.lineTrace(40,RIGHTEDGE);
-				//driver.straight(0);
-				// driver.straight(0);
+				driver.straight(0);
 				break;
 		}
 		lcd.clear(); // clear data buffer at row 1

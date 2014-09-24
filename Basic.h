@@ -25,4 +25,6 @@ public:
     ~Basic();
 	bool runIN(void);
     bool runToFigure(void);
+    bool runOUT(void);
+    bool runToGrid(void);
 };
