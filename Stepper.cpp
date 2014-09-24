@@ -1,6 +1,6 @@
 #include "Stepper.h"
 
-#define INSPEED 20
+#define INSPEED 15
 #define STEPFORWARD 60
 #define FSTEPTIME 300
 #define SSTEPTIME 500

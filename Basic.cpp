@@ -120,8 +120,8 @@ bool Basic::runIN(void){
 			break;
 
 		case 8:
-			pid->changePid(0.29, 0.001, 0.035);
-			lineTracer->lineTrace(80, LEFTEDGE);
+			pid->changePid(0.295, 0.001, 0.035);
+			lineTracer->lineTrace(70, LEFTEDGE);
 			if((distance->getDistance()) < IN_SNAKECHEST_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
@@ -246,6 +246,7 @@ bool Basic::runToFigure(void){
 			}
 			break;
 		case 5:
+			pid->changePid(0.22, 0.001, 0.05);
 			phase = 0;
 			return true;
 			break;
