@@ -37,6 +37,7 @@ bool OUT::run(){
 		case 4:
 			break;
 		case 10:
+			phase = 0;
 			return true;
 			break;
 	}

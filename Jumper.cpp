@@ -1,13 +1,13 @@
 #include "Jumper.h"
 
-Jumper::Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper, Distance *argDistance)
+Jumper::Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper, Distance *argDistance, StepDetector *sd)
 {
-	runtime = 0;
 	phase = 0;
 	stepper = argStepper;
 	lineTracer = argLineTracer;
 	driver = argDriver;
 	distance = argDistance;
+	stepDetector = sd;
 }
 
 Jumper::~Jumper()
@@ -18,44 +18,36 @@ Jumper::~Jumper()
 //これのtrueを確認したあとに左エッジの低速ライントレース
 bool Jumper::run()
 {
-	runtime += 4;
 	switch(phase){
 		case 0://段差に上る
-			if(stepper->run(1)){
+			if(stepper->run(RIGHTEDGE)){
 				phase++;
-				runtime = 0;
-			}
-			break;
-		case 1://１秒止まる
-			driver->straight(0);
-			if(runtime > 1000){
-				phase++;
-				runtime = 0;
+				driver->straightInit();
 				distance->init();
 			}
 			break;
-		case 2://
-			lineTracer->lineTrace(40, 1);
-			if(distance->getDistance() < -20){
+		case 1:
+			driver->straight(80);
+			if(distance->getDistance() < -38){
 				phase++;
-				runtime = 0;
 			}
 			break;
-		case 3://
-			driver->straight(-20);
-			if(runtime > 1500){//直して
+		case 2:
+			driver->straight(40);
+			if(distance->getDistance() < -55){
 				phase++;
-				runtime = 0;
+			}
+			break;
+
+		case 3:
+			lineTracer->changePid(0.15, 0.001, 0.055);
+			lineTracer->lineTrace(25, RIGHTEDGE);
+			if(distance->getDistance() < -80){
+				phase++;
 			}
 			break;
 		case 4:
-			driver->straight(80);
-			if(runtime > 600){//直して
-				phase++;
-				runtime = 0;
-			}
-			break;
-		case 5:
+			distance->init();
 			return true;
 			break;
 
