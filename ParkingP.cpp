@@ -38,43 +38,51 @@ bool ParkingP::run(){
 			}
 			break;
 		case 2:
+			if(distance->getDistance() < -18){
+				changePhase();
+				driver->straight(0);
+			}else{
+				driver->straight(20);
+			}
+			break;
+		case 3:
 			if(runtime > 1000){
 				changePhase();
 			}
-			driver->turn(70);
+			driver->turn(50);
 			break;
-		case 3:
+		case 4:
 			if(distance->getDiff() > 400){
 				changePhase();
 			}
-			driver->backDrive(70, 20);
+			driver->backDrive(40, 40);
 			break;
-		case 4:
-			if(distance->getDistance() > 15){
+		case 5:
+			if(distance->getDistance() > 7.5){
 				changePhase();
 			}
 			driver->straight(-30);
 			break;
-		case 5:
+		case 6:
 			if(runtime > 1000){
 				changePhase();
 			}
-			driver->turn(-70);
-			break;
-		case 6:
-			if(distance->getDiff() > 430){
-				changePhase();
-			}else{
-				driver->backDrive(-70, 20);
-			}
+			driver->turn(-60);
 			break;
 		case 7:
+			if(distance->getDiff() > 350){
+				changePhase();
+			}else{
+				driver->backDrive(-40, 40);
+			}
+			break;
+		case 8:
 			if(runtime > 4000){
 				changePhase();
 			}
-			driver->turn(-80);
+			driver->turn(-60);
 			break;
-		case 8:
+		case 9:
 			st = true;
 			break;
 	}

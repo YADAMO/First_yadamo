@@ -198,10 +198,10 @@ extern "C" TASK(OSEK_Task_Background)
 	{
 		
 //		driver.operate(hoseimX, hoseimY);
-		if(runtime % 100 == 0){
+		// if(runtime % 20 == 0){
 			motorR.setDiff();
 			motorL.setDiff();
-		}
+		// }
 
 		logToBatteryC = light.getBrightness();
 		logToMotorrevC[0] = (S32)distance.getDistance();
@@ -222,9 +222,9 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
-				// if(parkingP.run()){
+				if(parkingP.run()){
 				// if(parkingL.run()){
-				if(out.run()){
+				// if(out.run()){
 				// if(basic.runToGrid()){
 					phase++;
 					driver.straightInit();
