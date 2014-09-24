@@ -2,7 +2,7 @@
 
 #define IN_STRAIGHT_END -270
 #define IN_SHARPCURVE_END -420
-#define IN_SLOWCURVE_END -490
+#define IN_SLOWCURVE_END -485
 #define IN_LARGECURVE_END -770
 #define IN_SHARPCURVE2_END -900
 #define IN_CHANGEEDGE_END -920
@@ -18,7 +18,7 @@
 #define IN_TOMOGUL_END -1920
 #define IN_MOGULCURVE -2000
 
-#define IN_RETURNLINE_END -65
+#define IN_RETURNLINE_END -60
 #define IN_FRONTCURVE_END -175
 #define IN_GATE3CURVE_END -300
 #define IN_CHANGEEDGE2_END -320
@@ -70,8 +70,8 @@ bool Basic::runIN(void){
 			break;
 
 		case 3:
-			pid->changePid(0.27, 0.001, 0.045);
-			lineTracer->lineTrace(85, RIGHTEDGE);
+			pid->changePid(0.28, 0.001, 0.036);
+			lineTracer->lineTrace(90, RIGHTEDGE);
 			if((distance->getDistance()) < IN_LARGECURVE_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
