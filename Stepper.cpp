@@ -87,6 +87,7 @@ bool Stepper::run(int edge){
 			driver->straight(0);
 			runtime = 0;
 			phase = 0;
+			stepSpeed = 40;
 			return true;
 			break;
 

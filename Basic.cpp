@@ -16,10 +16,10 @@
 
 #define IN_SHARPCURVE3_END -1820
 #define IN_TOMOGUL_END -1920
-#define IN_MOGULCURVE -1980
+#define IN_MOGULCURVE -2000
 
-#define IN_RETURNLINE_END -55
-#define IN_FRONTCURVE_END -180
+#define IN_RETURNLINE_END -65
+#define IN_FRONTCURVE_END -175
 #define IN_GATE3CURVE_END -300
 #define IN_CHANGEEDGE2_END -320
 #define IN_TOFIGURE_END -440
@@ -125,6 +125,7 @@ bool Basic::runIN(void){
 			if((distance->getDistance()) < IN_SNAKECHEST_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
+				lineTracer->setTarget((offsetHolder->getWhite() * 3 + offsetHolder->getBlack() * 2) / 5);
 			}
 			break;
 
@@ -134,6 +135,7 @@ bool Basic::runIN(void){
 			if((distance->getDistance()) < IN_SNAKEBODY_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
+				lineTracer->setTarget((offsetHolder->getWhite() + offsetHolder->getBlack()) / 2);
 			}
 			break;
 
@@ -179,8 +181,8 @@ bool Basic::runIN(void){
 			}
 			break;
 		case 15:
-			pid->changePid(0.32, 0.001, 0.04);
-			lineTracer->lineTrace(70, LEFTEDGE);
+			pid->changePid(0.31, 0.001, 0.043);
+			lineTracer->lineTrace(60, LEFTEDGE);
 			if((distance->getDistance()) < IN_MOGULCURVE){
 				speaker->playTone(442, 500, 100);
 				phase++;

@@ -24,3 +24,7 @@ void LineTracer::setTarget(float tar){
 float LineTracer::getTarget(){
 	return target;
 }
+
+void LineTracer::changePid(float p, float i, float d){
+	pid->changePid(p, i, d);
+}

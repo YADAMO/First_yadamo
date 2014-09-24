@@ -20,4 +20,5 @@ public:
 	void lineTrace(int speed, int adge);
 	void setTarget(float target);
 	float getTarget();
+	void changePid(float p, float i, float d);
 };

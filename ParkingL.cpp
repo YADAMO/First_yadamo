@@ -44,7 +44,7 @@ bool ParkingL::run(){
 			driver->turn(80);
 			break;
 		case 3:
-			if(distance->getDiff() > 400){
+			if(distance->getDiff() > 385){
 				changePhase();
 			}
 			driver->backDrive(40, 40);
@@ -68,7 +68,7 @@ bool ParkingL::run(){
 			driver->straight(30);
 			break;
 		case 7:
-			if(distance->getDiff() > 400){
+			if(distance->getDiff() > 440){
 				changePhase();
 			}
 			driver->drive(30, 30);
