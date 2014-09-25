@@ -35,6 +35,19 @@ bool OUT::run(){
 			}
 			break;
 		case 4:
+			if(basic->runToJump()){
+				phase++;
+			}
+			break;
+		case 5:
+			if(jumper->run()){
+				phase++;
+			}
+			break;
+		case 6:
+			if(basic->runToGarage()){
+				phase = 10;
+			}
 			break;
 		case 10:
 			phase = 0;
