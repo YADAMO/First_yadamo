@@ -6,7 +6,7 @@ ParkingP::ParkingP(LineTracer *argLineTracer, Driver *argDriver, ColorDetector *
 	colorDetector = cd;
 	distance = dis;
 	runtime = 0;
-	phase = 2;
+	phase = 0;
 }
 
 ParkingP::~ParkingP(){
@@ -24,13 +24,14 @@ bool ParkingP::run(){
 
 	switch(phase){
 		case 0:
-			if(colorDetector->blackLineDetect() && runtime > 1500){
+			if(colorDetector->blackLineDetect() && runtime > 2000){
 				changePhase();
 			}
-			lineTracer->lineTrace(30, RIGHTEDGE);
+			lineTracer->changePid(0.15, 0.001, 0.0137);
+			lineTracer->lineTrace(30, RIGHTEDGE);	
 			break;
 		case 1:
-			if(distance->getDistance() > 10){
+			if(distance->getDistance() < -25){
 				changePhase();
 				driver->straight(0);
 			}else{

@@ -36,7 +36,8 @@
 #define OUT_TOJUMP_END -615
 
 #define OUT_SHARPCURVE5_END -130
-#define OUT_STRAIGHT4_END -445
+#define OUT_STRAIGHT4_END -365
+#define OUT_AVOIDGRAY_END -445
 
 Basic::Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Motor *lm, OffsetHolder *oh){
 	lineTracer = lt;
@@ -376,7 +377,7 @@ bool Basic::runToGarage(void){
 			if((distance->getDistance()) < OUT_SHARPCURVE5_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
-				lineTracer->setTarget((offsetHolder->getWhite() * 3 + offsetHolder->getBlack()) / 4);
+				// lineTracer->setTarget((offsetHolder->getWhite() * 3 + offsetHolder->getBlack()) / 4);
 			}
 			break;
 		case 1:
@@ -384,11 +385,20 @@ bool Basic::runToGarage(void){
 			lineTracer->lineTrace(110, RIGHTEDGE);
 			if((distance->getDistance()) < OUT_STRAIGHT4_END){
 				speaker->playTone(442, 500, 100);
+				lineTracer->setTarget((offsetHolder->getWhite() * 3 + offsetHolder->getBlack()) / 4);
 				phase++;
-				lineTracer->setTarget((offsetHolder->getWhite() + offsetHolder->getBlack()) / 2);
 			}
 			break;
 		case 2:
+			pid->changePid(0.22, 0.001, 0.058);
+			lineTracer->lineTrace(90, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_AVOIDGRAY_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+				lineTracer->setTarget((offsetHolder->getWhite() * 5 + offsetHolder->getBlack() * 6) / 11);
+			}
+			break;
+		case 3:
 			phase = 0;
 			return true;
 			break;

@@ -5,7 +5,7 @@ OUT::OUT(Basic *bs, Jumper *jp, GridRunner *gr, ParkingP *pP){
 	jumper = jp;
 	gridRunner = gr;
 	parkingP = pP;
-	phase = 0;
+	phase = 4;
 }
 
 OUT::~OUT(){
@@ -46,6 +46,11 @@ bool OUT::run(){
 			break;
 		case 6:
 			if(basic->runToGarage()){
+				phase++;
+			}
+			break;
+		case 7:
+			if(parkingP->run()){
 				phase = 10;
 			}
 			break;
