@@ -24,10 +24,10 @@ bool ParkingL::run(){
 
 	switch(phase){
 		case 0:
-			if(stepDetector->detect() && runtime > 1500){
+			if(stepDetector->detect() && runtime > 500){
 				changePhase();
 			}
-			lineTracer->lineTrace(15, RIGHTEDGE);
+			lineTracer->lineTrace(25, RIGHTEDGE);
 			break;
 		case 1:
 			if(distance->getDistance() > 6){
