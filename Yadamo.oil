@@ -31,6 +31,7 @@ CPU ATMEL_AT91SAM7S256
     STACKSIZE = 512;
   };
 
+
   COUNTER SysTimerCnt
   {
     MINCYCLE = 1;
