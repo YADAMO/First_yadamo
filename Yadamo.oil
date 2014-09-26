@@ -46,12 +46,7 @@ CPU ATMEL_AT91SAM7S256
     {
       TASK = OSEK_Task_Background;
     };
-    AUTOSTART = TRUE
-    {
-      ALARMTIME = 1;
-      CYCLETIME = 4; /* Task1は4msecごとに起動 */
-      APPMODE = appmode1;
-    };
+    AUTOSTART = FALSE;
   };
 
 

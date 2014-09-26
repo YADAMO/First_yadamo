@@ -237,7 +237,6 @@ extern "C" TASK(RUN_TASK)
 				if(in.run()){
 					phase++;
 					driver.straightInit();
-					break;
 				}
 				break;
 			case 1:
