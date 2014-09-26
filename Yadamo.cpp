@@ -43,6 +43,7 @@
 #include "IN.h"
 #include "OUT.h"
 #include "SpeedMeter.h"
+#include "SpeedPid.h"
 
 using namespace ecrobot;
 
@@ -82,6 +83,7 @@ Distance distance2(&motorR, &motorL);
 SpeedMeter speedMeter(&distance2, &motorR, &motorL);
 LightSensor light(LIGHT);
 Pid pid(&light);
+SpeedPid speedPid(&speedMeter);
 LineTracer lineTracer(&driver, &pid, &oHolder);
 TouchJudgement touchJudgement(&touch);
 ColorDetector colorDetector(&light, &oHolder);
@@ -98,6 +100,7 @@ ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
 ParkingP parkingP(&lineTracer, &driver, &colorDetector, &distance);
 IN in(&basic, &mogul, &figure, &parkingL);
 OUT out(&basic, &jumper, &gridRunner, &parkingP);
+
 
 
 // LineTracer _line;
@@ -218,20 +221,20 @@ extern "C" TASK(OSEK_Task_Background)
 				// driver.straight(30);
 
 				// pid.changePid(0.27, 0.001, 0.023);
-				// lineTracer.lineTrace(20, 1);
+				lineTracer.lineTrace(30, 1);
 				// if(runtime > 400){
 				// 	phase++;
 				// }
 				// basic.runIN();
 				// mogul.run();
-				if(in.run()){
-				// if(parkingL.run()){
-				// if(out.run()){
-				// if(basic.runToGrid()){
-					phase++;
-					driver.straightInit();
-					break;
-				}
+				// if(in.run()){
+				// // if(parkingL.run()){
+				// // if(out.run()){
+				// // if(basic.runToGrid()){
+				// 	phase++;
+				// 	driver.straightInit();
+				// 	break;
+				// }
 				break;
 			case 1:
 				driver.straight(0);
@@ -260,5 +263,5 @@ extern "C" TASK(OSEK_Task_Background)
 
 		runtime += 4;
 	}
-
+	TerminateTask();
 }
