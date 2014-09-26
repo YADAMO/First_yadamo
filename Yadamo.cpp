@@ -222,13 +222,13 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
-				if(parkingP.run()){
+				// if(parkingP.run()){
 				// if(parkingL.run()){
 				// if(out.run()){
 				// if(basic.runToGrid()){
+				if(gridRunner.run()){
 					phase++;
 					driver.straightInit();
-					break;
 				}
 				break;
 			case 1:
