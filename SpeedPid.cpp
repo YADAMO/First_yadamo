@@ -3,9 +3,9 @@
 SpeedPid::SpeedPid(SpeedMeter *sm){
     delta = 0.004; //処理周期：現在1msec
 
-    kp = 20; //ストレート
-    ki = 0;//ストレート
-    kd = 0;//ストレート
+    kp = 7; //ストレート
+    ki = 15;//ストレート
+    kd = 0.003;//ストレート
 
     diff[0] = 0;
 	diff[1] = 0;
@@ -42,7 +42,7 @@ int SpeedPid::calcSpeed(float target){
         speed = -100;
     }
     if(speed > 115){
-        speed = 115;
+        speed = 110;
     }
 
     return  speed;

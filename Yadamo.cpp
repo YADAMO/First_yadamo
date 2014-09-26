@@ -211,7 +211,7 @@ extern "C" TASK(OSEK_Task_Background)
 
 		logToBatteryC = light.getBrightness();
 		logToMotorrevC[0] = (S32)(speedMeter.getSpeed()*100);
-		logToMotorrevC[1] = motorL.getCount();
+		logToMotorrevC[1] = (S32)lineTracer.lineTrace((float)20, 1);
 		logToMotorrevC[2] = motorR.getCount();
 
 		logToAdcC[0] = gyroSensor.getAnglerVelocity();
@@ -221,7 +221,7 @@ extern "C" TASK(OSEK_Task_Background)
 				// driver.straight(30);
 
 				// pid.changePid(0.27, 0.001, 0.023);
-				lineTracer.lineTrace(30, 1);
+				
 				// if(runtime > 400){
 				// 	phase++;
 				// }

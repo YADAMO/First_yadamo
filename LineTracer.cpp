@@ -23,8 +23,10 @@ void LineTracer::lineTrace(int speed, int edge){
   driver->drive(edge * pid->calcTurn(target), speed);
 }
 
-void LineTracer::lineTrace(float speed, int edge){
-  driver->drive(edge * pid->calcTurn(target), speedPid->calcSpeed(speed));
+int LineTracer::lineTrace(float speed, int edge){
+  int tmp = speedPid->calcSpeed(speed);
+  driver->drive(edge * pid->calcTurn(target), tmp);
+  return tmp;
 }
 
 void LineTracer::setTarget(float tar){
