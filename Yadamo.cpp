@@ -60,7 +60,10 @@ using namespace ecrobot;
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
 #define GYRO	PORT_1
-
+extern "C"{
+DeclareCounter(SysTimerCnt);
+DeclareTask(run_alarm);
+}
 Bluetooth bt;
 static const CHAR* PASSKEY = "YADAMO";
 
@@ -132,17 +135,25 @@ void ecrobot_device_terminate()
 
 
 /* nxtOSEK hook to be invoked from an ISR in category 2 */
-void user_1ms_isr_type2(void){ /* do nothing */ }
+extern "C" void user_1ms_isr_type2(void)
+{ /* do nothing */ 
+	SignalCounter(SysTimerCnt);
+}
 
+Lcd lcd;
+bool btConnected = false;
 
+VectorT<S8> command;
+	
+	int offsetmX = 0;
+	int offsetmY = 0;
 
-
+	Daq daq(bt);
 extern "C" TASK(OSEK_Task_Background)
 {
-	Lcd lcd;
+	
 	BTConnection btConnection(bt, lcd, nxt);
 	
-	bool btConnected = false;
 	if (btConnection.connect(PASSKEY) == 1)
 		btConnected = true;
 		
@@ -159,11 +170,6 @@ extern "C" TASK(OSEK_Task_Background)
 	clk.wait(500); /* 500msec wait */
 	
 	GamePad gp(bt);
-	Daq daq(bt);
-	VectorT<S8> command;
-	
-	int offsetmX = 0;
-	int offsetmY = 0;
 	
 	if (btConnected){
 		command = gp.get();
@@ -172,7 +178,13 @@ extern "C" TASK(OSEK_Task_Background)
 		offsetmX = command.mX;
 		offsetmY = command.mY;
 	}
-	
+
+	SetRelAlarm(run_alarm, 1, 4);
+	TerminateTask();
+}
+
+extern "C" TASK(RUN_TASK)
+{
 	int hoseimX;
 	int hoseimY;
 	
@@ -194,10 +206,7 @@ extern "C" TASK(OSEK_Task_Background)
 	
 	int runtime = 0;
 	int phase = 0;
-	while(1)
-	{
-		
-//		driver.operate(hoseimX, hoseimY);
+	driver.operate(hoseimX, hoseimY);
 		// if(runtime % 20 == 0){
 			motorR.setDiff();
 			motorL.setDiff();
@@ -222,10 +231,10 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
-				if(parkingP.run()){
+				//lineTracer.lineTrace(50,RIGHTEDGE);
 				// if(parkingL.run()){
 				// if(out.run()){
-				// if(basic.runToGrid()){
+				if(in.run()){
 					phase++;
 					driver.straightInit();
 					break;
@@ -257,6 +266,5 @@ extern "C" TASK(OSEK_Task_Background)
 		clk.wait(4); /* 10msec wait */
 
 		runtime += 4;
-	}
-
+		TerminateTask();
 }
