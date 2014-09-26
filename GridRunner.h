@@ -23,7 +23,6 @@ private:
 	int phase;
 	int closePhase;
 	F32 disOffset;
-	int direction;
 	int exitline;
 	void back();
 	void changePattern();
@@ -45,5 +44,5 @@ RunPattern GridRunner::runPatterns[] = {
 	RunPattern(GOSTRAIGHT, -50, 40),
 	RunPattern(TURN, LEFTEDGE, 45),
 	RunPattern(GOSTRAIGHT, -40, 40),
-	RunPattern()
+	RunPattern(0, 0, 0)
 };
