@@ -42,6 +42,7 @@
 #include "ParkingP.h"
 #include "IN.h"
 #include "OUT.h"
+#include "SpeedMeter.h"
 
 using namespace ecrobot;
 
@@ -77,6 +78,8 @@ Motor motorR(DRIVE_R,true);
 Motor motorS(STEER,true);
 Driver driver(&motorL, &motorR, &motorS);
 Distance distance(&motorR, &motorL);
+Distance distance2(&motorR, &motorL);
+SpeedMeter speedMeter(&distance2, &motorR, &motorL);
 LightSensor light(LIGHT);
 Pid pid(&light);
 LineTracer lineTracer(&driver, &pid, &oHolder);
@@ -204,12 +207,11 @@ extern "C" TASK(OSEK_Task_Background)
 		// }
 
 		logToBatteryC = light.getBrightness();
-		logToMotorrevC[0] = (S32)distance.getDistance();
+		logToMotorrevC[0] = (S32)(speedMeter.getSpeed()*100);
 		logToMotorrevC[1] = motorL.getCount();
 		logToMotorrevC[2] = motorR.getCount();
 
 		logToAdcC[0] = gyroSensor.getAnglerVelocity();
-		
 		switch(phase)
 		{
 			case 0:
@@ -222,7 +224,7 @@ extern "C" TASK(OSEK_Task_Background)
 				// }
 				// basic.runIN();
 				// mogul.run();
-				if(parkingP.run()){
+				if(in.run()){
 				// if(parkingL.run()){
 				// if(out.run()){
 				// if(basic.runToGrid()){
