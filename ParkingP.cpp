@@ -31,7 +31,7 @@ bool ParkingP::run(){
 			lineTracer->lineTrace(30, RIGHTEDGE);	
 			break;
 		case 1:
-			if(distance->getDistance() < -25){
+			if(distance->getDistance() < -24){
 				changePhase();
 				driver->straight(0);
 			}else{

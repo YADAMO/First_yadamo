@@ -11,8 +11,9 @@ private:
 	F32 distance;
 public:
 	Distance(Motor *rm, Motor *lm);
-	~Distance();
-	void init();
-	F32 getDistance();
-	int getDiff();
+	~Distance(void);
+	void init(void);
+	void init(S32 mR, S32 mL);
+	F32 getDistance(void);
+	int getDiff(void);
 };

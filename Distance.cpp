@@ -21,6 +21,11 @@ void Distance::init(void){
 	rightOffset = motorR->getCount();
 }
 
+void Distance::init(S32 mR, S32 mL){
+	leftOffset = mL;
+	rightOffset = mR;
+}
+
 F32 Distance::getDistance(void){
 	static const F32 DPOD = 0.06981317F;
 	

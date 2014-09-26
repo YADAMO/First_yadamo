@@ -62,3 +62,7 @@ bool Motor::isStep(void){
 	return (diff.front() == getCount());
 }
 
+std::list<S32> Motor::getDiff(void){
+	return diff;
+}
+

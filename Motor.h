@@ -95,6 +95,7 @@ public:
 	bool isStep(void);
 
 	void setDiff(void);
+	std::list<S32> getDiff(void);
 protected:
 	/**
 	 * Get motor connected port.
