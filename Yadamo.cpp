@@ -199,8 +199,7 @@ extern "C" TASK(RUN_TASK)
 	motorR.setDiff();
 	motorL.setDiff();
 
-	switch(phase)
-	{
+	switch(phase){
 		case 0:
 			if(in.run()){
 				phase++;
@@ -218,6 +217,7 @@ extern "C" TASK(RUN_TASK)
 		lcd.putf("dd", 0, 0, 0, 5);
 	}else{
 		lcd.putf("dd", (int)distance.getDistance(), 0, oHolder.getWhite(), 4);
+		lcd.clear(); // clear data buffer at row 1
 	}
 	lcd.disp();
 

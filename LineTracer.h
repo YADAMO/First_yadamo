@@ -22,7 +22,7 @@ public:
 	LineTracer(Driver *argDriver, Pid *argPid, OffsetHolder *oh, SpeedPid *sp);
 	~LineTracer();
 	void lineTrace(int speed, int edge);
-	void lineTrace(float speed, int edge);
+	int lineTrace(float speed, int edge);
 	void setTarget(float target);
 	float getTarget();
 	void changePid(float p, float i, float d);
