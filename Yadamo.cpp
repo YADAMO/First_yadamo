@@ -150,11 +150,11 @@ Lcd lcd;
 bool btConnected = false;
 
 VectorT<S8> command;
-	
-	int offsetmX = 0;
-	int offsetmY = 0;
 
-	Daq daq(bt);
+Daq daq(bt);
+
+int phase = 0;
+
 extern "C" TASK(OSEK_Task_Background)
 {
 	
@@ -165,9 +165,6 @@ extern "C" TASK(OSEK_Task_Background)
 		
 	speaker.playTone(442, 100, 10);
 	
-	// int grey = (BLACK+WHITE)/2;
-	// int light = 0;
-	// int count = 0;
 	motorL.setCount(0);
 	motorR.setCount(0);
 	
@@ -175,100 +172,54 @@ extern "C" TASK(OSEK_Task_Background)
 	ui.calibration();
 	clk.wait(500); /* 500msec wait */
 	
-	GamePad gp(bt);
-	
-	if (btConnected){
-		command = gp.get();
-		lcd.clear();
-		lcd.putf("s", (gp.isConnected() ? "connected": "not connected"));
-		offsetmX = command.mX;
-		offsetmY = command.mY;
-	}
-
-	SetRelAlarm(run_alarm, 1, 4);
+	SetRelAlarm(run_alarm, 1, 3);
 	TerminateTask();
 }
 
 extern "C" TASK(RUN_TASK)
-{
-	int hoseimX;
-	int hoseimY;
-	
+{	
 	S8 logToDataC[2];
 	logToDataC[0] = 1;//data1
 	logToDataC[1] = 2;//data2
-	U16 logToBatteryC = 3;//data3
+	
+	U16 logToBatteryC = light.getBrightness();//data3
+
 	S16 logToAdcC[4];
-	logToAdcC[0] = 4;//data7
+	logToAdcC[0] = gyroSensor.getAnglerVelocity();//data7
 	logToAdcC[1] = 5;//data8
 	logToAdcC[2] = 6;//data9
 	logToAdcC[3] = 7;
 
 	S32 logToMotorrevC[4];
-	logToMotorrevC[0] = 8;//data4
-	logToMotorrevC[1] = 9;//data5
-	logToMotorrevC[2] = 10;//data6
+	logToMotorrevC[0] = (S32)(speedMeter.getSpeed()*100);//data4
+	logToMotorrevC[1] = motorL.getCount();//data5
+	logToMotorrevC[2] = motorR.getCount();//data6
 	logToMotorrevC[3] = 11;	
-	
-	int runtime = 0;
-	int phase = 0;
-	driver.operate(hoseimX, hoseimY);
-		// if(runtime % 20 == 0){
-			motorR.setDiff();
-			motorL.setDiff();
-		// }
 
-		logToBatteryC = light.getBrightness();
-		logToMotorrevC[0] = (S32)(speedMeter.getSpeed()*100);
-		logToMotorrevC[1] = motorL.getCount();
-		logToMotorrevC[2] = motorR.getCount();
+	motorR.setDiff();
+	motorL.setDiff();
 
-		logToAdcC[0] = gyroSensor.getAnglerVelocity();
-		switch(phase)
-		{
-			case 0:
-				// driver.straight(30);
+	switch(phase)
+	{
+		case 0:
+			if(in.run()){
+				phase++;
+				driver.straightInit();
+			}
+			break;
+		case 1:
+			driver.straight(0);
+			break;
+	}
 
-				// pid.changePid(0.27, 0.001, 0.023);
-				// if(runtime > 400){
-				// 	phase++;
-				// }
-				// basic.runIN();
-				// mogul.run();
+	lcd.clear(); // clear data buffer at row 1
+	if (btConnected){
+		daq.send(logToDataC, logToBatteryC, logToAdcC, logToMotorrevC);
+		lcd.putf("dd", 0, 0, 0, 5);
+	}else{
+		lcd.putf("dd", (int)distance.getDistance(), 0, oHolder.getWhite(), 4);
+	}
+	lcd.disp();
 
-				//lineTracer.lineTrace(50,RIGHTEDGE);
-				// if(parkingL.run()){
-				// if(out.run()){
-				if(in.run()){
-					phase++;
-					driver.straightInit();
-				}
-				break;
-			case 1:
-				driver.straight(0);
-				break;
-		}
-		lcd.clear(); // clear data buffer at row 1
-		if (btConnected){		
-			hoseimX = command.mX - offsetmX;
-			hoseimY = command.mY - offsetmY;
-			
-			daq.send(logToDataC, logToBatteryC, logToAdcC, logToMotorrevC);
-			
-			lcd.clear(); // clear data buffer at row 1
-			lcd.putf("dd", hoseimX,0, hoseimY, 5);
-		}else{
-			int flag = 0;
-			// if(colorDetector.blackLineDetect()){
-			// 	flag = 1;
-			// }else{
-			// 	flag = 0;
-			// }
-			lcd.putf("ddd", (int)distance.getDistance(), 0, oHolder.getWhite(), 4, flag, 7);
-		}
-		lcd.disp();
-		clk.wait(4); /* 10msec wait */
-
-		runtime += 4;
 	TerminateTask();
 }
