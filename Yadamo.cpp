@@ -84,7 +84,7 @@ SpeedMeter speedMeter(&distance2, &motorR, &motorL);
 LightSensor light(LIGHT);
 Pid pid(&light);
 SpeedPid speedPid(&speedMeter);
-LineTracer lineTracer(&driver, &pid, &oHolder);
+LineTracer lineTracer(&driver, &pid, &oHolder, &speedPid);
 TouchJudgement touchJudgement(&touch);
 ColorDetector colorDetector(&light, &oHolder);
 UI ui(&light, &touchJudgement, &lineTracer, &clk, &speaker, &oHolder);

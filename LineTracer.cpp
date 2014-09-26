@@ -1,10 +1,11 @@
 #include "LineTracer.h"
 
-LineTracer::LineTracer(Driver *argDriver, Pid *argPid, OffsetHolder *oh)
+LineTracer::LineTracer(Driver *argDriver, Pid *argPid, OffsetHolder *oh, SpeedPid *sp)
 {
   driver = argDriver;
   pid = argPid;
   offsetHolder = oh;
+  speedPid = sp;
   target = 600;
   nearblack = 0;
   nearnearblack = 0;
@@ -18,8 +19,12 @@ LineTracer::~LineTracer()
 }
 
 //hidari adge == 1 , migi adge == -1
-void LineTracer::lineTrace(int speed, int adge){
-  driver->drive(adge * pid->calcTurn(target), speed);
+void LineTracer::lineTrace(int speed, int edge){
+  driver->drive(edge * pid->calcTurn(target), speed);
+}
+
+void LineTracer::lineTrace(float speed, int edge){
+  driver->drive(edge * pid->calcTurn(target), speedPid->calcSpeed(speed));
 }
 
 void LineTracer::setTarget(float tar){
