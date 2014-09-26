@@ -31,6 +31,14 @@
 #define OUT_STRAIGHT2_END -495
 #define OUT_SHARPCURVE3_END -595
 
+#define OUT_SHARPCURVE4_END -130
+#define OUT_STRAIGHT3_END -445
+#define OUT_TOJUMP_END -615
+
+#define OUT_SHARPCURVE5_END -130
+#define OUT_STRAIGHT4_END -365
+#define OUT_AVOIDGRAY_END -445
+
 Basic::Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Motor *lm, OffsetHolder *oh){
 	lineTracer = lt;
 	pid = pd;
@@ -317,6 +325,77 @@ bool Basic::runToGrid(void){
 			if((distance->getDistance()) < OUT_SHARPCURVE3_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
+			}
+			break;
+		case 3:
+			phase = 0;
+			return true;
+			break;
+	}
+	return false;
+}
+
+bool Basic::runToJump(void){
+	switch(phase){
+		case 0:
+			pid->changePid(0.25, 0.001, 0.036);
+			lineTracer->lineTrace(80, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_SHARPCURVE4_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+			}
+			break;
+		case 1:
+			pid->changePid(0.25, 0.001, 0.058);
+			lineTracer->lineTrace(110, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_STRAIGHT3_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+			}
+			break;
+		case 2:
+			pid->changePid(0.25, 0.001, 0.036);
+			lineTracer->lineTrace(80, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_TOJUMP_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+			}
+			break;
+		case 3:
+			phase = 0;
+			return true;
+			break;
+	}
+	return false;
+}
+
+bool Basic::runToGarage(void){
+	switch(phase){
+		case 0:
+			pid->changePid(0.25, 0.001, 0.036);
+			lineTracer->lineTrace(80, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_SHARPCURVE5_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+				// lineTracer->setTarget((offsetHolder->getWhite() * 3 + offsetHolder->getBlack()) / 4);
+			}
+			break;
+		case 1:
+			pid->changePid(0.22, 0.001, 0.058);
+			lineTracer->lineTrace(110, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_STRAIGHT4_END){
+				speaker->playTone(442, 500, 100);
+				lineTracer->setTarget((offsetHolder->getWhite() * 3 + offsetHolder->getBlack()) / 4);
+				phase++;
+			}
+			break;
+		case 2:
+			pid->changePid(0.22, 0.001, 0.058);
+			lineTracer->lineTrace(90, RIGHTEDGE);
+			if((distance->getDistance()) < OUT_AVOIDGRAY_END){
+				speaker->playTone(442, 500, 100);
+				phase++;
+				lineTracer->setTarget((offsetHolder->getWhite() * 5 + offsetHolder->getBlack() * 6) / 11);
 			}
 			break;
 		case 3:

@@ -27,4 +27,6 @@ public:
     bool runToFigure(void);
     bool runOUT(void);
     bool runToGrid(void);
+    bool runToJump(void);
+    bool runToGarage(void);
 };
