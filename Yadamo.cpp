@@ -221,7 +221,6 @@ extern "C" TASK(OSEK_Task_Background)
 				// driver.straight(30);
 
 				// pid.changePid(0.27, 0.001, 0.023);
-				lineTracer.lineTrace(30, 1);
 				// if(runtime > 400){
 				// 	phase++;
 				// }
@@ -231,7 +230,7 @@ extern "C" TASK(OSEK_Task_Background)
 				// if(parkingL.run()){
 				// if(out.run()){
 				// if(basic.runToGrid()){
-				if(gridRunner.run()){
+				if(out.run()){
 					phase++;
 					driver.straightInit();
 				}

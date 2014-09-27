@@ -101,14 +101,18 @@ void Driver::turn(int angle){
 	if(angle > 0){//左旋回  steerAngle負
 	    if(count > angle * -6){
 		  handle = -100;
+	    }else if(count < angle * -6){
+	      handle = 100;
 	    }else{
-	      handle = 0;
+	    	handle = 0;
 	    }
 	  }else{//右旋回 steerAngle正
 	    if(count < angle * -6){
 		  handle = 100;
+	    }else if(count > angle * -6){
+	      handle = -100;
 	    }else{
-	      handle = 0;
+	    	handle = 0;
 	    }
 	  }
 

@@ -17,6 +17,7 @@ private:
 	Distance *distance;
 	StepDetector *stepDetector;
 	int runtime;
+	bool turnflag;
 	RunPattern curPattern;
 	int patIndex;
 	bool detected;
@@ -37,12 +38,16 @@ public:
 };
 
 //RunPattern(pattern, param: distance or direction, param2: speed or angle)
+//マス移動の距離 -20
+//斜め移動の距離 -35
+//90度旋回 382
+//45度旋回 175
 RunPattern GridRunner::runPatterns[] = {
-	RunPattern(TURN, LEFTEDGE, 45),
-	RunPattern(GOSTRAIGHT, -50, 40),
-	RunPattern(TURN, RIGHTEDGE, 90),
-	RunPattern(GOSTRAIGHT, -50, 40),
-	RunPattern(TURN, LEFTEDGE, 45),
-	RunPattern(GOSTRAIGHT, -40, 40),
+	RunPattern(TURN, LEFTEDGE, 360),
+	RunPattern(GOSTRAIGHT, -15, 40),
+	RunPattern(TURN, RIGHTEDGE, 190),
+	RunPattern(GOSTRAIGHT, -60, 40),
+	RunPattern(TURN, RIGHTEDGE, 190),
+	RunPattern(GOSTRAIGHT, -60, 40),
 	RunPattern(0, 0, 0)
 };

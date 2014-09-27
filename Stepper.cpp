@@ -22,6 +22,67 @@ Stepper::~Stepper(){
 
 }
 
+bool Stepper::gridStep(int edge){
+	switch(phase){
+		case 0://低速でぶつける
+			pid->changePid(0.15, 0.001, 0.02);
+			lineTracer->lineTrace(INSPEED, edge);
+			if(stepDetector->detect() && runtime > 500){
+				phase = 2;
+				runtime = 0;
+				distance->init();
+			}
+			break;
+		case 2://前輪のぼる
+			lineTracer->lineTrace(stepSpeed, edge);
+			if(distance->getDistance() < -13){
+				phase = 3;
+				distance->init();
+				driver->straightInit();
+				runtime = 0;
+			}
+			if(stepDetector->detect()){
+				stepSpeed += 3;
+			}
+			break;
+		case 3://タイヤ整える
+			if(runtime < 1000){
+				driver->turn(-60);
+			}else if(distance->getDiff() < 20){
+				driver->drive(-60, 60);
+			}else{
+				phase = 4;
+				distance->init();
+				driver->straightInit();
+				runtime = 0;
+				stepSpeed = 40;
+			}
+			break;
+		case 4://のぼる
+			lineTracer->lineTrace(stepSpeed, edge);
+			if(distance->getDistance() < -13){
+				phase = 10;
+				distance->init();
+				driver->straightInit();
+				runtime = 0;
+			}
+			if(stepDetector->detect()){
+				stepSpeed += 3;
+			}
+			break;
+		case 10:
+			driver->straight(0);
+			runtime = 0;
+			phase = 0;
+			stepSpeed = 40;
+			return true;
+			break;
+
+	}
+	runtime += 4;
+	return false;
+}
+
 bool Stepper::run(int edge){
 	switch(phase){
 		case 0://低速でぶつける

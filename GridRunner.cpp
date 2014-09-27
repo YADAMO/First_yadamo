@@ -1,5 +1,7 @@
 #include "GridRunner.h"
 
+#define EXITLINE 2
+
 GridRunner::GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *cd, Distance *dis, StepDetector *sd){
 	lineTracer = lt;
 	driver = dr;
@@ -12,9 +14,9 @@ GridRunner::GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *c
 	detected = false;
 	closePhase = 0;
 	phase = 0;
+	turnflag = false;
 	runtime = 0;
 	disOffset = 0;
-	exitline = 3;
 }
 
 GridRunner::~GridRunner(){
@@ -62,12 +64,24 @@ void GridRunner::goStraight(){
 }
 
 void GridRunner::turn(){
-	if(runtime < 1000){
-		driver->turn(60 * -curPattern.param);
-	}else if(distance->getDiff() < 360){
-		driver->drive(60 * -curPattern.param, 0);
+	if(distance->getDiff() < curPattern.param2 && !turnflag){
+		if(runtime < 1000){
+			driver->turn(60 * -curPattern.param);
+		}else{
+			driver->drive(60 * -curPattern.param, 0);
+		}
 	}else{
-		changePattern();
+		if(turnflag){
+			if(runtime < 1000){
+				driver->turn(0);
+			}else{
+				changePattern();
+				turnflag = false;
+			}
+		}else{
+			turnflag = true;
+			runtime = 0;
+		}
 	}
 }
 
@@ -75,10 +89,18 @@ bool GridRunner::run(){
 	bool st = false;
 	switch(phase){
 		case 0:
-		if(stepper->run(RIGHTEDGE)){
+		if(stepper->gridStep(RIGHTEDGE)){
 			changePhase();
 		}
 		break;
+
+		// case 1:
+		// if(distance->getDistance() > 5){
+		// 	lineTracer->lineTrace(RIGHTEDGE, 15);
+		// }else{
+		// 	changePhase();
+		// }
+		// break;
 
 		case 1:
 		switch(curPattern.pattern){
@@ -98,36 +120,38 @@ bool GridRunner::run(){
 		case 2:
 		switch(closePhase){
 			case 0:
-				if(exitline > 3){
+				if(EXITLINE > 3){
 					closePhase = 4;
 				}else{
 					closePhase = 1;
 				}
 				break;
 			case 1:
-				if(runtime < 1000){
-					driver->turn(-60);
-				}else if(distance->getDiff() < 360.0){
-					driver->drive(-60, 0);
+				if(distance->getDiff() < 340 && !turnflag){
+					if(runtime < 1000){
+						driver->turn(-60);
+					}else{
+						driver->drive(-60, 0);
+					}
 				}else{
-					closePhase = 3;
-					distance->init();
-					driver->straightInit();
-					runtime = 0;
-				}
-				break;
-			case 2:
-				if(distance->getDistance() > -40 * (3 - exitline)){
-					driver->straight(60);
-				}else{
-					closePhase = 3;	
-					distance->init();
-					driver->straightInit();
-					runtime = 0;
+					if(turnflag){
+						if(runtime < 1000){
+							driver->turn(0);
+						}else{
+							closePhase = 3;
+							distance->init();
+							driver->straightInit();
+							runtime = 0;
+							turnflag = false;
+						}
+					}else{
+						turnflag = true;
+						runtime = 0;
+					}
 				}
 				break;
 			case 3:
-				if(colorDetector->blackLineDetect() && runtime > 500){
+				if(colorDetector->blackLineDetect() && runtime > 10){
 					closePhase = 4;	
 					distance->init();
 					driver->straightInit();
@@ -137,36 +161,68 @@ bool GridRunner::run(){
 				}
 				break;
 			case 4:
-				if(runtime < 1000){
-					driver->turn(60);
-				}else if(distance->getDiff() < 360){
-					driver->drive(60, 0);
+				if(distance->getDistance() > -9){
+					driver->straight(40);
 				}else{
-					closePhase = 5;
+					closePhase = 5;	
 					distance->init();
 					driver->straightInit();
 					runtime = 0;
 				}
 				break;
 			case 5:
-				lineTracer->changePid(0.15, 0.001, 0.055);
-				lineTracer->lineTrace(25, RIGHTEDGE);
-				if(distance->getDistance() < -80){
-					closePhase = 6;	
+				if(runtime < 1000){
+					driver->turn(60);
+				}else if(!colorDetector->blackLineDetect()){
+					driver->drive(60, 0);
+				}else{
+					closePhase = 2;
 					distance->init();
 					driver->straightInit();
 					runtime = 0;
 				}
 				break;
+			case 2:
+				if(distance->getDiff() < 20 && !turnflag){
+					if(runtime < 1000){
+						driver->turn(-60);
+					}else{
+						driver->drive(-60, 0);
+					}
+				}else{
+					if(turnflag){
+						if(runtime < 500){
+							driver->turn(10);
+						}else{
+							closePhase = 6;
+							distance->init();
+							driver->straightInit();
+							runtime = 0;
+							turnflag = false;
+						}
+					}else{
+						turnflag = true;
+						runtime = 0;
+					}
+				}
+				break;
 			case 6:
-				changePhase();
-				driver->straight(0);
+				lineTracer->changePid(0.15, 0.001, 0.055);
+				lineTracer->lineTrace(25, RIGHTEDGE);
+				if(distance->getDistance() < -80){
+					closePhase = 7;
+					driver->straight(0);	
+					changePhase();
+				}
+				break;
+			case 7:
 				break;
 		}
 		break;
 
 		case 3:
 		st = true;
+		driver->straightInit();
 		driver->straight(0);
 		break;
 	}
