@@ -13,5 +13,5 @@ SpeedMeter::~SpeedMeter(){
 float SpeedMeter::getSpeed(void){
 	distance->init(motorR->getDiff().front(), motorL->getDiff().front());
 	F32 dis = distance->getDistance();
-	return -(dis * 50);
+	return -(dis * 66.67);
 }

@@ -1,7 +1,7 @@
 #include "SpeedPid.h"
 
 SpeedPid::SpeedPid(SpeedMeter *sm){
-    delta = 0.004; //処理周期：現在1msec
+    delta = 0.003; //処理周期：現在1msec
 
     kp = 5; //ストレート
     ki = 20;//ストレート
@@ -46,12 +46,12 @@ int SpeedPid::calcSpeed(float target){
         speed = 110;
     }
 
-    if((speed - speedbuf) < -30){
-        speed = speedbuf - 5;
-    }
+    // if((speed - speedbuf) < -70){
+    //     speed = speedbuf - 5;
+    // }
     speedbuf = speed;
     return  speed;
 }
-
-
-
+void SpeedPid::resetIntegral(float rate){
+    integral = integral * rate;
+}
