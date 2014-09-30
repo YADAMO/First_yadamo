@@ -18,7 +18,7 @@ Mogul::~Mogul(){
 }
 
 bool Mogul::run(){
-	runtime += 4;
+	runtime += 3;
 	switch(phase){
 		case 0://段差に上る
 			if(stepper->run(-1)){
