@@ -20,10 +20,13 @@ private:
 	RunPattern curPattern;
 	int patIndex;
 	bool detected;
-	bool spFlag;
+	int phase;
+	int closePhase;
 	F32 disOffset;
+	int exitline;
 	void back();
 	void changePattern();
+	void changePhase();
 	void goStraight();
 	void turn();
 public:
@@ -36,8 +39,10 @@ public:
 //RunPattern(pattern, param: distance or direction, param2: speed or angle)
 RunPattern GridRunner::runPatterns[] = {
 	RunPattern(TURN, LEFTEDGE, 45),
-	RunPattern(GOSTRAIGHT, -30, 40),
-	RunPattern(TURN, RIGHTEDGE, 45),
-	RunPattern(GOSTRAIGHT, -100, 40),
-	RunPattern()
+	RunPattern(GOSTRAIGHT, -50, 40),
+	RunPattern(TURN, RIGHTEDGE, 90),
+	RunPattern(GOSTRAIGHT, -50, 40),
+	RunPattern(TURN, LEFTEDGE, 45),
+	RunPattern(GOSTRAIGHT, -40, 40),
+	RunPattern(0, 0, 0)
 };

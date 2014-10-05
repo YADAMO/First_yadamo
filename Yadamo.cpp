@@ -62,7 +62,10 @@ using namespace ecrobot;
 #define LIGHT	PORT_3
 #define TOUCH	PORT_2
 #define GYRO	PORT_1
-
+extern "C"{
+DeclareCounter(SysTimerCnt);
+DeclareTask(run_alarm);
+}
 Bluetooth bt;
 static const CHAR* PASSKEY = "YADAMO";
 
@@ -93,9 +96,9 @@ StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper, &oHolder, &distance);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &pid);
-Jumper jumper(&driver, &lineTracer, &stepper, &distance, &stepDetector);
+Jumper jumper(&driver, &lineTracer, &stepper, &distance, &stepDetector, &speedPid, &colorDetector);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
-Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder);
+Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder, &speedPid);
 ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
 ParkingP parkingP(&lineTracer, &driver, &colorDetector, &distance);
 IN in(&basic, &mogul, &figure, &parkingL);
@@ -138,25 +141,30 @@ void ecrobot_device_terminate()
 
 
 /* nxtOSEK hook to be invoked from an ISR in category 2 */
-void user_1ms_isr_type2(void){ /* do nothing */ }
+extern "C" void user_1ms_isr_type2(void)
+{ /* do nothing */ 
+	SignalCounter(SysTimerCnt);
+}
 
+Lcd lcd;
+bool btConnected = false;
 
+VectorT<S8> command;
 
+Daq daq(bt);
+
+int phase = 0;
 
 extern "C" TASK(OSEK_Task_Background)
 {
-	Lcd lcd;
+	
 	BTConnection btConnection(bt, lcd, nxt);
 	
-	bool btConnected = false;
 	if (btConnection.connect(PASSKEY) == 1)
 		btConnected = true;
 		
 	speaker.playTone(442, 100, 10);
 	
-	// int grey = (BLACK+WHITE)/2;
-	// int light = 0;
-	// int count = 0;
 	motorL.setCount(0);
 	motorR.setCount(0);
 	
@@ -164,104 +172,55 @@ extern "C" TASK(OSEK_Task_Background)
 	ui.calibration();
 	clk.wait(500); /* 500msec wait */
 	
-	GamePad gp(bt);
-	Daq daq(bt);
-	VectorT<S8> command;
-	
-	int offsetmX = 0;
-	int offsetmY = 0;
-	
-	if (btConnected){
-		command = gp.get();
-		lcd.clear();
-		lcd.putf("s", (gp.isConnected() ? "connected": "not connected"));
-		offsetmX = command.mX;
-		offsetmY = command.mY;
-	}
-	
-	int hoseimX;
-	int hoseimY;
-	
+	SetRelAlarm(run_alarm, 1, 3);
+	TerminateTask();
+}
+
+extern "C" TASK(RUN_TASK)
+{	
 	S8 logToDataC[2];
 	logToDataC[0] = 1;//data1
 	logToDataC[1] = 2;//data2
-	U16 logToBatteryC = 3;//data3
+	
+	U16 logToBatteryC = light.getBrightness();//data3
+
 	S16 logToAdcC[4];
-	logToAdcC[0] = 4;//data7
+	logToAdcC[0] = gyroSensor.getAnglerVelocity();//data7
 	logToAdcC[1] = 5;//data8
 	logToAdcC[2] = 6;//data9
 	logToAdcC[3] = 7;
 
 	S32 logToMotorrevC[4];
-	logToMotorrevC[0] = 8;//data4
-	logToMotorrevC[1] = 9;//data5
-	logToMotorrevC[2] = 10;//data6
+	logToMotorrevC[0] = (S32)(speedMeter.getSpeed()*100);//data4
+	logToMotorrevC[1] = motorL.getCount();//data5
+	logToMotorrevC[2] = motorR.getCount();//data6
 	logToMotorrevC[3] = 11;	
-	
-	int runtime = 0;
-	int phase = 0;
-	while(1)
-	{
-		
-//		driver.operate(hoseimX, hoseimY);
-		// if(runtime % 20 == 0){
-			motorR.setDiff();
-			motorL.setDiff();
-		// }
 
-		logToBatteryC = light.getBrightness();
-		logToMotorrevC[0] = (S32)(speedMeter.getSpeed()*100);
-		logToMotorrevC[1] = (S32)lineTracer.lineTrace((float)20, 1);
-		logToMotorrevC[2] = motorR.getCount();
+	motorR.setDiff();
+	motorL.setDiff();
 
-		logToAdcC[0] = gyroSensor.getAnglerVelocity();
-		switch(phase)
-		{
-			case 0:
-				// driver.straight(30);
+	switch(phase){
+		case 0:
+			if(jumper.run()){
+				phase++;
+				driver.straightInit();
+			}
 
-				// pid.changePid(0.27, 0.001, 0.023);
-				
-				// if(runtime > 400){
-				// 	phase++;
-				// }
-				// basic.runIN();
-				// mogul.run();
-				// if(in.run()){
-				// // if(parkingL.run()){
-				// // if(out.run()){
-				// // if(basic.runToGrid()){
-				// 	phase++;
-				// 	driver.straightInit();
-				// 	break;
-				// }
-				break;
-			case 1:
-				driver.straight(0);
-				break;
-		}
-		lcd.clear(); // clear data buffer at row 1
-		if (btConnected){		
-			hoseimX = command.mX - offsetmX;
-			hoseimY = command.mY - offsetmY;
-			
-			daq.send(logToDataC, logToBatteryC, logToAdcC, logToMotorrevC);
-			
-			lcd.clear(); // clear data buffer at row 1
-			lcd.putf("dd", hoseimX,0, hoseimY, 5);
-		}else{
-			int flag = 0;
-			// if(colorDetector.blackLineDetect()){
-			// 	flag = 1;
-			// }else{
-			// 	flag = 0;
-			// }
-			lcd.putf("ddd", (int)distance.getDistance(), 0, oHolder.getWhite(), 4, flag, 7);
-		}
-		lcd.disp();
-		clk.wait(4); /* 10msec wait */
-
-		runtime += 4;
+			break;
+		case 1:
+			driver.straight(0);
+			break;
 	}
+
+	lcd.clear(); // clear data buffer at row 1
+	if (btConnected){
+		daq.send(logToDataC, logToBatteryC, logToAdcC, logToMotorrevC);
+		lcd.putf("dd", 0, 0, 0, 5);
+	}else{
+		lcd.putf("dd", (int)distance.getDistance(), 0, oHolder.getWhite(), 4);
+		lcd.clear(); // clear data buffer at row 1
+	}
+	lcd.disp();
+
 	TerminateTask();
 }

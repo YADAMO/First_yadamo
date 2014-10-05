@@ -1,7 +1,7 @@
 #include "Pid.h"
 
 Pid::Pid(LightSensor *light){
-    delta = 0.004; //処理周期：現在1msec
+    delta = 0.003; //処理周期：現在1msec
     // kp = 0.3;
     // ki = 0.001;
     // kd = 0.03;

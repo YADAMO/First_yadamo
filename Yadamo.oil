@@ -30,5 +30,41 @@ CPU ATMEL_AT91SAM7S256
     SCHEDULE = FULL;
     STACKSIZE = 512;
   };
-};
 
+
+  COUNTER SysTimerCnt
+  {
+    MINCYCLE = 1;
+    MAXALLOWEDVALUE = 10000000;
+    TICKSPERBASE = 1;
+  };
+  
+  ALARM osek_task_alarm
+  {
+    COUNTER = SysTimerCnt;
+    ACTION = ACTIVATETASK
+    {
+      TASK = OSEK_Task_Background;
+    };
+    AUTOSTART = FALSE;
+  };
+
+
+  TASK RUN_TASK
+  {                                         
+    PRIORITY = 3; /* lowest priority */
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+    STACKSIZE = 512;
+  };
+
+  ALARM run_alarm
+  {
+    COUNTER = SysTimerCnt;
+    ACTION = ACTIVATETASK
+    {
+      TASK = RUN_TASK;
+    };
+    AUTOSTART = FALSE;
+  };
+};

@@ -15,7 +15,7 @@ IN::~IN(){
 bool IN::run(){
 	switch(phase){
 		case 0:
-			if(basic->runIN()){
+			if(basic->runIN(1)){
 				phase++;
 			}
 			break;

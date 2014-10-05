@@ -17,4 +17,5 @@ public:
 	SpeedPid(SpeedMeter *sm);
 	void changePid(float p, float i, float d);
 	int calcSpeed(float target);
+    void resetIntegral(float rate);
 };
