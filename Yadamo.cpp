@@ -96,7 +96,7 @@ StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper, &oHolder, &distance);
 Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &pid);
-Jumper jumper(&driver, &lineTracer, &stepper, &distance, &stepDetector);
+Jumper jumper(&driver, &lineTracer, &stepper, &distance, &stepDetector, &speedPid, &colorDetector);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder, &speedPid);
 ParkingL parkingL(&lineTracer, &driver, &stepDetector, &distance);
@@ -201,7 +201,7 @@ extern "C" TASK(RUN_TASK)
 
 	switch(phase){
 		case 0:
-			if(in.run()){
+			if(jumper.run()){
 				phase++;
 				driver.straightInit();
 			}
