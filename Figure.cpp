@@ -89,6 +89,6 @@ bool Figure::run(){
 		st = true;
 		break;
 	}
-	runtime += 4;
+	runtime += 3;
 	return st;
 }

@@ -464,11 +464,11 @@ bool Basic::runOUT(void){
 			if((distance->getDistance()) < OUT_STRAIGHT_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
-				speedPid->resetIntegral(0.5);
+				speedPid->resetIntegral(0.3);
 			}
 			break;
 		case 1:
-			pid->changePid(0.246, 0.001, 0.03);
+			pid->changePid(0.27, 0.0022, 0.045);
 			lineTracer->lineTrace((float)26, RIGHTEDGE);
 			if((distance->getDistance()) < OUT_SHARPCURVE_END){
 				speaker->playTone(442, 500, 100);
@@ -487,8 +487,8 @@ bool Basic::runOUT(void){
 bool Basic::runToGrid(void){
 	switch(phase){
 		case 0:
-			pid->changePid(0.245, 0.001, 0.03);
-			lineTracer->lineTrace((float)24, RIGHTEDGE);
+			pid->changePid(0.27, 0.0022, 0.045);
+			lineTracer->lineTrace((float)26, RIGHTEDGE);
 			if((distance->getDistance()) < OUT_SHARPCURVE2_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
@@ -507,7 +507,7 @@ bool Basic::runToGrid(void){
 			break;
 		case 2:
 			pid->changePid(0.26, 0.001, 0.038);
-			lineTracer->lineTrace((float)17332, RIGHTEDGE);
+			lineTracer->lineTrace((float)17, RIGHTEDGE);
 			if((distance->getDistance()) < OUT_SHARPCURVE3_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
@@ -515,6 +515,7 @@ bool Basic::runToGrid(void){
 			break;
 		case 3:
 			phase = 0;
+			distance->init();
 			return true;
 			break;
 	}

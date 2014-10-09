@@ -45,24 +45,24 @@ public:
 //斜め移動の距離 -35
 //90度旋回 382
 //45度旋回 175
-RunPattern GridRunner::runPatterns[] = {
-	RunPattern(TURN, LEFTEDGE, 350),
-	RunPattern(GOSTRAIGHT, -20, 40),
-	RunPattern(TURN, RIGHTEDGE, 360),
-	RunPattern(LINETRACE, RIGHTEDGE, 40),
-	RunPattern(LINETRACE, RIGHTEDGE, 40),
-	RunPattern(LINETRACE, RIGHTEDGE, 40),
-	// RunPattern(GOSTRAIGHT, -8, 40),
-	// RunPattern(TURN, LEFTEDGE, 175),
-	// RunPattern(GOSTRAIGHT, -35, 40),
-	// RunPattern(TURN, RIGHTEDGE, 185),
-	// RunPattern(LINETRACE, RIGHTEDGE, 35),
-	// RunPattern(LINETRACE, RIGHTEDGE, 40),
-	// RunPattern(LINETRACE, RIGHTEDGE, 40),
-	// RunPattern(GOSTRAIGHT, -110, 40),
-	// RunPattern(TURN, RIGHTEDGE, 190),
-	// RunPattern(GOSTRAIGHT, -60, 40),
-	// RunPattern(TURN, RIGHTEDGE, 190),
-	RunPattern(GOSTRAIGHT, -30, 40),
-	RunPattern(0, 0, 0)
-};
+// RunPattern GridRunner::runPatterns[] = {
+// 	RunPattern(TURN, LEFTEDGE, 350),
+// 	RunPattern(GOSTRAIGHT, -20, 40),
+// 	RunPattern(TURN, RIGHTEDGE, 360),
+// 	RunPattern(LINETRACE, RIGHTEDGE, 40),
+// 	RunPattern(LINETRACE, RIGHTEDGE, 40),
+// 	RunPattern(LINETRACE, RIGHTEDGE, 40),
+// 	// RunPattern(GOSTRAIGHT, -8, 40),
+// 	// RunPattern(TURN, LEFTEDGE, 175),
+// 	// RunPattern(GOSTRAIGHT, -35, 40),
+// 	// RunPattern(TURN, RIGHTEDGE, 185),
+// 	// RunPattern(LINETRACE, RIGHTEDGE, 35),
+// 	// RunPattern(LINETRACE, RIGHTEDGE, 40),
+// 	// RunPattern(LINETRACE, RIGHTEDGE, 40),
+// 	// RunPattern(GOSTRAIGHT, -110, 40),
+// 	// RunPattern(TURN, RIGHTEDGE, 190),
+// 	// RunPattern(GOSTRAIGHT, -60, 40),
+// 	// RunPattern(TURN, RIGHTEDGE, 190),
+// 	RunPattern(GOSTRAIGHT, -30, 40),
+// 	RunPattern(0, 0, 0)
+// };
