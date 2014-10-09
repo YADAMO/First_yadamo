@@ -19,5 +19,6 @@ private:
 public:
 	Stepper(StepDetector *sd, LineTracer *lt, Driver *dr,Pid *pd, Distance *dis);
 	~Stepper();
+	bool gridStep(int edge);
 	bool run(int edge);
 };

@@ -2,6 +2,7 @@
 
 #define GOSTRAIGHT 1
 #define TURN 2
+#define LINETRACE 3
 
 class RunPattern{
 private:

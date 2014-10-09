@@ -91,6 +91,7 @@ bool Jumper::run()
 			break;
 		case 8:
 			distance->init();
+			phase = 0;
 			return true;
 			break;
 	}

@@ -5,7 +5,7 @@ OUT::OUT(Basic *bs, Jumper *jp, GridRunner *gr, ParkingP *pP){
 	jumper = jp;
 	gridRunner = gr;
 	parkingP = pP;
-	phase = 4;
+	phase = 0;
 }
 
 OUT::~OUT(){
