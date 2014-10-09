@@ -59,5 +59,7 @@ int Pid::calcTurn(float target){
     return  turn;
 }
 
-
+void Pid::resetIntegral(float rate){
+    integral = integral * rate;
+}
 

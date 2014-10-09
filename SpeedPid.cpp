@@ -42,8 +42,8 @@ int SpeedPid::calcSpeed(float target){
     if(speed < -100){
         speed = -100;
     }
-    if(speed > 115){
-        speed = 110;
+    if(speed > 100){
+        speed = 100;
     }
 
     // if((speed - speedbuf) < -70){

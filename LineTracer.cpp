@@ -41,6 +41,10 @@ void LineTracer::changePid(float p, float i, float d){
 	pid->changePid(p, i, d);
 }
 
+void LineTracer::resetIntegral(float rate){
+  pid->resetIntegral(rate);
+}
+
 void LineTracer::calcAllTarget(){
 	nearnearblack = (offsetHolder->getWhite() * 2 + offsetHolder->getBlack() * 3) / 5;
 	nearblack = (offsetHolder->getWhite() + offsetHolder->getBlack() * 3) / 4;
