@@ -19,6 +19,6 @@ private:
 	Speaker *speaker;
 	int touchCount;
 	bool judge;
-	S16 white, black;
+	S16 white_bright, black_bright, white_dark, black_dark;
 	OffsetHolder *oHolder;
 };
