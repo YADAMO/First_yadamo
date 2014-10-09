@@ -26,6 +26,7 @@ public:
 	void setTarget(float target);
 	float getTarget();
 	void changePid(float p, float i, float d);
+	void resetIntegral(float rate);
 	void calcAllTarget();
 	float nearblack;
 	float nearnearblack;
