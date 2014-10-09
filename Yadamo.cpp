@@ -201,7 +201,7 @@ extern "C" TASK(RUN_TASK)
 
 	switch(phase){
 		case 0:
-			if(gridRunner.run()){
+			if(out.run()){
 				phase++;
 				driver.straightInit();
 			}

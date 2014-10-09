@@ -39,7 +39,7 @@ bool ParkingP::run(){
 			}
 			break;
 		case 2:
-			if(distance->getDistance() < -18){
+			if(distance->getDistance() < -17){
 				changePhase();
 				driver->straight(0);
 			}else{
@@ -59,7 +59,7 @@ bool ParkingP::run(){
 			driver->backDrive(40, 40);
 			break;
 		case 5:
-			if(distance->getDistance() > 7.5){
+			if(distance->getDistance() > 8.5){
 				changePhase();
 			}
 			driver->straight(-30);

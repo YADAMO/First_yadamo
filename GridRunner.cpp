@@ -2,6 +2,28 @@
 
 #define EXITLINE 2
 
+RunPattern GridRunner::runPatterns[] = {
+	RunPattern(TURN, LEFTEDGE, 350),
+	RunPattern(GOSTRAIGHT, -20, 40),
+	RunPattern(TURN, RIGHTEDGE, 360),
+	RunPattern(LINETRACE, RIGHTEDGE, 40),
+	RunPattern(LINETRACE, RIGHTEDGE, 40),
+	RunPattern(LINETRACE, RIGHTEDGE, 40),
+	// RunPattern(GOSTRAIGHT, -8, 40),
+	// RunPattern(TURN, LEFTEDGE, 175),
+	// RunPattern(GOSTRAIGHT, -35, 40),
+	// RunPattern(TURN, RIGHTEDGE, 185),
+	// RunPattern(LINETRACE, RIGHTEDGE, 35),
+	// RunPattern(LINETRACE, RIGHTEDGE, 40),
+	// RunPattern(LINETRACE, RIGHTEDGE, 40),
+	// RunPattern(GOSTRAIGHT, -110, 40),
+	// RunPattern(TURN, RIGHTEDGE, 190),
+	// RunPattern(GOSTRAIGHT, -60, 40),
+	// RunPattern(TURN, RIGHTEDGE, 190),
+	RunPattern(GOSTRAIGHT, -30, 40),
+	RunPattern(0, 0, 0)
+};
+
 GridRunner::GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *cd, Distance *dis, StepDetector *sd){
 	lineTracer = lt;
 	driver = dr;
@@ -33,20 +55,19 @@ void GridRunner::changePhase(){
 
 void GridRunner::changePattern(){
 	patIndex++;
-	curPattern = runPatterns[patIndex];
 	distance->init();
 	driver->straightInit();
 	runtime = 0;
 }
 
 void GridRunner::backTurn(){
-	if(distance->getDiff() > 0 && !diffflag){
+	if(distance->getDiff() > 1 && !diffflag){
 		driver->backDrive(30 * -curPattern.param, 0);
 		runtime = 0;
 	}else if(runtime < 1000){
 		driver->turn(20 * curPattern.param);
 		diffflag = true;
-	}else if(runtime < 2000){
+	}else if(runtime < 1200){
 		driver->straight(-30);
 	}else{
 		driver->straightInit();
@@ -126,6 +147,29 @@ void GridRunner::turn(){
 }
 
 bool GridRunner::run(){
+	RunPattern runPatterns1[] = {
+		RunPattern(TURN, LEFTEDGE, 350),
+		RunPattern(GOSTRAIGHT, -20, 40),
+		RunPattern(TURN, RIGHTEDGE, 360),
+		RunPattern(LINETRACE, RIGHTEDGE, 40),
+		RunPattern(LINETRACE, RIGHTEDGE, 40),
+		RunPattern(LINETRACE, RIGHTEDGE, 40),
+		// RunPattern(GOSTRAIGHT, -8, 40),
+		// RunPattern(TURN, LEFTEDGE, 175),
+		// RunPattern(GOSTRAIGHT, -35, 40),
+		// RunPattern(TURN, RIGHTEDGE, 185),
+		// RunPattern(LINETRACE, RIGHTEDGE, 35),
+		// RunPattern(LINETRACE, RIGHTEDGE, 40),
+		// RunPattern(LINETRACE, RIGHTEDGE, 40),
+		// RunPattern(GOSTRAIGHT, -110, 40),
+		// RunPattern(TURN, RIGHTEDGE, 190),
+		// RunPattern(GOSTRAIGHT, -60, 40),
+		// RunPattern(TURN, RIGHTEDGE, 190),
+		RunPattern(GOSTRAIGHT, -30, 40),
+		RunPattern(0, 0, 0)
+	};
+
+	curPattern = runPatterns1[patIndex];
 	bool st = false;
 	switch(phase){
 		case 0:
