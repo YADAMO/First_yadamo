@@ -28,26 +28,27 @@ bool Jumper::run()
 			break;
 		case 1:
 			driver->straight(80);
-			if(distance->getDistance() < -38){
+			if(distance->getDistance() < -40){
 				phase++;
 			}
 			break;
 		case 2:
-			driver->straight(40);
-			if(distance->getDistance() < -60){
+			driver->straight(30);
+			if(distance->getDistance() < -54){
 				phase++;
 			}
 			break;
 
 		case 3:
-			lineTracer->changePid(0.15, 0.001, 0.055);
-			lineTracer->lineTrace(25, RIGHTEDGE);
-			if(distance->getDistance() < -80){
+			lineTracer->changePid(0.15, 0.001, 0.06);
+			lineTracer->lineTrace(20, RIGHTEDGE);
+			if(distance->getDistance() < -85){
 				phase++;
 			}
 			break;
 		case 4:
 			distance->init();
+			phase = 0;
 			return true;
 			break;
 

@@ -26,17 +26,17 @@ void UI::calibration(void){
 			if(touchCount == 1){
 				white = lightSensor->getBrightness();
 				oHolder->setWhite(white);
-				speaker->playTone(442, 100, 10);
+				speaker->playTone(1046, 100, 50);
 				judge = false;
 			}else if(touchCount == 2){
 				black = lightSensor->getBrightness();
 				oHolder->setBlack(black);
-				speaker->playTone(884, 100, 10);
+				speaker->playTone(1174, 100, 50);
 				judge = false;
 			}else if(touchCount == 3){
 				lineTracer->setTarget(((float)white + (float)black) / 2);
 				lineTracer->calcAllTarget();
-				speaker->playTone(1326, 100, 10);
+				speaker->playTone(1318, 100, 50);
 				judge = false;
 				break;
 			}

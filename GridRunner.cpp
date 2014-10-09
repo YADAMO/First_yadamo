@@ -12,6 +12,7 @@ GridRunner::GridRunner(LineTracer *lt, Driver *dr, Stepper *sp, ColorDetector *c
 	patIndex = 0;
 	curPattern = runPatterns[0];
 	detected = false;
+	diffflag = false;
 	closePhase = 0;
 	phase = 0;
 	turnflag = false;
@@ -38,13 +39,45 @@ void GridRunner::changePattern(){
 	runtime = 0;
 }
 
+void GridRunner::backTurn(){
+	if(distance->getDiff() > 0 && !diffflag){
+		driver->backDrive(30 * -curPattern.param, 0);
+		runtime = 0;
+	}else if(runtime < 1000){
+		driver->turn(20 * curPattern.param);
+		diffflag = true;
+	}else if(runtime < 2000){
+		driver->straight(-30);
+	}else{
+		driver->straightInit();
+		distance->init();
+		detected = false;
+		runtime = 0;
+		diffflag = false;
+	}
+}
+
 void GridRunner::back(){
 	if(distance->getDistance() - disOffset < 18){
-		driver->drive(10, -30);
+		driver->drive(20, -40);
 	}else{
 		driver->straightInit();
 		detected = false;
 		runtime = 0;
+	}
+}
+
+void GridRunner::lineTrace(){
+	if((colorDetector->blackLineDetect() && runtime > 1000) || distance->getDistance() < -30){
+		detected = false;
+		changePattern();
+	}else{
+		if((stepDetector->detect() && runtime > 1000) || detected){
+			detected = true;
+			lineTracer->lineTrace(100, curPattern.param);
+		}else{
+			lineTracer->lineTrace(curPattern.param2, curPattern.param);
+		}
 	}
 }
 
@@ -65,17 +98,24 @@ void GridRunner::goStraight(){
 
 void GridRunner::turn(){
 	if(distance->getDiff() < curPattern.param2 && !turnflag){
-		if(runtime < 1000){
+		if(runtime < 1000 && !detected){
 			driver->turn(60 * -curPattern.param);
+		}else if(detected){
+			backTurn();
 		}else{
-			driver->drive(60 * -curPattern.param, 0);
+			if((stepDetector->detect() && runtime > 1500)){
+				detected = true;
+			}else{
+				driver->drive(60 * -curPattern.param, 0);
+			}
 		}
 	}else{
 		if(turnflag){
 			if(runtime < 1000){
-				driver->turn(0);
+				driver->turn(20 * curPattern.param);
 			}else{
 				changePattern();
+				detected = false;
 				turnflag = false;
 			}
 		}else{
@@ -110,6 +150,9 @@ bool GridRunner::run(){
 			case TURN:
 				turn();
 				break;
+			case LINETRACE:
+				lineTrace();
+				break;
 			default:
 				driver->straight(0);
 				changePhase();
@@ -127,7 +170,7 @@ bool GridRunner::run(){
 				}
 				break;
 			case 1:
-				if(distance->getDiff() < 340 && !turnflag){
+				if(distance->getDiff() < 320 && !turnflag){
 					if(runtime < 1000){
 						driver->turn(-60);
 					}else{
@@ -161,7 +204,7 @@ bool GridRunner::run(){
 				}
 				break;
 			case 4:
-				if(distance->getDistance() > -9){
+				if(distance->getDistance() > -8){
 					driver->straight(40);
 				}else{
 					closePhase = 5;	
@@ -208,8 +251,8 @@ bool GridRunner::run(){
 				break;
 			case 6:
 				lineTracer->changePid(0.15, 0.001, 0.055);
-				lineTracer->lineTrace(25, RIGHTEDGE);
-				if(distance->getDistance() < -80){
+				lineTracer->lineTrace(60, RIGHTEDGE);
+				if(distance->getDistance() < -25){
 					closePhase = 7;
 					driver->straight(0);	
 					changePhase();

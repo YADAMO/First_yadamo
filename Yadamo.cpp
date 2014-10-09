@@ -230,7 +230,8 @@ extern "C" TASK(OSEK_Task_Background)
 				// if(parkingL.run()){
 				// if(out.run()){
 				// if(basic.runToGrid()){
-				if(out.run()){
+				// if(out.run()){
+				if(gridRunner.run()){
 					phase++;
 					driver.straightInit();
 				}
@@ -255,7 +256,7 @@ extern "C" TASK(OSEK_Task_Background)
 			// }else{
 			// 	flag = 0;
 			// }
-			lcd.putf("ddd", (int)distance.getDistance(), 0, oHolder.getWhite(), 4, flag, 7);
+			lcd.putf("ddd", (int)distance.getDiff(), 0, oHolder.getWhite(), 4, flag, 7);
 		}
 		lcd.disp();
 		clk.wait(4); /* 10msec wait */

@@ -60,7 +60,7 @@ bool Stepper::gridStep(int edge){
 			break;
 		case 4://のぼる
 			lineTracer->lineTrace(stepSpeed, edge);
-			if(distance->getDistance() < -13){
+			if(distance->getDistance() < -12){
 				phase = 10;
 				distance->init();
 				driver->straightInit();

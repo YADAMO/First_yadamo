@@ -78,10 +78,7 @@ bool ParkingP::run(){
 			}
 			break;
 		case 8:
-			if(runtime > 4000){
-				changePhase();
-			}
-			driver->turn(-60);
+			changePhase();
 			break;
 		case 9:
 			st = true;

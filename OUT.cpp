@@ -26,7 +26,7 @@ bool OUT::run(){
 			break;
 		case 2:
 			if(basic->runToGrid()){
-				phase = 10;
+				phase++;
 			}
 			break;
 		case 3:
