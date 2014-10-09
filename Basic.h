@@ -6,6 +6,7 @@
 #include "Motor.h"
 #include "OffsetHolder.h"
 #include "SpeedPid.h"
+#include "Driver.h"
 
 using namespace ecrobot;
 
@@ -19,11 +20,13 @@ private:
     Motor *leftMotor;
     OffsetHolder *offsetHolder;
     SpeedPid *speedPid;
+    Driver *driver;
+    int runtime;
     int phase;
     int tmptarget;
     bool dflag;
 public:
-	Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Motor *lm, OffsetHolder *oh, SpeedPid *spid);
+	Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Motor *lm, OffsetHolder *oh, SpeedPid *spid, Driver *dri);
     ~Basic();
 	bool runIN(void);
     bool runIN(int dammy);

@@ -12,7 +12,7 @@
 #define IN_SNAKECHEST_END -1180
 #define IN_SNAKEBODY_END -1240
 #define IN_SNAKEHIP_END -1300
-#define IN_SNAKETAIL_END -1380
+#define IN_SNAKETAIL_END -1390
 #define IN_STRAIGHT3_END -1665
 
 #define IN_SHARPCURVE3_END -1820
@@ -40,7 +40,7 @@
 #define OUT_STRAIGHT4_END -365
 #define OUT_AVOIDGRAY_END -445
 
-Basic::Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Motor *lm, OffsetHolder *oh, SpeedPid *spid){
+Basic::Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Motor *lm, OffsetHolder *oh, SpeedPid *spid, Driver *dri){
 	lineTracer = lt;
 	pid = pd;
 	speaker = sp;
@@ -49,6 +49,8 @@ Basic::Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Mot
 	leftMotor = lm;
 	offsetHolder = oh;
 	speedPid = spid;
+	driver = dri;
+	runtime = 0;
 	phase = 0;
 	tmptarget = 0;
 	dflag = false;
@@ -57,6 +59,7 @@ Basic::Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Mot
 Basic::~Basic(){
 }
 
+/*
 bool Basic::runIN(void){
 
 	switch(phase){
@@ -214,6 +217,7 @@ bool Basic::runIN(void){
 	}
 	return false;
 }
+*/
 
 bool Basic::runIN(int dammy){
 
@@ -250,7 +254,7 @@ bool Basic::runIN(int dammy){
 			break;
 
 		case 3:
-			pid->changePid(0.25, 0.01, 0.058);
+			pid->changePid(0.22, 0.015, 0.055);
 			lineTracer->lineTrace((float)26, RIGHTEDGE);
 			if((distance->getDistance()) < IN_LARGECURVE_END){
 				speaker->playTone(442, 500, 100);
@@ -282,7 +286,7 @@ bool Basic::runIN(int dammy){
 			break;
 
 		case 6:
-			pid->changePid(0.22, 0.001, 0.058);
+			pid->changePid(0.15, 0.001, 0.058);
 			lineTracer->lineTrace((float)28, LEFTEDGE);
 			if((distance->getDistance()) < IN_STRAIGHT2_END){
 				speaker->playTone(442, 500, 100);
@@ -290,6 +294,7 @@ bool Basic::runIN(int dammy){
 				lineTracer->setTarget((offsetHolder->getWhite() + offsetHolder->getBlack()) / 2);
 				speedPid->resetIntegral(0);
 			}else if((distance->getDistance()) < IN_STRAIGHT2_1_END){
+				speaker->playTone(442, 500, 100);
 				lineTracer->setTarget((offsetHolder->getWhite()*3 + offsetHolder->getBlack()*2) / 5);
 			}
 			break;
@@ -304,7 +309,7 @@ bool Basic::runIN(int dammy){
 			break;
 
 		case 8:
-			pid->changePid(0.295, 0.001, 0.035);
+			pid->changePid(0.31, 0.0015, 0.037);
 			lineTracer->lineTrace((float)21, LEFTEDGE);
 			if((distance->getDistance()) < IN_SNAKECHEST_END){
 				speaker->playTone(442, 500, 100);
@@ -334,8 +339,8 @@ bool Basic::runIN(int dammy){
 			}
 			break;
 		case 11:
-			pid->changePid(0.32, 0.001, 0.03);
-			lineTracer->lineTrace((float)9, LEFTEDGE);
+			pid->changePid(0.30, 0.001, 0.033);
+			lineTracer->lineTrace((float)16, LEFTEDGE);
 			if((distance->getDistance()) < IN_SNAKETAIL_END){
 				speaker->playTone(442, 500, 100);
 				lineTracer->setTarget((offsetHolder->getWhite() + offsetHolder->getBlack()) / 2);
@@ -343,18 +348,23 @@ bool Basic::runIN(int dammy){
 			}
 			break;
 		case 12:
-			pid->changePid(0.15, 0.01, 0.058);
-			lineTracer->lineTrace((float)35, LEFTEDGE);
-			if((distance->getDistance()) < IN_STRAIGHT3_END){
-				speaker->playTone(442, 500, 100);
-				phase++;
-				speedPid->resetIntegral(0);
+			if(runtime < 0){
+				driver->turn(-20);
+				runtime += 3;
+			}else{
+				pid->changePid(0.15, 0.01, 0.058);
+				lineTracer->lineTrace((float)35, LEFTEDGE);
+				if((distance->getDistance()) < IN_STRAIGHT3_END){
+					speaker->playTone(442, 500, 100);
+					phase++;
+					speedPid->resetIntegral(0);
+				}
 			}
 			break;
 
 		case 13:
 			pid->changePid(0.35, 0.01, 0.058);
-			lineTracer->lineTrace((float)12, LEFTEDGE);
+			lineTracer->lineTrace((float)18, LEFTEDGE);
 			if((distance->getDistance()) < IN_SHARPCURVE3_END){
 				speaker->playTone(442, 500, 100);
 				phase++;

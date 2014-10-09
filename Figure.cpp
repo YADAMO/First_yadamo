@@ -74,14 +74,14 @@ bool Figure::run(){
 		if(distance->getDiff() > 265){
 			changePhase();
 		}
-		driver->drive(80, 5);
+		driver->drive(70, 10);
 		break;
 
 		case 7:
 		if(distance->getDistance() < -40){
 			changePhase();
 		}
-		lineTracer->lineTrace(20, LEFTEDGE);
+		lineTracer->lineTrace(30, LEFTEDGE);
 		break;
 
 		case 8:
