@@ -95,7 +95,7 @@ ReturnLine returnLine(&driver, &light, &colorDetector);
 StepDetector stepDetector(&motorR, &motorL, &speaker);
 Stepper stepper(&stepDetector, &lineTracer, &driver, &pid, &distance);
 Figure figure(&lineTracer, &colorDetector, &driver, &stepper, &oHolder, &distance);
-Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &pid);
+Mogul mogul(&driver, &lineTracer, &stepDetector, &stepper, &distance, &pid, &colorDetector);
 Jumper jumper(&driver, &lineTracer, &stepper, &distance, &stepDetector, &speedPid, &colorDetector);
 GridRunner gridRunner(&lineTracer, &driver, &stepper, &colorDetector, &distance, &stepDetector);
 Basic basic(&lineTracer, &pid, &speaker, &distance, &motorR, &motorL, &oHolder, &speedPid, &driver);
@@ -201,7 +201,7 @@ extern "C" TASK(RUN_TASK)
 
 	switch(phase){
 		case 0:
-			if(in.run()){
+			if(mogul.run()){
 				phase++;
 				driver.straightInit();
 			}
