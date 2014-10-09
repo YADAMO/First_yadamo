@@ -106,7 +106,7 @@ bool Stepper::run(int edge){
 				phase = 10;
 			}
 			if(stepDetector->detect()){
-				stepSpeed += 3;
+				stepSpeed += 1;
 			}
 			break;
 		case 3://低速でぶつける

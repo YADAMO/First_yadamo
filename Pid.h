@@ -16,4 +16,5 @@ public:
 	Pid(LightSensor *light);
 	void changePid(float p, float i, float d);
 	int calcTurn(float target);
+    void resetIntegral(float rate);
 };

@@ -269,6 +269,6 @@ bool GridRunner::run(){
 		driver->straight(0);
 		break;
 	}
-	runtime += 4;
+	runtime += 3;
 	return st;
 }

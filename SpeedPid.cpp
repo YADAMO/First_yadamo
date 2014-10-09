@@ -1,16 +1,17 @@
 #include "SpeedPid.h"
 
 SpeedPid::SpeedPid(SpeedMeter *sm){
-    delta = 0.004; //処理周期：現在1msec
+    delta = 0.003; //処理周期：現在1msec
 
-    kp = 20; //ストレート
-    ki = 0;//ストレート
-    kd = 0;//ストレート
+    kp = 5; //ストレート
+    ki = 20;//ストレート
+    kd = 0.05;//ストレート
 
     diff[0] = 0;
 	diff[1] = 0;
     integral = 0;
 	speedMeter = sm;
+    speedbuf = 50;
 }
 
 void SpeedPid::changePid(float p, float i, float d){
@@ -41,12 +42,16 @@ int SpeedPid::calcSpeed(float target){
     if(speed < -100){
         speed = -100;
     }
-    if(speed > 115){
-        speed = 115;
+    if(speed > 100){
+        speed = 100;
     }
 
+    // if((speed - speedbuf) < -70){
+    //     speed = speedbuf - 5;
+    // }
+    speedbuf = speed;
     return  speed;
 }
-
-
-
+void SpeedPid::resetIntegral(float rate){
+    integral = integral * rate;
+}

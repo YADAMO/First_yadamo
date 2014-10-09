@@ -1,13 +1,17 @@
 #include "Jumper.h"
 
-Jumper::Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper, Distance *argDistance, StepDetector *sd)
+Jumper::Jumper(Driver *argDriver, LineTracer *argLineTracer, Stepper *argStepper, Distance *argDistance, StepDetector *sd, SpeedPid *sp, ColorDetector *cd)
 {
 	phase = 0;
+	runtime = 0;
+	dbuf = 0.0;
 	stepper = argStepper;
 	lineTracer = argLineTracer;
 	driver = argDriver;
 	distance = argDistance;
 	stepDetector = sd;
+	speedPid = sp;
+	colorDetector = cd;
 }
 
 Jumper::~Jumper()
@@ -27,31 +31,70 @@ bool Jumper::run()
 			}
 			break;
 		case 1:
-			driver->straight(80);
-			if(distance->getDistance() < -40){
+			driver->straight(speedPid->calcSpeed(27));
+			if(distance->getDistance() < -35){
 				phase++;
+				speedPid->resetIntegral(0);
 			}
 			break;
 		case 2:
-			driver->straight(30);
-			if(distance->getDistance() < -54){
+			driver->straight(speedPid->calcSpeed(5));
+			if(distance->getDistance() < -45){
 				phase++;
+				distance->init();
 			}
 			break;
 
 		case 3:
-			lineTracer->changePid(0.15, 0.001, 0.06);
-			lineTracer->lineTrace(20, RIGHTEDGE);
-			if(distance->getDistance() < -85){
-				phase++;
+			driver->straight(speedPid->calcSpeed(-10));
+			if(distance->getDistance() > 5){
+				distance->init();
+				driver->straightInit();
+				if(colorDetector->blackLineDetect()){
+					phase = 7;
+				}else{
+					phase = 4;
+				}
 			}
 			break;
 		case 4:
+			driver->straight(speedPid->calcSpeed(15));
+			if(distance->getDistance() < -18){
+				phase++;
+			}
+			if(colorDetector->blackLineDetect()){
+				dbuf = distance->getDistance();
+				phase = 6;
+			}
+			break;
+
+		case 5:
+			driver->drive(20, 50);
+			if(colorDetector->blackLineDetect()){
+				phase = 6;
+				dbuf = distance->getDistance();
+				distance->init();
+			}
+			break;
+		case 6:
+			driver->drive(-100, 0);
+			if(distance->getDiff() > 110){
+				phase++;
+			}
+			break;
+		case 7:
+			lineTracer->changePid(0.18, 0.001, 0.055);
+			lineTracer->lineTrace((float)20, RIGHTEDGE);
+			if((distance->getDistance() + dbuf) < -50){
+				phase++;
+			}
+			break;
+		case 8:
 			distance->init();
 			phase = 0;
 			return true;
 			break;
-
 	}
+	runtime += 3;
 	return false;
 }
