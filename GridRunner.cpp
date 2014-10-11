@@ -61,7 +61,7 @@ void GridRunner::changePattern(){
 }
 
 void GridRunner::backTurn(){
-	if(distance->getDiff() > 1 && !diffflag){
+	if(distance->getDiff() > 3 && !diffflag){
 		driver->backDrive(30 * -curPattern.param, 0);
 		runtime = 0;
 	}else if(runtime < 1000){
@@ -89,7 +89,7 @@ void GridRunner::back(){
 }
 
 void GridRunner::lineTrace(){
-	if((colorDetector->blackLineDetect() && runtime > 1000) || distance->getDistance() < -30){
+	if((colorDetector->blackLineDetect() && runtime > 1000 && distance->getDistance() < -22) || distance->getDistance() < -30){
 		detected = false;
 		changePattern();
 	}else{
@@ -148,12 +148,11 @@ void GridRunner::turn(){
 
 bool GridRunner::run(){
 	RunPattern runPatterns1[] = {
-		RunPattern(TURN, LEFTEDGE, 350),
-		RunPattern(GOSTRAIGHT, -20, 40),
-		RunPattern(TURN, RIGHTEDGE, 360),
 		RunPattern(LINETRACE, RIGHTEDGE, 40),
 		RunPattern(LINETRACE, RIGHTEDGE, 40),
-		RunPattern(LINETRACE, RIGHTEDGE, 40),
+		RunPattern(TURN, LEFTEDGE, 190),
+		RunPattern(GOSTRAIGHT, -29, 40),
+		RunPattern(TURN, RIGHTEDGE, 180),
 		// RunPattern(GOSTRAIGHT, -8, 40),
 		// RunPattern(TURN, LEFTEDGE, 175),
 		// RunPattern(GOSTRAIGHT, -35, 40),
@@ -165,7 +164,7 @@ bool GridRunner::run(){
 		// RunPattern(TURN, RIGHTEDGE, 190),
 		// RunPattern(GOSTRAIGHT, -60, 40),
 		// RunPattern(TURN, RIGHTEDGE, 190),
-		RunPattern(GOSTRAIGHT, -30, 40),
+		RunPattern(GOSTRAIGHT, -40, 40),
 		RunPattern(0, 0, 0)
 	};
 
@@ -214,7 +213,7 @@ bool GridRunner::run(){
 				}
 				break;
 			case 1:
-				if(distance->getDiff() < 320 && !turnflag){
+				if(distance->getDiff() < 260 && !turnflag){
 					if(runtime < 1000){
 						driver->turn(-60);
 					}else{
@@ -225,7 +224,7 @@ bool GridRunner::run(){
 						if(runtime < 1000){
 							driver->turn(0);
 						}else{
-							closePhase = 3;
+							closePhase = 10;
 							distance->init();
 							driver->straightInit();
 							runtime = 0;
@@ -238,6 +237,16 @@ bool GridRunner::run(){
 				}
 				break;
 			case 3:
+				if(distance->getDistance() < 5){
+					driver->straight(-40);
+				}else{
+					closePhase = 10;
+					distance->init();
+					driver->straightInit();
+					runtime = 0;
+				}
+				break;
+			case 10:
 				if(colorDetector->blackLineDetect() && runtime > 10){
 					closePhase = 4;	
 					distance->init();

@@ -24,6 +24,7 @@ Pid::Pid(LightSensor *light){
 	diff[1] = 0;
     integral = 0;
 	lightSensor = light;
+    result = 0;
 }
 
 void Pid::changePid(float p, float i, float d){
@@ -55,7 +56,7 @@ int Pid::calcTurn(float target){
 	// }else if(turn >= 100){
 	  // turn = 100;
 	// }
-	
+	result = turn;
     return  turn;
 }
 

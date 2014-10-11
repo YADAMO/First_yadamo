@@ -42,6 +42,7 @@ bool Jumper::run()
 			if(distance->getDistance() < -45){
 				phase++;
 				distance->init();
+				driver->straightInit();
 			}
 			break;
 

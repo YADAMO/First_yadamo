@@ -24,13 +24,13 @@ bool ParkingL::run(){
 
 	switch(phase){
 		case 0:
-			if(stepDetector->detect() && runtime > 500){
+			if(stepDetector->detect() && runtime > 1000){
 				changePhase();
 			}
 			lineTracer->lineTrace(25, RIGHTEDGE);
 			break;
 		case 1:
-			if(distance->getDistance() > 6){
+			if(distance->getDistance() > 4){
 				changePhase();
 				driver->straight(0);
 			}else{
@@ -44,13 +44,13 @@ bool ParkingL::run(){
 			driver->turn(80);
 			break;
 		case 3:
-			if(distance->getDiff() > 385){
+			if(distance->getDiff() > 570){
 				changePhase();
 			}
 			driver->backDrive(40, 40);
 			break;
 		case 4:
-			if(distance->getDistance() > 30){
+			if(distance->getDistance() > 20){
 				changePhase();
 			}
 			driver->straight(-30);
@@ -62,13 +62,13 @@ bool ParkingL::run(){
 			driver->straight(0);
 			break;
 		case 6:
-			if(distance->getDistance() < -25){
+			if(distance->getDistance() < -20){
 				changePhase();
 			}
 			driver->straight(30);
 			break;
 		case 7:
-			if(distance->getDiff() > 440){
+			if(distance->getDiff() > 500){
 				changePhase();
 			}
 			driver->drive(30, 30);
