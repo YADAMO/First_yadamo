@@ -39,7 +39,8 @@ void Motor::setPWM(S8 pwm)
 	else
 	{
 		nxt_motor_set_speed(mPort, mPWM, 0);
-	}	
+	}
+	result = mPWM;
 }
 
 //=============================================================================
@@ -53,7 +54,7 @@ void Motor::setBrake(bool brake)
 
 void Motor::setDiff(void){
 	diff.push_back((int)getCount());
-	if(diff.size() > 4){
+	if(diff.size() > 5){
 		diff.pop_front();
 	}
 }

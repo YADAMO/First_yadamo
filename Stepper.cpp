@@ -27,7 +27,7 @@ bool Stepper::gridStep(int edge){
 		case 0://低速でぶつける
 			pid->changePid(0.15, 0.001, 0.02);
 			lineTracer->lineTrace(INSPEED, edge);
-			if(stepDetector->detect() && runtime > 500){
+			if(stepDetector->detect() && runtime > 1500){
 				phase = 2;
 				runtime = 0;
 				distance->init();
@@ -153,6 +153,6 @@ bool Stepper::run(int edge){
 			break;
 
 	}
-	runtime += 4;
+	runtime += 3;
 	return false;
 }

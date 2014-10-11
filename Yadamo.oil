@@ -55,7 +55,7 @@ CPU ATMEL_AT91SAM7S256
     PRIORITY = 3; /* lowest priority */
     ACTIVATION = 1;
     SCHEDULE = FULL;
-    STACKSIZE = 512;
+    STACKSIZE = 2048;
   };
 
   ALARM run_alarm

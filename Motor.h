@@ -24,6 +24,8 @@ namespace ecrobot
 class Motor
 {
 public:
+
+	S8 result;
 	/**
 	 * Maximum PWM value.
 	 */

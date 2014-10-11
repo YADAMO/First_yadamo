@@ -25,6 +25,7 @@ private:
     int phase;
     int tmptarget;
     bool dflag;
+    int speedOffset;
 public:
 	Basic(LineTracer *lt, Pid *pd, Speaker *sp, Distance *dis, Motor *rm, Motor *lm, OffsetHolder *oh, SpeedPid *spid, Driver *dri);
     ~Basic();

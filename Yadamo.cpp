@@ -179,29 +179,31 @@ extern "C" TASK(OSEK_Task_Background)
 extern "C" TASK(RUN_TASK)
 {	
 	S8 logToDataC[2];
-	logToDataC[0] = 1;//data1
-	logToDataC[1] = 2;//data2
+	logToDataC[0] = motorR.result;//data1
+	logToDataC[1] = motorL.result;//data2
 	
 	U16 logToBatteryC = light.getBrightness();//data3
 
 	S16 logToAdcC[4];
 	logToAdcC[0] = gyroSensor.getAnglerVelocity();//data7
-	logToAdcC[1] = 5;//data8
+	logToAdcC[1] = (S16)(speedMeter.getSpeed()*100);//data8
 	logToAdcC[2] = 6;//data9
 	logToAdcC[3] = 7;
 
 	S32 logToMotorrevC[4];
-	logToMotorrevC[0] = (S32)(speedMeter.getSpeed()*100);//data4
-	logToMotorrevC[1] = motorL.getCount();//data5
-	logToMotorrevC[2] = motorR.getCount();//data6
+	logToMotorrevC[0] = (S32)distance.getDistance();//data4
+	logToMotorrevC[1] = (S32)speedPid.result;//data5
+	logToMotorrevC[2] = (S32)pid.result;//data6
 	logToMotorrevC[3] = 11;	
 
 	motorR.setDiff();
 	motorL.setDiff();
 
+
 	switch(phase){
 		case 0:
-			if(out.run()){
+			if(in.run()){
+			// if(out.run()){
 				phase++;
 				driver.straightInit();
 			}

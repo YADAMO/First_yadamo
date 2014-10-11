@@ -5,13 +5,14 @@ SpeedPid::SpeedPid(SpeedMeter *sm){
 
     kp = 5; //ストレート
     ki = 20;//ストレート
-    kd = 0.05;//ストレート
-
+    // kd = 0.05;//ストレート
+    kd = 0.0;
     diff[0] = 0;
 	diff[1] = 0;
     integral = 0;
 	speedMeter = sm;
     speedbuf = 50;
+    result = 0;
 }
 
 void SpeedPid::changePid(float p, float i, float d){
@@ -41,8 +42,7 @@ int SpeedPid::calcSpeed(float target){
 	
     if(speed < -100){
         speed = -100;
-    }
-    if(speed > 100){
+    }else if(speed > 100){
         speed = 100;
     }
 
@@ -50,6 +50,7 @@ int SpeedPid::calcSpeed(float target){
     //     speed = speedbuf - 5;
     // }
     speedbuf = speed;
+    result = speed;
     return  speed;
 }
 void SpeedPid::resetIntegral(float rate){

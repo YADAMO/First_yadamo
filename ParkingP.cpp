@@ -28,7 +28,7 @@ bool ParkingP::run(){
 				changePhase();
 			}
 			lineTracer->changePid(0.15, 0.001, 0.0137);
-			lineTracer->lineTrace(30, RIGHTEDGE);	
+			lineTracer->lineTrace(38, RIGHTEDGE);
 			break;
 		case 1:
 			if(distance->getDistance() < -24){
@@ -39,11 +39,11 @@ bool ParkingP::run(){
 			}
 			break;
 		case 2:
-			if(distance->getDistance() < -17){
+			if(distance->getDistance() < -19){
 				changePhase();
 				driver->straight(0);
 			}else{
-				driver->straight(20);
+				driver->straight(30);
 			}
 			break;
 		case 3:
@@ -53,13 +53,13 @@ bool ParkingP::run(){
 			driver->turn(50);
 			break;
 		case 4:
-			if(distance->getDiff() > 400){
+			if(distance->getDiff() > 490){
 				changePhase();
 			}
 			driver->backDrive(40, 40);
 			break;
 		case 5:
-			if(distance->getDistance() > 8.5){
+			if(distance->getDistance() > 8){
 				changePhase();
 			}
 			driver->straight(-30);
@@ -78,9 +78,20 @@ bool ParkingP::run(){
 			}
 			break;
 		case 8:
-			changePhase();
+			if(runtime > 1000){
+				changePhase();
+			}
+			driver->turn(20);
 			break;
 		case 9:
+			if(distance->getDistance() < -4){
+				changePhase();
+				driver->straight(0);
+			}else{
+				driver->straight(30);
+			}
+			break;
+		case 10:
 			st = true;
 			break;
 	}

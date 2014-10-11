@@ -43,7 +43,7 @@ bool Figure::run(){
 			lineTracer->changePid(0.15, 0.001, 0.02);
 			changePhase();
 		}
-		lineTracer->lineTrace(20, RIGHTEDGE);
+		lineTracer->lineTrace(30, RIGHTEDGE);
 		break;
 
 		case 3:
@@ -71,10 +71,10 @@ bool Figure::run(){
 		break;
 
 		case 6:
-		if(distance->getDiff() > 265){
+		if(distance->getDiff() > 245){
 			changePhase();
 		}
-		driver->drive(70, 10);
+		driver->drive(35, 40);
 		break;
 
 		case 7:
