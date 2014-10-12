@@ -30,7 +30,7 @@ bool Mogul::run(){
 		case 1://
 			pid->changePid(0.15, 0.001, 0.02);
 			lineTracer->lineTrace(50, LEFTEDGE);
-			if(distance->getDistance() < -55){
+			if(distance->getDistance() < -60){
 				phase++;
 				distance->init();
 			}

@@ -18,6 +18,26 @@ bool ColorDetector::grayDetect(){
 
 bool ColorDetector::blackLineDetect(){
     if(runtime < 56){
+        runtime += 4;
+    }else{
+        runtime = 0;
+    }
+    buffer[runtime/4] = lightSensor->getBrightness();
+
+    int sum = 0;
+    for(int i = 0; i < 15; i++){
+        sum += (int)buffer[i];
+    }
+
+    if(lightSensor->getBrightness() < oHolder->getBlack() + 25){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+bool ColorDetector::blackLineDetect(int i){
+    if(runtime < 56){
     	runtime += 4;
     }else{
     	runtime = 0;
@@ -29,10 +49,17 @@ bool ColorDetector::blackLineDetect(){
     	sum += (int)buffer[i];
     }
 
-
-    if(lightSensor->getBrightness() < oHolder->getBlack() + 15){
-    	return true;
+    if(i == 1){
+        if(lightSensor->getBrightness() < oHolder->getBlack(DARK_PLACE) + 25){
+        	return true;
+        }else{
+        	return false;
+        }
     }else{
-    	return false;
+        if(lightSensor->getBrightness() < oHolder->getBlack() + 25){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

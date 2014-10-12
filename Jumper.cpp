@@ -31,14 +31,14 @@ bool Jumper::run()
 			}
 			break;
 		case 1:
-			driver->straight(speedPid->calcSpeed(27));
+			driver->straight(speedPid->calcSpeed(32));
 			if(distance->getDistance() < -35){
 				phase++;
 				speedPid->resetIntegral(0);
 			}
 			break;
 		case 2:
-			driver->straight(speedPid->calcSpeed(5));
+			driver->straight(speedPid->calcSpeed(10));
 			if(distance->getDistance() < -45){
 				phase++;
 				distance->init();
@@ -71,7 +71,7 @@ bool Jumper::run()
 
 		case 5:
 			driver->drive(20, 50);
-			if(colorDetector->blackLineDetect()){
+			if(colorDetector->blackLineDetect(1)){
 				phase = 6;
 				dbuf = distance->getDistance();
 				distance->init();

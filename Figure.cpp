@@ -85,6 +85,20 @@ bool Figure::run(){
 		break;
 
 		case 8:
+		if(distance->getDiff() > 650){
+			changePhase();
+		}
+		driver->drive(35, 40);
+		break;
+
+		case 9:
+		if(distance->getDistance() < - 40){
+			changePhase();
+		}
+		driver->straight(35);
+		break;
+
+		case 10:
 		driver->straight(0);
 		st = true;
 		break;

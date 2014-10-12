@@ -279,7 +279,7 @@ bool GridRunner::run(){
 				}
 				break;
 			case 2:
-				if(distance->getDiff() < 20 && !turnflag){
+				if(distance->getDiff() < 50 && !turnflag){
 					if(runtime < 1000){
 						driver->turn(-60);
 					}else{

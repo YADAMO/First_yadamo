@@ -336,12 +336,13 @@ bool Basic::runIN(int dammy){
 			if((distance->getDistance()) < IN_SNAKEHIP_END){
 				speaker->playTone(442, 500, 100);
 				lineTracer->setTarget((offsetHolder->getWhite()*3 + offsetHolder->getBlack()*2) / 5);
+				speedPid->resetIntegral(0.5);
 				phase++;
 			}
 			break;
 		case 11:
-			pid->changePid(0.34, 0.001, 0.04);
-			lineTracer->lineTrace((float)17 + speedOffset, LEFTEDGE);
+			pid->changePid(0.36, 0.001, 0.04);
+			lineTracer->lineTrace((float)14 + speedOffset, LEFTEDGE);
 			if((distance->getDistance()) < IN_SNAKETAIL_END){
 				speaker->playTone(442, 500, 100);
 				lineTracer->setTarget((offsetHolder->getWhite() + offsetHolder->getBlack()) / 2);
@@ -588,7 +589,7 @@ bool Basic::runToGarage(void){
 			if((distance->getDistance()) < OUT_AVOIDGRAY_END){
 				speaker->playTone(442, 500, 100);
 				phase++;
-				lineTracer->setTarget((offsetHolder->getWhite() * 5 + offsetHolder->getBlack() * 5) / 10);
+				lineTracer->setTarget((offsetHolder->getWhite() * 5 + offsetHolder->getBlack() * 6) / 11);
 			}
 			break;
 		case 3:

@@ -16,5 +16,6 @@ public:
 	ColorDetector(LightSensor *argLightSensor, OffsetHolder *oh);
     bool grayDetect();
     bool blackLineDetect();
+    bool blackLineDetect(int i);
 };
 
